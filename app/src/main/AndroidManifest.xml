@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.treasure.traveldiary">
+
+    <permission
+        android:name="com.treasure.traveldiary.permission.JPUSH_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <!--百度地图-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <!-- 申请使用摄像头的权限 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!--极光推送-->
+    <uses-permission android:name="com.treasure.traveldiary.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:name=".TravelApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_travel_logo"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_travel_logo"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WelcomeActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
+
+
+
+
+
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   百度Map     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="L9vvCVWlaZkuj36Q2revQdNv5dWNo8f0" />
+
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" />
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   Bmob后端云     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <activity
+            android:name=".CreateActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".DeleteActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".UpdateActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FindActivity"
+            android:screenOrientation="portrait" />
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   极光推送     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <activity
+            android:name="cn.jpush.android.ui.PushActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:exported="false"
+            android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter>
+                <action android:name="cn.jpush.android.ui.PushActivity"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="com.treasure.traveldiary"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="cn.jpush.android.ui.PopWinActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:exported="false"
+            android:theme="@style/MyDialogStyle">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="com.treasure.traveldiary"/>
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="cn.jpush.android.service.DownloadService"
+            android:enabled="true"
+            android:exported="false">
+        </service>
+        <service
+            android:name="cn.jpush.android.service.PushService"
+            android:process=":mult">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTER"/>
+                <action android:name="cn.jpush.android.intent.REPORT"/>
+                <action android:name="cn.jpush.android.intent.PushService"/>
+                <action android:name="cn.jpush.android.intent.PUSH_TIME"/>
+            </intent-filter>
+        </service>
+        <!-- since 1.8.0 option 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
+        <!-- 若不启用该功能可删除该组件，将不拉起其他应用也不能被其他应用拉起 -->
+        <service
+            android:name="cn.jpush.android.service.DaemonService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.DaemonService" />
+                <category android:name="com.treasure.traveldiary" />
+            </intent-filter>
+
+        </service>
+        <receiver
+            android:name="cn.jpush.android.service.PushReceiver"
+            android:enabled="true">
+            <intent-filter android:priority="1000">
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY"/> <!-- Required  显示通知栏 -->
+                <category android:name="com.treasure.traveldiary"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+            <!-- Optional -->
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+
+                <data android:scheme="package"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="cn.jpush.android.service.AlarmReceiver"
+            android:exported="false"/>
+        <receiver
+            android:name=".receiver.JPushReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTRATION"/> <!-- Required  用户注册SDK的intent -->
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED"/> <!-- Required  用户接收SDK消息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED"/> <!-- Required  用户接收SDK通知栏信息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED"/> <!-- Required  用户打开自定义通知栏的intent -->
+                <action android:name="cn.jpush.android.intent.CONNECTION"/> <!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <category android:name="com.treasure.traveldiary"/>
+            </intent-filter>
+        </receiver>
+        <!-- Required  . Enable it you can get statistics data with channel -->
+        <meta-data android:name="JPUSH_CHANNEL" android:value="developer-default"/>
+        <meta-data android:name="JPUSH_APPKEY" android:value="5d59b8892e5c42a4c3f154d8"/> <!--  </>值来自开发者平台取得的AppKey-->
+
+
+
+
+
+
+
+        <activity
+            android:name=".activity.user.UserCenterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.traveller.TravellerCenterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user.UserRegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user.UserForgetPassActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user.UserEditUserInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user.UserSettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.add.DiaryTextPublishActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.add.DiaryImagePublishActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.add.DiaryEvaluatedActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.traveller.TravellerDiaryDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.add.DiaryCameraActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.user.UserEvaluatedListActivity" />
+        <activity android:name=".activity.user.UserMessageListActivity"></activity>
+    </application>
+
+</manifest>

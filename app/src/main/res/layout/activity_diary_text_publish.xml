@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_life_assistant_record"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".activity.add.DiaryTextPublishActivity">
+
+    <include layout="@layout/common_top_view" />
+    <EditText
+        android:id="@+id/diary_text_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:hint="#怀揣梦想"
+        android:background="@drawable/frame_block_radius5" />
+
+    <EditText
+        android:id="@+id/diary_text_desc"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_weight="1"
+        android:gravity="top"
+        android:background="@null"
+        android:hint="记录旅行的一点一滴"
+        android:padding="15dp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:orientation="horizontal"
+        android:layout_margin="10dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="20dp"
+        android:background="@drawable/frame_orange_radius25">
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/ic_location"/>
+        <TextView
+            android:id="@+id/diary_text_loc"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:paddingLeft="10dp"/>
+    </LinearLayout>
+</LinearLayout>

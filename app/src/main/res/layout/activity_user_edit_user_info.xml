@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorWhite"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/common_top_view"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/mine_edit_icon"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            fresco:placeholderImage="@mipmap/ic_travel_logo"
+            fresco:roundAsCircle = "true"/>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="手机："
+            android:textSize="20sp"
+            android:gravity="center"
+            android:id="@+id/textView"/>
+
+        <TextView
+            android:id="@+id/mine_edit_phone"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:textSize="18sp"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/colorBlock"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/edittext_bg"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="昵称"
+            android:textSize="20sp"
+            android:gravity="center"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlock"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"/>
+        <EditText
+            android:id="@+id/mine_edit_nickname"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:background="@null"
+            android:textColor="@color/colorOrange"
+            android:paddingLeft="10dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/edittext_bg"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.15"
+            android:text="密码"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:id="@+id/textView4"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlock"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"/>
+        <EditText
+            android:id="@+id/mine_edit_password"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:background="@null"
+            android:inputType="textPassword"
+            android:textColor="@color/colorOrange"
+            android:paddingLeft="10dp"/>
+        <ImageView
+            android:id="@+id/mine_edit_pass_visible"
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/ic_eye_close"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/edittext_bg"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="年龄"
+                android:textSize="20sp"
+                android:gravity="center"/>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorBlock"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"/>
+            <EditText
+                android:id="@+id/mine_edit_age"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@null"
+                android:inputType="number"
+                android:textColor="@color/colorOrange"
+                android:paddingLeft="10dp"/>
+        </LinearLayout>
+
+        <RadioGroup
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingLeft="20dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/mine_edit_sex_man"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="男"
+                android:textColor="@color/colorRed"/>
+
+            <RadioButton
+                android:id="@+id/mine_edit_sex_woman"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="女"/>
+        </RadioGroup>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/mine_edit_userDesc"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bottom_white_frame_black_radius5"
+        android:gravity="top"
+        android:hint="留点啥呗。。。"
+        android:padding="10dp"
+        android:paddingLeft="20dp"/>
+
+    <TextView
+        android:id="@+id/btn_user_edit_enter"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/gradient_yellow_orange_radius25"
+        android:gravity="center"
+        android:text="进入XT"
+        android:textColor="#fff"
+        android:textSize="20sp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"/>
+</LinearLayout>

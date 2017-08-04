@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="300dp"
+    android:layout_height="350dp">
+        <LinearLayout
+            android:layout_width="246dp"
+            android:layout_height="330dp"
+            android:background="@color/colorWhite"
+            android:orientation="vertical"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="20dp">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/map_marker_icon"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                fresco:placeholderImage="@mipmap/ic_travel_logo"
+                android:padding="12dp" />
+            <!--android:layout_height="90dp"-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="12dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="match_parent"
+                        android:src="@mipmap/ic_location" />
+
+                    <TextView
+                        android:id="@+id/map_marker_addr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="11dp"
+                        android:textColor="#333333"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="match_parent"
+                        android:src="@mipmap/ic_time"/>
+                    <TextView
+                        android:id="@+id/map_marker_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="11dp"
+                        android:textColor="#333333"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="match_parent"
+                        android:src="@mipmap/ic_title"/>
+                    <TextView
+                        android:id="@+id/map_marker_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="11dp"
+                        android:textColor="#333333"/>
+                </LinearLayout>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="7dp"
+                android:background="#eeeeee"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="内容"
+                    android:layout_margin="6dp"
+                    android:textSize="15sp"
+                    android:textColor="#ea6200"
+                    android:gravity="center_horizontal"/>
+
+                <TextView
+                    android:id="@+id/map_marker_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="6dp"
+                    android:textSize="15sp"
+                    android:maxLines="3"
+                    android:ellipsize="end"
+                    android:textColor="#ea6200"/>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/map_marker_join"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:text="详情"
+                android:textSize="20sp"
+                android:textColor="#333333"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:background="#feb70d"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/map_marker_close"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="right"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="5dp"
+            android:src="@mipmap/ic_close"/>
+    </FrameLayout>
