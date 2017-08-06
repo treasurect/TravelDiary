@@ -7,9 +7,7 @@
     android:background="@color/colorWhite"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
-    tools:context=".activity.add.DiaryImagePublishActivity">
-
-    <include layout="@layout/common_loading_view"/>
+    tools:context=".activity.add.DiaryVideoPublishActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +17,7 @@
         <include layout="@layout/common_top_view" />
 
         <EditText
-            android:id="@+id/diary_image_title"
+            android:id="@+id/diary_video_title"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_margin="10dp"
@@ -35,7 +33,7 @@
             android:background="@color/colorOrange" />
 
         <EditText
-            android:id="@+id/diary_image_desc"
+            android:id="@+id/diary_video_desc"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="5dp"
@@ -52,65 +50,31 @@
             android:layout_height="1dp"
             android:layout_margin="10dp"
             android:background="@color/colorOrange" />
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.7"
-            android:orientation="horizontal">
+            android:layout_weight="1.2">
 
-            <FrameLayout
-                android:layout_width="0dp"
+            <SurfaceView
+                android:id="@+id/diary_video_view"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1">
+                android:layout_margin="20dp" />
 
-                <ImageView
-                    android:id="@+id/diary_image_camera1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitXY" />
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="0dp"
+            <ImageView
+                android:id="@+id/diary_video_first_view"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1">
+                android:layout_margin="20dp" />
 
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/ic_add" />
-
-                <ImageView
-                    android:id="@+id/diary_image_camera2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitXY" />
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1">
-
-                <ImageView
-                    android:id="@+id/diary_image_add"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/ic_add"
-                    android:visibility="gone" />
-
-                <ImageView
-                    android:id="@+id/diary_image_camera3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitXY" />
-            </FrameLayout>
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/diary_video_play"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:src="@mipmap/ic_play"
+                android:visibility="gone"/>
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -130,10 +94,12 @@
                 android:src="@mipmap/ic_location" />
 
             <TextView
-                android:id="@+id/diary_image_loc"
+                android:id="@+id/diary_video_loc"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
                 android:paddingLeft="10dp" />
         </LinearLayout>
     </LinearLayout>
+
+    <include layout="@layout/common_loading_view" />
 </FrameLayout>

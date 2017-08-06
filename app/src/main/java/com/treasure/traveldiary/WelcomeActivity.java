@@ -87,6 +87,14 @@ public class WelcomeActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= 21 && ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 4);
         } else {
+            checkAudioPermission();
+        }
+    }
+    //请求录音权限
+    private void checkAudioPermission() {
+        if (Build.VERSION.SDK_INT >= 21 && ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 5);
+        } else {
             startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
             WelcomeActivity.this.finish();
         }
@@ -170,6 +178,27 @@ public class WelcomeActivity extends BaseActivity {
                     }
                 });
                 builder.setMessage("检测到没有相机权限，请开启相机权限后，在使用产品");
+                builder.setIcon(R.mipmap.ic_travel_logo);
+                builder.create();
+                builder.show();
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+        if (requestCode == 5) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                checkAudioPermission();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(WelcomeActivity.this);
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        WelcomeActivity.this.finish();
+                    }
+                });
+                builder.setMessage("检测到没有录音权限，请开启录音权限后，在使用产品");
                 builder.setIcon(R.mipmap.ic_travel_logo);
                 builder.create();
                 builder.show();

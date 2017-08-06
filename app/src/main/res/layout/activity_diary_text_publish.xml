@@ -20,7 +20,11 @@
         android:paddingRight="10dp"
         android:hint="#怀揣梦想"
         android:background="@drawable/frame_block_radius5" />
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="10dp"
+        android:background="@color/colorOrange" />
     <EditText
         android:id="@+id/diary_text_desc"
         android:layout_width="match_parent"

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.add.DiaryImageCameraActivity">
+
+    <SurfaceView
+        android:id="@+id/diary_image_camera_surfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/diary_image_camera_scan"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="50dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/ic_camera_scan2" />
+    <ImageView
+        android:id="@+id/diary_image_false"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@mipmap/ic_false"
+        android:layout_gravity="center"
+        android:layout_marginRight="60dp"
+        android:visibility="gone"/>
+    <ImageView
+        android:id="@+id/diary_image_true"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@mipmap/ic_true"
+        android:layout_gravity="center"
+        android:layout_marginLeft="60dp"
+        android:visibility="gone"/>
+</FrameLayout>

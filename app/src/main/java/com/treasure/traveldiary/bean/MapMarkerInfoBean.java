@@ -19,6 +19,7 @@ public class MapMarkerInfoBean implements Serializable {
     private String user_nick;
     private List<String> user_image;
     private int diary_type;
+    private String video_path;
 
     public LatLng getLatLng() {
         return latLng;
@@ -90,5 +91,13 @@ public class MapMarkerInfoBean implements Serializable {
 
     public void setDiary_type(int diary_type) {
         this.diary_type = diary_type;
+    }
+
+    public String getVideo_path() {
+        return video_path;
+    }
+
+    public void setVideo_path(String video_path) {
+        this.video_path = video_path;
     }
 }

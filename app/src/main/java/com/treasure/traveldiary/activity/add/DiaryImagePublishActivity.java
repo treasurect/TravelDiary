@@ -1,44 +1,28 @@
 package com.treasure.traveldiary.activity.add;
 
-import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
-import com.treasure.traveldiary.WelcomeActivity;
 import com.treasure.traveldiary.bean.DiaryBean;
-import com.treasure.traveldiary.utils.LogUtil;
 import com.treasure.traveldiary.utils.Tools;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +31,6 @@ import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadBatchListener;
-import cn.bmob.v3.listener.UploadFileListener;
 
 public class DiaryImagePublishActivity extends BaseActivity implements View.OnClickListener, TextWatcher {
     private EditText diaryDesc;
@@ -71,9 +54,14 @@ public class DiaryImagePublishActivity extends BaseActivity implements View.OnCl
                 case 200:
                     sendDiary();
                     break;
+                case 400:
+                    Toast.makeText(DiaryImagePublishActivity.this, "上传失败："+error, Toast.LENGTH_SHORT).show();
+                    loading.setVisibility(View.GONE);
+                    break;
             }
         }
     };
+    private String error;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,9 +105,12 @@ public class DiaryImagePublishActivity extends BaseActivity implements View.OnCl
         if (!Tools.isNull(intent.getStringExtra("user_long"))) {
             user_long = Float.parseFloat(intent.getStringExtra("user_long"));
         }
-        if (!Tools.isNull(intent.getByteArrayExtra("bitmap").toString())) {
-            byte[] bitmaps = intent.getByteArrayExtra("bitmap");
+        if (!Tools.isNull(intent.getByteArrayExtra("camera_data").toString())) {
+            byte[] bitmaps = intent.getByteArrayExtra("camera_data");
             bm_camera1 = BitmapFactory.decodeByteArray(bitmaps, 0, bitmaps.length);
+            Matrix matrix = new Matrix();
+            matrix.setRotate(90);
+            bm_camera1 = Bitmap.createBitmap(bm_camera1,0,0,bm_camera1.getWidth(),bm_camera1.getHeight(),matrix,true);
             image1.setImageBitmap(bm_camera1);
 
         }
@@ -146,15 +137,15 @@ public class DiaryImagePublishActivity extends BaseActivity implements View.OnCl
                 uploadImage();
                 break;
             case R.id.diary_image_camera1:
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 201);
+                Intent intent1 = new Intent(DiaryImagePublishActivity.this, DiaryImageCameraActivity.class);
+                startActivityForResult(intent1, 201);
                 break;
             case R.id.diary_image_camera2:
-                Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Intent intent2 = new Intent(DiaryImagePublishActivity.this, DiaryImageCameraActivity.class);
                 startActivityForResult(intent2, 202);
                 break;
             case R.id.diary_image_camera3:
-                Intent intent3 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Intent intent3 = new Intent(DiaryImagePublishActivity.this, DiaryImageCameraActivity.class);
                 startActivityForResult(intent3, 203);
                 break;
         }
@@ -184,47 +175,52 @@ public class DiaryImagePublishActivity extends BaseActivity implements View.OnCl
     private void uploadImage() {
         loading.setVisibility(View.VISIBLE);
         //上传图片
-
-        int length;
-        if (bm_camera2 == null) {
-            length = 1;
-        } else if (bm_camera3 == null) {
-            length = 2;
-        } else {
-            length = 3;
-        }
-        final String[] image_list = new String[length];
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int length;
+                if (bm_camera2 == null) {
+                    length = 1;
+                } else if (bm_camera3 == null) {
+                    length = 2;
+                } else {
+                    length = 3;
+                }
+                final String[] image_list = new String[length];
                 if (bm_camera1 != null) {
-                    String path1 = Tools.saveBitmapToSD(this,bm_camera1, "bm_camera1");
+                    String path1 = Tools.saveBitmapToSD(DiaryImagePublishActivity.this,bm_camera1, "bm_camera1");
                     image_list[0] = path1;
                 }
                 if (bm_camera2 != null) {
-                    String path2 =Tools.saveBitmapToSD(this,bm_camera2, "bm_camera2");
+                    String path2 =Tools.saveBitmapToSD(DiaryImagePublishActivity.this,bm_camera2, "bm_camera2");
                     image_list[1] = path2;
                 }
                 if (bm_camera3 != null) {
-                    String path3 = Tools.saveBitmapToSD(this,bm_camera3, "bm_camera3");
+                    String path3 = Tools.saveBitmapToSD(DiaryImagePublishActivity.this,bm_camera3, "bm_camera3");
                     image_list[2] = path3;
                 }
-        BmobFile.uploadBatch(image_list, new UploadBatchListener() {
-            @Override
-            public void onSuccess(List<BmobFile> list1, List<String> list2) {
-                if (list2.size() == image_list.length){
-                    list.addAll(list2);
-                    handler.sendMessage(handler.obtainMessage(200));
-                }
-            }
+                BmobFile.uploadBatch(image_list, new UploadBatchListener() {
+                    @Override
+                    public void onSuccess(List<BmobFile> list1, List<String> list2) {
+                        if (list2.size() == image_list.length){
+                            list.addAll(list2);
+                            handler.sendMessage(handler.obtainMessage(200));
+                        }
+                    }
 
-            @Override
-            public void onProgress(int curIndex, int curPercent, int total, int totalPercent) {
+                    @Override
+                    public void onProgress(int curIndex, int curPercent, int total, int totalPercent) {
 
-            }
+                    }
 
-            @Override
-            public void onError(int i, String error) {
-                LogUtil.d("~~~~~~~~~~~~~~~~~~error:" + error);
+                    @Override
+                    public void onError(int i, String s) {
+                         error = s;
+                        handler.sendMessage(handler.obtainMessage(400));
+                    }
+                });
             }
-        });
+        }).start();
 
     }
 
@@ -249,44 +245,46 @@ public class DiaryImagePublishActivity extends BaseActivity implements View.OnCl
             public void done(String s, BmobException e) {
                 if (e == null) {
                     Toast.makeText(DiaryImagePublishActivity.this, "恭喜你，日记发表成功", Toast.LENGTH_SHORT).show();
+                    loading.setVisibility(View.GONE);
                     DiaryImagePublishActivity.this.finish();
                 } else {
                     Toast.makeText(DiaryImagePublishActivity.this, "很遗憾，发表失败\n原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    loading.setVisibility(View.GONE);
                 }
             }
         });
-    }
-
-    private Bitmap setBitmapSize(Bitmap bitmap) {
-        int bm_width = bitmap.getWidth();
-        int bm_height = bitmap.getHeight();
-        int newWidth = 32;
-        int newHeight = 48;
-        float scaleWidth = ((float) newWidth) / bm_width;
-        float scaleHeight = ((float) newHeight) / bm_height;
-        Matrix matrix = new Matrix();
-        matrix.postScale(scaleWidth, scaleHeight);
-        return Bitmap.createBitmap(bitmap, 0, 0, bm_width, bm_height, matrix, true);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 201 && resultCode == Activity.RESULT_OK) {
-            bm_camera1 = (Bitmap) data.getExtras().get("data");
-            if (bm_camera1 != null) {
+            byte[] bitmaps = (byte[]) data.getExtras().get("camera_data");
+            if (bitmaps != null){
+                bm_camera1 = BitmapFactory.decodeByteArray(bitmaps, 0, bitmaps.length);
+                Matrix matrix = new Matrix();
+                matrix.setRotate(90);
+                bm_camera1 = Bitmap.createBitmap(bm_camera1,0,0,bm_camera1.getWidth(),bm_camera1.getHeight(),matrix,true);
                 image1.setImageBitmap(bm_camera1);
             }
         } else if (requestCode == 202 && resultCode == Activity.RESULT_OK) {
-            bm_camera2 = (Bitmap) data.getExtras().get("data");
-            if (bm_camera2 != null) {
+            byte[] bitmaps = (byte[]) data.getExtras().get("camera_data");
+            if (bitmaps != null){
+                bm_camera2 = BitmapFactory.decodeByteArray(bitmaps, 0, bitmaps.length);
+                Matrix matrix = new Matrix();
+                matrix.setRotate(90);
+                bm_camera2 = Bitmap.createBitmap(bm_camera2,0,0,bm_camera2.getWidth(),bm_camera2.getHeight(),matrix,true);
                 image2.setImageBitmap(bm_camera2);
                 image_add.setVisibility(View.VISIBLE);
                 image3.setClickable(true);
             }
         } else if (requestCode == 203 && resultCode == Activity.RESULT_OK) {
-            bm_camera3 = (Bitmap) data.getExtras().get("data");
-            if (bm_camera3 != null) {
+            byte[] bitmaps = (byte[]) data.getExtras().get("camera_data");
+            if (bitmaps != null){
+                bm_camera3 = BitmapFactory.decodeByteArray(bitmaps, 0, bitmaps.length);
+                Matrix matrix = new Matrix();
+                matrix.setRotate(90);
+                bm_camera3 = Bitmap.createBitmap(bm_camera3,0,0,bm_camera3.getWidth(),bm_camera3.getHeight(),matrix,true);
                 image3.setImageBitmap(bm_camera3);
             }
         }

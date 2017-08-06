@@ -5,13 +5,11 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.support.annotation.IdRes;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -46,18 +44,21 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.treasure.traveldiary.activity.add.DiaryImageCameraActivity;
 import com.treasure.traveldiary.activity.add.DiaryImagePublishActivity;
 import com.treasure.traveldiary.activity.add.DiaryEvaluatedActivity;
+import com.treasure.traveldiary.activity.add.DiaryVideoCameraActivity;
+import com.treasure.traveldiary.activity.add.DiaryVideoPublishActivity;
+import com.treasure.traveldiary.activity.traveller.DiaryCenterActivity;
 import com.treasure.traveldiary.activity.traveller.TravellerDiaryDetailActivity;
 import com.treasure.traveldiary.activity.add.DiaryTextPublishActivity;
-import com.treasure.traveldiary.activity.traveller.TravellerCenterActivity;
+import com.treasure.traveldiary.activity.user.UserDiaryActivity;
 import com.treasure.traveldiary.activity.user.UserCenterActivity;
 import com.treasure.traveldiary.bean.DiaryBean;
 import com.treasure.traveldiary.bean.MapMarkerInfoBean;
 import com.treasure.traveldiary.listener.MapOrientationListener;
 import com.treasure.traveldiary.utils.Tools;
 
-import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -120,10 +121,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     };
     private boolean isPageDestroy;
     private FrameLayout loading;
-    private FloatingActionButton btnAdd;
-    private FloatingActionButton btnDiaryText;
-    private FloatingActionButton btnDiaryImage;
-    private FloatingActionButton btnDiarySignin;
+    private FloatingActionButton btnAdd,btnDiaryText,btnDiaryImage,btnDiaryEvaluated,btnDiaryVideo;
     private boolean addShow;
     private int widthPixels;
     private String user_city;
@@ -138,7 +136,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private MyLocationConfiguration.LocationMode mode = MyLocationConfiguration.LocationMode.NORMAL;
     private ImageView show_location;
     private TravelApplication application;
-    private TextView text_t,image_t,signin_t;
+    private TextView text_t,image_t, video_t,evaluated_t;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,7 +164,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         btnAdd = (FloatingActionButton) findViewById(R.id.main_add_image);
         btnDiaryText = (FloatingActionButton) findViewById(R.id.add_diary_text);
         btnDiaryImage = (FloatingActionButton) findViewById(R.id.add_diary_image);
-        btnDiarySignin = (FloatingActionButton) findViewById(R.id.add_diary_evaluated);
+        btnDiaryVideo = (FloatingActionButton) findViewById(R.id.add_diary_video);
+        btnDiaryEvaluated = (FloatingActionButton) findViewById(R.id.add_diary_evaluated);
         addLayout = (ImageView) findViewById(R.id.add_diary_layout);
         map_type = (RadioGroup) findViewById(R.id.layout_map_type);
         map_type_normal = (RadioButton) findViewById(R.id.btn_map_normal);
@@ -175,7 +174,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         show_location = (ImageView) findViewById(R.id.user_map_location);
         text_t = (TextView) findViewById(R.id.add_diary_text_t);
         image_t = (TextView) findViewById(R.id.add_diary_image_t);
-        signin_t = (TextView) findViewById(R.id.add_diary_evaluated_t);
+        video_t = (TextView) findViewById(R.id.add_diary_video_t);
+        evaluated_t = (TextView) findViewById(R.id.add_diary_evaluated_t);
     }
 
     private void useLocationOrientationListener() {
@@ -234,7 +234,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         loading.setOnClickListener(this);
         btnDiaryText.setOnClickListener(this);
         btnDiaryImage.setOnClickListener(this);
-        btnDiarySignin.setOnClickListener(this);
+        btnDiaryVideo.setOnClickListener(this);
+        btnDiaryEvaluated.setOnClickListener(this);
         map.setOnMarkerClickListener(this);
         map.setOnMapClickListener(this);
         addLayout.setOnClickListener(this);
@@ -242,14 +243,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         show_location.setOnClickListener(this);
         text_t.setOnClickListener(this);
         image_t.setOnClickListener(this);
-        signin_t.setOnClickListener(this);
+        video_t.setOnClickListener(this);
+        evaluated_t.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.main_travel_layout:
-                Intent intent1 = new Intent(MainActivity.this, TravellerCenterActivity.class);
+                Intent intent1 = new Intent(MainActivity.this, DiaryCenterActivity.class);
                 if (Build.VERSION.SDK_INT >= 21) {
                     startActivity(intent1, ActivityOptions.makeSceneTransitionAnimation(this, travellerLayout, "traveller").toBundle());
                 } else {
@@ -284,8 +286,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             case R.id.add_diary_image:
             case R.id.add_diary_image_t:
-                Intent intent3 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Intent intent3 = new Intent(MainActivity.this, DiaryImageCameraActivity.class);
                 startActivityForResult(intent3, 200);
+                hindFloatActionButton();
+                break;
+            case R.id.add_diary_video:
+            case R.id.add_diary_video_t:
+                Intent intent6 = new Intent(MainActivity.this, DiaryVideoCameraActivity.class);
+                startActivityForResult(intent6, 201);
                 hindFloatActionButton();
                 break;
             case R.id.add_diary_evaluated:
@@ -295,7 +303,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 intent5.putExtra("user_lon",String.valueOf(user_longitude));
                 intent5.putExtra("user_addr",user_addr);
                 if (Build.VERSION.SDK_INT >= 21) {
-                    startActivity(intent5, ActivityOptions.makeSceneTransitionAnimation(this, btnDiarySignin, "diary_evaluated").toBundle());
+                    startActivity(intent5, ActivityOptions.makeSceneTransitionAnimation(this, btnDiaryEvaluated, "diary_evaluated").toBundle());
                 } else {
                     startActivity(intent5);
                 }
@@ -344,12 +352,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void showFloatActionButton() {
-        Tools.setAnimation(btnDiaryText, -widthPixels / 4, -330, 0, 1,0,360,1,1,500);
-        Tools.setAnimation(btnDiaryImage, 0, -330, 0, 1,0,360,1,1,500);
-        Tools.setAnimation(btnDiarySignin, widthPixels / 4, -330, 0, 1,0,-360,1,1,500);
-        Tools.setAnimation(text_t, -widthPixels / 4, -250, 0, 1,0,360,1,1,500);
-        Tools.setAnimation(image_t, 0, -250, 0, 1,0,360,1,1,500);
-        Tools.setAnimation(signin_t, widthPixels / 4, -250, 0, 1,0,-360,1,1,500);
+        Tools.setAnimation(btnDiaryText, -widthPixels / 3, -330, 0, 1,0,360,1,1,500);
+        Tools.setAnimation(btnDiaryImage, -widthPixels/9, -330, 0, 1,0,360,1,1,500);
+        Tools.setAnimation(btnDiaryVideo, widthPixels / 9, -330, 0, 1,0,-360,1,1,500);
+        Tools.setAnimation(btnDiaryEvaluated, widthPixels / 3, -330, 0, 1,0,-360,1,1,500);
+        Tools.setAnimation(text_t, -widthPixels / 3, -250, 0, 1,0,360,1,1,500);
+        Tools.setAnimation(image_t, -widthPixels/9, -250, 0, 1,0,360,1,1,500);
+        Tools.setAnimation(video_t, widthPixels / 9, -250, 0, 1,0,-360,1,1,500);
+        Tools.setAnimation(evaluated_t, widthPixels / 3, -250, 0, 1,0,-360,1,1,500);
         Tools.setAnimation(btnAdd, 0,0,1,1,0, -45,1,1,500);
         addLayout.setVisibility(View.VISIBLE);
         addLayout.setClickable(true);
@@ -362,10 +372,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private void hindFloatActionButton() {
         Tools.setAnimation(btnDiaryText, 0, 0, 1, 0,-360,0,1,1,500);
         Tools.setAnimation(btnDiaryImage, 0, 0, 1, 0,-360,0,1,1,500);
-        Tools.setAnimation(btnDiarySignin, 0, 0, 1, 0,360,0,1,1,500);
+        Tools.setAnimation(btnDiaryVideo, 0, 0, 1, 0,360,0,1,1,500);
+        Tools.setAnimation(btnDiaryEvaluated, 0, 0, 1, 0,360,0,1,1,500);
         Tools.setAnimation(text_t, 0, 0, 1, 0,-360,0,1,1,500);
         Tools.setAnimation(image_t, 0, 0, 1, 0,-360,0,1,1,500);
-        Tools.setAnimation(signin_t, 0, 0, 1, 0,360,0,1,1,500);
+        Tools.setAnimation(video_t, 0, 0, 1, 0,360,0,1,1,500);
+        Tools.setAnimation(evaluated_t, 0, 0, 1, 0,360,0,1,1,500);
         Tools.setAnimation(btnAdd,0,0,1,1, -45, 0,1,1,500);
         addLayout.setClickable(false);
         ObjectAnimator alpha = ObjectAnimator.ofFloat(addLayout, "alpha", 1, 0);
@@ -541,6 +553,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     intent.putExtra("type","text");
                 }else if (markerInfo.getDiary_type() == 1){
                     intent.putExtra("type","image");
+                }else if (markerInfo.getDiary_type() == 2){
+                    intent.putExtra("type","video");
+                    intent.putExtra("path",markerInfo.getVideo_path());
                 }
                 startActivity(intent);
             }
@@ -582,6 +597,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         mapMarkerInfoBean.setUser_nick(list.get(i).getUser_nick());
                         mapMarkerInfoBean.setUser_image(list.get(i).getDiary_image());
                         mapMarkerInfoBean.setDiary_type(list.get(i).getDiary_type());
+                        mapMarkerInfoBean.setVideo_path(list.get(i).getDiary_video()+"");
                         addOverlay(mapMarkerInfoBean);
                     }
                 }
@@ -593,20 +609,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 200 && resultCode == Activity.RESULT_OK){
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            if (bitmap != null){
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
-                byte[] bitmapByte = baos.toByteArray();
-
+            byte[] camera_data = (byte[]) data.getExtras().get("camera_data");
+            if (camera_data != null){
                 Intent intent2 = new Intent(MainActivity.this, DiaryImagePublishActivity.class);
-                intent2.putExtra("bitmap",bitmapByte);
+                intent2.putExtra("camera_data",camera_data);
                 intent2.putExtra("user_addr", user_addr);
                 intent2.putExtra("user_lat", String.valueOf(user_latitude));
                 intent2.putExtra("user_long", String.valueOf(user_longitude));
                 startActivity(intent2);
             }
         }
+        if (requestCode == 201 && resultCode == Activity.RESULT_OK){
+                Intent intent2 = new Intent(MainActivity.this, DiaryVideoPublishActivity.class);
+                intent2.putExtra("user_addr", user_addr);
+                intent2.putExtra("user_lat", String.valueOf(user_latitude));
+                intent2.putExtra("user_long", String.valueOf(user_longitude));
+                startActivity(intent2);
+            }
     }
 
     /**

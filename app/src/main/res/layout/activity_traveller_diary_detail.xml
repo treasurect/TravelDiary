@@ -101,30 +101,60 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:background="@color/colorAccent" />
-            <LinearLayout
-                android:id="@+id/diary_detail_user_image_layout"
+            <FrameLayout
+                android:id="@+id/diary_detail_user_noText_layout"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:orientation="horizontal">
-                <com.facebook.drawee.view.SimpleDraweeView
-                    android:id="@+id/diary_detail_user_image1"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                android:layout_height="180dp">
+                <FrameLayout
+                    android:id="@+id/diary_detail_user_video_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <SurfaceView
+                        android:id="@+id/diary_detail_user_video_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <ImageView
+                        android:id="@+id/diary_detail_user_video_first"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <ImageView
+                        android:id="@+id/diary_detail_user_video_play"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@mipmap/ic_play"
+                        android:layout_gravity="center"
+                        android:visibility="gone"/>
+                    <ProgressBar
+                        android:id="@+id/diary_detail_user_video_loading"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"/>
+                </FrameLayout>
+                <LinearLayout
+                    android:id="@+id/diary_detail_user_image_layout"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="10dp"/>
-                <com.facebook.drawee.view.SimpleDraweeView
-                    android:id="@+id/diary_detail_user_image2"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:layout_margin="10dp"/>
-                <com.facebook.drawee.view.SimpleDraweeView
-                    android:id="@+id/diary_detail_user_image3"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:layout_margin="10dp"/>
-            </LinearLayout>
+                    android:orientation="horizontal">
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/diary_detail_user_image1"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"/>
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/diary_detail_user_image2"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"/>
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/diary_detail_user_image3"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"/>
+                </LinearLayout>
+            </FrameLayout>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"

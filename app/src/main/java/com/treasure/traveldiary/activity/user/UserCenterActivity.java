@@ -28,9 +28,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.TravelApplication;
-import com.treasure.traveldiary.activity.traveller.TravellerCenterActivity;
 import com.treasure.traveldiary.bean.UserInfoBean;
 import com.treasure.traveldiary.receiver.CommonDataReceiver;
 import com.treasure.traveldiary.utils.LogUtil;
@@ -43,7 +43,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class UserCenterActivity extends AppCompatActivity implements View.OnClickListener {
+public class UserCenterActivity extends BaseActivity implements View.OnClickListener {
     private PopupWindow mPopupWindow;
     private ImageView imageNight, mine_login_icon, imageHistory, imageSettings;
     private TextView mine_login_username;
@@ -77,6 +77,7 @@ public class UserCenterActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_center);
         application = (TravelApplication) getApplication();
+        initTitle();
         Tools.setTranslucentStatus(this);
 
         mPreferences = getSharedPreferences("user", MODE_PRIVATE);
@@ -248,7 +249,7 @@ public class UserCenterActivity extends AppCompatActivity implements View.OnClic
                 if (Tools.isNull(mPreferences.getString("token",""))){
                     showPopupWindow();
                 }else {
-                    Intent intent = new Intent(UserCenterActivity.this, TravellerCenterActivity.class);
+                    Intent intent = new Intent(UserCenterActivity.this, UserDiaryActivity.class);
                     intent.putExtra("type","mine");
                     startActivity(intent);
                 }

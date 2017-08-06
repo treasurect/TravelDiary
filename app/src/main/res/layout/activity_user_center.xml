@@ -29,7 +29,7 @@
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="登录让内容更精彩"
+            android:text="登录，记录精彩生活"
             android:textColor="#fff"
             android:textStyle="bold"
             android:gravity="center"/>
@@ -122,8 +122,8 @@
             android:paddingLeft="10dp"
             android:background="@color/colorWhite"/>
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:src="@mipmap/ic_right"
             android:layout_gravity="right|center_vertical"
             android:layout_marginRight="10dp"/>
@@ -143,8 +143,8 @@
             android:paddingLeft="10dp"
             android:background="@color/colorWhite"/>
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:src="@mipmap/ic_right"
             android:layout_gravity="right|center_vertical"
             android:layout_marginRight="10dp"/>
@@ -164,8 +164,8 @@
             android:paddingLeft="10dp"
             android:background="@color/colorWhite"/>
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:src="@mipmap/ic_right"
             android:layout_gravity="right|center_vertical"
             android:layout_marginRight="10dp"/>
@@ -185,8 +185,8 @@
             android:paddingLeft="10dp"
             android:background="@color/colorWhite"/>
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:src="@mipmap/ic_right"
             android:layout_gravity="right|center_vertical"
             android:layout_marginRight="10dp"/>
@@ -206,8 +206,8 @@
             android:paddingLeft="10dp"
             android:background="@color/colorWhite"/>
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:src="@mipmap/ic_right"
             android:layout_gravity="right|center_vertical"
             android:layout_marginRight="10dp"/>
@@ -227,8 +227,8 @@
             android:paddingLeft="10dp"
             android:background="@color/colorWhite"/>
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:src="@mipmap/ic_right"
             android:layout_gravity="right|center_vertical"
             android:layout_marginRight="10dp"/>

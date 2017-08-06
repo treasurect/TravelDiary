@@ -1,18 +1,20 @@
 package com.treasure.traveldiary.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.bean.DiaryBean;
-import com.treasure.traveldiary.utils.LogUtil;
 import com.treasure.traveldiary.utils.Tools;
 
 import java.util.List;
@@ -53,33 +55,47 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (list.get(position).getDiary_type() == 0){
+        if (list.get(position).getDiary_type() == 0) {
             return 0;
+        } else if (list.get(position).getDiary_type() == 1){
+            if (list.get(position).getDiary_image().size() == 1) {
+                return 1;
+            } else if (list.get(position).getDiary_image().size() == 2) {
+                return 2;
+            } else{
+                return 3;
+            }
         }else {
-            return 1;
+            return 4;
         }
     }
 
     @Override
     public int getViewTypeCount() {
-        return 2;
+        return 5;
     }
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
         View ret = null;
         ViewHolder holder = null;
-          final DiaryBean listBean = list.get(position);
+        final DiaryBean listBean = list.get(position);
         if (view != null) {
             ret = view;
-             holder = (ViewHolder) ret.getTag();
+            holder = (ViewHolder) ret.getTag();
         } else {
             if (getItemViewType(position) == 0) {
                 ret = inflater.inflate(R.layout.diary_text_list_item, viewGroup, false);
-            }else{
-                ret = inflater.inflate(R.layout.diary_image_list_item, viewGroup, false);
+            } else if (getItemViewType(position) == 1) {
+                ret = inflater.inflate(R.layout.diary_image1_list_item, viewGroup, false);
+            } else if (getItemViewType(position) == 2) {
+                ret = inflater.inflate(R.layout.diary_image2_list_item, viewGroup, false);
+            } else if (getItemViewType(position) == 3) {
+                ret = inflater.inflate(R.layout.diary_image3_list_item, viewGroup, false);
+            }else {
+                ret = inflater.inflate(R.layout.diary_video_list_item,viewGroup,false);
             }
-             holder = new ViewHolder(ret);
+            holder = new ViewHolder(ret);
             ret.setTag(holder);
         }
 
@@ -99,24 +115,27 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
         if (!Tools.isNull(listBean.getUser_title())) {
             holder.user_title.setText(listBean.getUser_title());
         }
-        if (listBean.getDiary_type() == 1){
-            if (listBean.getDiary_image() !=null){
-                holder.image1.setVisibility(View.VISIBLE);
-                holder.image2.setVisibility(View.VISIBLE);
-                holder.image3.setVisibility(View.VISIBLE);
-                if (listBean.getDiary_image().size() == 1){
+        if (listBean.getDiary_type() == 1) {
+            if (listBean.getDiary_image() != null) {
+                if (listBean.getDiary_image().size() == 1) {
                     holder.image1.setImageURI(Uri.parse(listBean.getDiary_image().get(0).toString()));
-                    holder.image2.setVisibility(View.GONE);
-                    holder.image3.setVisibility(View.GONE);
-                }else if (listBean.getDiary_image().size() == 2){
+                } else if (listBean.getDiary_image().size() == 2) {
                     holder.image1.setImageURI(Uri.parse(listBean.getDiary_image().get(0).toString()));
                     holder.image2.setImageURI(Uri.parse(listBean.getDiary_image().get(1).toString()));
-                    holder.image3.setVisibility(View.GONE);
-                }else if (listBean.getDiary_image().size() == 3){
+                } else if (listBean.getDiary_image().size() == 3) {
                     holder.image1.setImageURI(Uri.parse(listBean.getDiary_image().get(0).toString()));
                     holder.image2.setImageURI(Uri.parse(listBean.getDiary_image().get(1).toString()));
                     holder.image3.setImageURI(Uri.parse(listBean.getDiary_image().get(2).toString()));
                 }
+            }
+        }
+        if (listBean.getDiary_type() == 2){
+            if (!Tools.isNull(listBean.getDiary_video())){
+//                MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+//                mmr.setDataSource(listBean.getDiary_video());
+//                Bitmap bitmap = mmr.getFrameAtTime();//获取第一帧图片
+//                holder.video_image.setImageBitmap(bitmap);
+//                mmr.release();//释放资源
             }
         }
         holder.text_layout.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +148,8 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
     }
 
     public static class ViewHolder {
-        private SimpleDraweeView image1,image2,image3;
+        private ImageView video_image;
+        private SimpleDraweeView image1, image2, image3;
         private SimpleDraweeView user_icon;
         private TextView user_name, user_time, user_desc, user_title;
         private LinearLayout text_layout;
@@ -140,15 +160,18 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
             user_time = ((TextView) view.findViewById(R.id.diary_list_user_time));
             user_desc = ((TextView) view.findViewById(R.id.diary_list_user_desc));
             user_title = ((TextView) view.findViewById(R.id.diary_list_user_title));
-            text_layout = (LinearLayout)view.findViewById(R.id.diary_list_layout);
+            text_layout = (LinearLayout) view.findViewById(R.id.diary_list_layout);
             image1 = (SimpleDraweeView) view.findViewById(R.id.diary_list_image1);
             image2 = (SimpleDraweeView) view.findViewById(R.id.diary_list_image2);
             image3 = (SimpleDraweeView) view.findViewById(R.id.diary_list_image3);
+            video_image = (ImageView) view.findViewById(R.id.diary_list_video);
         }
     }
-    public interface DiaryTextClick{
+
+    public interface DiaryTextClick {
         void textClick(DiaryBean diaryBean);
     }
+
     public DiaryTextClick diaryTextClick = null;
 
     public void setDiaryTextClick(DiaryTextClick diaryTextClick) {

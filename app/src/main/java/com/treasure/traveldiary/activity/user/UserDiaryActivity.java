@@ -1,4 +1,4 @@
-package com.treasure.traveldiary.activity.traveller;
+package com.treasure.traveldiary.activity.user;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
+import com.treasure.traveldiary.activity.traveller.TravellerDiaryDetailActivity;
 import com.treasure.traveldiary.adapter.TravellerDiaryListAdapter;
 import com.treasure.traveldiary.bean.DiaryBean;
 import com.treasure.traveldiary.utils.Tools;
@@ -22,32 +23,25 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class TravellerCenterActivity extends BaseActivity implements View.OnClickListener, TravellerDiaryListAdapter.DiaryTextClick {
+public class UserDiaryActivity extends BaseActivity implements View.OnClickListener, TravellerDiaryListAdapter.DiaryTextClick {
     private ListView listView;
     private List<DiaryBean> diaryList;
     private TravellerDiaryListAdapter adapter;
     private FrameLayout loading;
     private boolean isPageDestroy;
-    private boolean isMine;
     private SharedPreferences mPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_traveller_center);
+        setContentView(R.layout.activity_user_diary);
         initTitle();
         Tools.setTranslucentStatus(this);
         btn_back.setVisibility(View.VISIBLE);
-        title.setText("驴友记");
+        title.setText("我的日记");
         mPreferences = getSharedPreferences("user", MODE_PRIVATE);
 
         initFindId();
-        Intent intent = getIntent();
-        if (!Tools.isNull(intent.getStringExtra("type"))){
-            if (intent.getStringExtra("type").equals("mine")){
-                isMine = true;
-            }
-        }
         initListView();
         initClick();
     }
@@ -78,9 +72,7 @@ public class TravellerCenterActivity extends BaseActivity implements View.OnClic
     private void getDiaryList() {
         loading.setVisibility(View.VISIBLE);
         BmobQuery<DiaryBean> query = new BmobQuery<>();
-        if (isMine){
             query.addWhereEqualTo("user_name",mPreferences.getString("user_name",""));
-        }
         query.findObjects(new FindListener<DiaryBean>() {
             @Override
             public void done(List<DiaryBean> list, BmobException e) {
@@ -98,7 +90,7 @@ public class TravellerCenterActivity extends BaseActivity implements View.OnClic
                     if (!isPageDestroy){
                         loading.setVisibility(View.GONE);
                     }
-                    Toast.makeText(TravellerCenterActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserDiaryActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -108,7 +100,7 @@ public class TravellerCenterActivity extends BaseActivity implements View.OnClic
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_back:
-                TravellerCenterActivity.this.finish();
+                UserDiaryActivity.this.finish();
                 break;
         }
     }
@@ -116,14 +108,19 @@ public class TravellerCenterActivity extends BaseActivity implements View.OnClic
     @Override
     public void textClick(DiaryBean diaryBean) {
         if (diaryBean.getDiary_type() == 0){
-            Intent intent = new Intent(TravellerCenterActivity.this, TravellerDiaryDetailActivity.class);
+            Intent intent = new Intent(UserDiaryActivity.this, TravellerDiaryDetailActivity.class);
             intent.putExtra("diaryBean",diaryBean);
             intent.putExtra("type","text");
             startActivity(intent);
         }else if (diaryBean.getDiary_type() == 1){
-            Intent intent = new Intent(TravellerCenterActivity.this, TravellerDiaryDetailActivity.class);
+            Intent intent = new Intent(UserDiaryActivity.this, TravellerDiaryDetailActivity.class);
             intent.putExtra("diaryBean",diaryBean);
             intent.putExtra("type","image");
+            startActivity(intent);
+        }else if (diaryBean.getDiary_type() == 2){
+            Intent intent = new Intent(UserDiaryActivity.this, TravellerDiaryDetailActivity.class);
+            intent.putExtra("diaryBean",diaryBean);
+            intent.putExtra("type","video");
             startActivity(intent);
         }
     }

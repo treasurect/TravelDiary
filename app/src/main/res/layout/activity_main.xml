@@ -153,6 +153,15 @@
             android:layout_marginBottom="25dp"
             android:textColor="@color/colorWhite"/>
         <TextView
+            android:id="@+id/add_diary_video_t"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="短视频"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="25dp"
+            android:textColor="@color/colorWhite"/>
+        <TextView
             android:id="@+id/add_diary_evaluated_t"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -179,6 +188,15 @@
             android:layout_gravity="center_horizontal|bottom"
             android:layout_marginBottom="25dp"
             app:backgroundTint="@color/colorRed"
+            app:rippleColor="@color/colorAccent"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/add_diary_video"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/ic_video"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="25dp"
+            app:backgroundTint="@color/colorYellow"
             app:rippleColor="@color/colorAccent"/>
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/add_diary_evaluated"
