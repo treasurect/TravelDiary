@@ -9,6 +9,7 @@ import cn.bmob.v3.BmobObject;
 public class EvaluatedBean extends BmobObject{
     private String user_name;
     private String user_nick;
+    private String user_icon;
     private String publish_time;
     private String user_addr;
     private int star_num;
@@ -60,5 +61,13 @@ public class EvaluatedBean extends BmobObject{
 
     public void setUser_evaluated(String user_evaluated) {
         this.user_evaluated = user_evaluated;
+    }
+
+    public String getUser_icon() {
+        return user_icon;
+    }
+
+    public void setUser_icon(String user_icon) {
+        this.user_icon = user_icon;
     }
 }

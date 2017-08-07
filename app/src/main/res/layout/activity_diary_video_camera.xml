@@ -24,14 +24,13 @@
             android:src="@mipmap/ic_camera_scan" />
         <TextView
             android:id="@+id/diary_video_camera_countTimer"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:text="20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="@color/colorYellow"
             android:textStyle="bold"
-            android:textSize="25sp"
+            android:textSize="50sp"
             android:gravity="center"
-            android:layout_gravity="center_horizontal|bottom"
+            android:layout_gravity="center"
             android:layout_marginBottom="70dp"/>
         <ImageView
             android:id="@+id/diary_video_camera_scan"

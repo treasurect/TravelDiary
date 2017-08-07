@@ -556,6 +556,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }else if (markerInfo.getDiary_type() == 2){
                     intent.putExtra("type","video");
                     intent.putExtra("path",markerInfo.getVideo_path());
+                    intent.putExtra("path_first",markerInfo.getVideo_path_first());
                 }
                 startActivity(intent);
             }
@@ -598,6 +599,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         mapMarkerInfoBean.setUser_image(list.get(i).getDiary_image());
                         mapMarkerInfoBean.setDiary_type(list.get(i).getDiary_type());
                         mapMarkerInfoBean.setVideo_path(list.get(i).getDiary_video()+"");
+                        mapMarkerInfoBean.setVideo_path_first(list.get(i).getDiary_video_first()+"");
                         addOverlay(mapMarkerInfoBean);
                     }
                 }

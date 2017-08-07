@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_user_feed_back"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".activity.user.UserFeedBackActivity">
+    <include layout="@layout/common_top_view"/>
+    <EditText
+        android:id="@+id/user_feedBack_content"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:padding="20dp"
+        android:gravity="top"
+        android:hint="留下您的建议，我们会做得更好！"
+        android:background="@drawable/bottom_yellow1_frame_gray_radius5"
+        android:layout_margin="10dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="留下你的联系方式（选填）"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"/>
+    <EditText
+        android:id="@+id/user_feedBack_contacts"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/bottom_yellow1_frame_gray_radius5"
+        android:layout_margin="10dp"
+        android:paddingLeft="10dp"/>
+    <TextView
+        android:id="@+id/mine_history_feedBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="我的历史反馈"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"/>
+</LinearLayout>

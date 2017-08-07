@@ -13,6 +13,8 @@ import com.treasure.traveldiary.fragments.DiaryAllFragment;
 import com.treasure.traveldiary.fragments.DiaryImageFragment;
 import com.treasure.traveldiary.fragments.DiaryTextFragment;
 import com.treasure.traveldiary.fragments.DiaryVideoFragment;
+import com.treasure.traveldiary.fragments.EvaluatedFragment;
+import com.treasure.traveldiary.fragments.SmallGameFragment;
 import com.treasure.traveldiary.utils.Tools;
 
 import java.util.ArrayList;
@@ -48,6 +50,8 @@ public class DiaryCenterActivity extends BaseActivity implements TabLayout.OnTab
         tabLayout.addTab(tabLayout.newTab().setText("文字"));
         tabLayout.addTab(tabLayout.newTab().setText("图片"));
         tabLayout.addTab(tabLayout.newTab().setText("短视频"));
+        tabLayout.addTab(tabLayout.newTab().setText("点评/吐槽"));
+        tabLayout.addTab(tabLayout.newTab().setText("小游戏"));
     }
 
     private void initViewPager() {
@@ -56,6 +60,8 @@ public class DiaryCenterActivity extends BaseActivity implements TabLayout.OnTab
         list.add(new DiaryTextFragment());
         list.add(new DiaryImageFragment());
         list.add(new DiaryVideoFragment());
+        list.add(new EvaluatedFragment());
+        list.add(new SmallGameFragment());
         HomeFragmentPagerAdapter pagerAdapter = new HomeFragmentPagerAdapter(getSupportFragmentManager(), list);
         viewPager.setAdapter(pagerAdapter);
     }

@@ -39,7 +39,7 @@ public class TravellerDiaryDetailActivity extends BaseActivity implements View.O
     private MediaPlayer mediaPlayer;
     private SurfaceHolder holder;
     private FrameLayout video_layout;
-    private ImageView video_first;
+    private SimpleDraweeView video_first;
     private ProgressBar video_loading;
 
     @Override
@@ -72,7 +72,7 @@ public class TravellerDiaryDetailActivity extends BaseActivity implements View.O
         video_play = (ImageView) findViewById(R.id.diary_detail_user_video_play);
         noText_layout = (FrameLayout) findViewById(R.id.diary_detail_user_noText_layout);
         video_layout = (FrameLayout) findViewById(R.id.diary_detail_user_video_layout);
-        video_first = (ImageView) findViewById(R.id.diary_detail_user_video_first);
+        video_first = (SimpleDraweeView) findViewById(R.id.diary_detail_user_video_first);
         video_loading = (ProgressBar) findViewById(R.id.diary_detail_user_video_loading);
     }
 
@@ -116,8 +116,9 @@ public class TravellerDiaryDetailActivity extends BaseActivity implements View.O
                         }
                     }
                 } else {
-                    if (!Tools.isNull(diaryBean.getDiary_video())) {
+                    if (!Tools.isNull(diaryBean.getDiary_video_first())) {
                         image_layout.setVisibility(View.GONE);
+                        video_first.setImageURI(Uri.parse(diaryBean.getDiary_video_first()));
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -173,6 +174,10 @@ public class TravellerDiaryDetailActivity extends BaseActivity implements View.O
                             initMediaPlayer(path);
                         }
                     }).start();
+                }
+                if (!Tools.isNull(intent.getStringExtra("path_first"))) {
+                    String path = intent.getStringExtra("path_first");
+                    video_first.setImageURI(Uri.parse(path));
                 }
             }
         }

@@ -71,7 +71,8 @@
             android:id="@+id/diary_list_image1"
             android:layout_width="match_parent"
             android:layout_height="350dp"
-            android:layout_margin="10dp" />
+            android:layout_margin="10dp"
+            fresco:placeholderImage="@mipmap/pic_page_loading"/>
 
         <View
             android:layout_width="match_parent"

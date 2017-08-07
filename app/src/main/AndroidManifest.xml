@@ -204,11 +204,23 @@
         <activity
             android:name=".activity.add.DiaryImageCameraActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.user.UserEvaluatedListActivity" />
-        <activity android:name=".activity.user.UserMessageListActivity" />
-        <activity android:name=".activity.add.DiaryVideoCameraActivity" />
-        <activity android:name=".activity.add.DiaryVideoPublishActivity" />
-        <activity android:name=".activity.traveller.DiaryCenterActivity"></activity>
+        <activity
+            android:name=".activity.user.UserEvaluatedListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user.UserMessageListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.add.DiaryVideoCameraActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.add.DiaryVideoPublishActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.traveller.DiaryCenterActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.user.UserFeedBackActivity" />
+        <activity android:name=".activity.user.UserFeedBckHistoryActivity"></activity>
     </application>
 
 </manifest>

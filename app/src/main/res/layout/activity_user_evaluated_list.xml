@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     tools:context="com.treasure.traveldiary.activity.user.UserEvaluatedListActivity">
-<include layout="@layout/common_top_view"/>
-    <ListView
-        android:id="@+id/user_evaluated"
+
+    <include layout="@layout/common_top_view" />
+
+    <com.treasure.traveldiary.widget.CustomRefreshListView
+        android:id="@+id/user_evaluated_listView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_marginTop="45dp"/>
+    <include layout="@layout/common_loading_view"/>
+</FrameLayout>

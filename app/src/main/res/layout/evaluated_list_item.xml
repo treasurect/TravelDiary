@@ -8,7 +8,7 @@
     <LinearLayout
         android:id="@+id/diary_list_layout"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="200dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="12dp"
@@ -23,7 +23,7 @@
             android:paddingRight="10dp">
 
             <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/diary_list_user_icon"
+                android:id="@+id/evaluated_list_user_icon"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center"
@@ -37,14 +37,14 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/diary_list_user_name"
+                    android:id="@+id/evaluated_list_user_name"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="bottom" />
 
                 <TextView
-                    android:id="@+id/diary_list_user_time"
+                    android:id="@+id/evaluated_list_user_time"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -53,12 +53,13 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/diary_list_user_title"
+            android:id="@+id/evaluated_list_user_title"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:maxLines="1"
+            android:maxLines="3"
+            android:ellipsize="end"
             android:paddingLeft="10dp"
             android:textSize="16sp" />
 
@@ -67,37 +68,50 @@
             android:layout_height="0.5dp"
             android:background="@color/colorAccent" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_margin="10dp" >
-            <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/diary_list_video"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                fresco:placeholderImage="@mipmap/pic_page_loading" />
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@mipmap/ic_play"
-                android:layout_gravity="center"/>
-        </FrameLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/colorAccent" />
-
-        <TextView
+        <LinearLayout
             android:id="@+id/diary_list_user_desc"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:maxLines="2"
+            android:layout_weight="0.5"
             android:paddingLeft="10dp"
-            android:textSize="16sp" />
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/evaluated_list_user_star1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@mipmap/ic_star_unclick"
+                android:layout_margin="5dp"
+                android:layout_gravity="center_vertical"/>
+            <ImageView
+                android:id="@+id/evaluated_list_user_star2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@mipmap/ic_star_unclick"
+                android:layout_margin="5dp"
+                android:layout_gravity="center_vertical"/>
+            <ImageView
+                android:id="@+id/evaluated_list_user_star3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@mipmap/ic_star_unclick"
+                android:layout_margin="5dp"
+                android:layout_gravity="center_vertical"/>
+            <ImageView
+                android:id="@+id/evaluated_list_user_star4"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:src="@mipmap/ic_star_unclick"
+                android:layout_gravity="center_vertical"/>
+            <ImageView
+                android:id="@+id/evaluated_list_user_star5"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:src="@mipmap/ic_star_unclick"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
 
 
     </LinearLayout>

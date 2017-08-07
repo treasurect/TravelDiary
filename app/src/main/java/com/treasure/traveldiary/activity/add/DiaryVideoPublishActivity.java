@@ -22,15 +22,18 @@ import android.widget.Toast;
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.bean.DiaryBean;
+import com.treasure.traveldiary.utils.LogUtil;
 import com.treasure.traveldiary.utils.Tools;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UploadBatchListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
 public class DiaryVideoPublishActivity extends BaseActivity implements View.OnClickListener, TextWatcher, SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
@@ -45,6 +48,7 @@ public class DiaryVideoPublishActivity extends BaseActivity implements View.OnCl
     private SurfaceHolder holder;
     private ImageView first_image;
     private SharedPreferences mPreferences;
+    private String video_first = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,10 +107,15 @@ public class DiaryVideoPublishActivity extends BaseActivity implements View.OnCl
 
             MediaMetadataRetriever mmr = new MediaMetadataRetriever();
             mmr.setDataSource(path);
-            Bitmap bitmap = mmr.getFrameAtTime();//获取第一帧图片
+            final Bitmap bitmap = mmr.getFrameAtTime();//获取第一帧图片
             first_image.setImageBitmap(bitmap);
             mmr.release();//释放资源
-
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    video_first = Tools.saveBitmapToSD(DiaryVideoPublishActivity.this, bitmap, "diary_video_first");
+                }
+            }).start();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -162,20 +171,34 @@ public class DiaryVideoPublishActivity extends BaseActivity implements View.OnCl
 
     private void upLoadVideo() {
         loading.setVisibility(View.VISIBLE);
-        final BmobFile bmobFile = new BmobFile(new File(getExternalFilesDir(null).getAbsolutePath()+"/diary_video.mp4"));
-        bmobFile.uploadblock(new UploadFileListener() {
+        final String[] path = new String[2];
+        path[0] = video_first;
+        path[1] = getExternalFilesDir(null).getAbsolutePath()+"/diary_video.mp4";
+        BmobFile.uploadBatch(path, new UploadBatchListener() {
             @Override
-            public void done(BmobException e) {
-                if (e== null){
-                    String fileUrl = bmobFile.getFileUrl();
-                    sendDiary(fileUrl);
-                }else {
-                    Toast.makeText(DiaryVideoPublishActivity.this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onSuccess(List<BmobFile> list, List<String> list1) {
+                if (list1.size() == path.length){
+                    LogUtil.d("~~~~~~~~~~~~~~~~~~~~`"+list1.get(0).contains("mp4")+"........"+list1.get(1).contains("mp4"));
+                    if (list1.get(0).contains("mp4")){
+                        sendDiary(list1.get(0),list1.get(1));
+                    }else {
+                        sendDiary(list1.get(1),list1.get(0));
+                    }
                 }
+            }
+
+            @Override
+            public void onProgress(int i, int i1, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onError(int i, String s) {
+
             }
         });
     }
-    private void sendDiary(String fileUrl) {
+    private void sendDiary(String fileUrl,String imageUrl) {
         String textDesc = diaryDesc.getText().toString().trim();
         String textTitle = diaryTitle.getText().toString().trim();
         DiaryBean diaryBean = new DiaryBean();
@@ -191,6 +214,7 @@ public class DiaryVideoPublishActivity extends BaseActivity implements View.OnCl
         diaryBean.setUser_title(textTitle);
 
         diaryBean.setDiary_video(fileUrl);
+        diaryBean.setDiary_video_first(imageUrl);
         diaryBean.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {

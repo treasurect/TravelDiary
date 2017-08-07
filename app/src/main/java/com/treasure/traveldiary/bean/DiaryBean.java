@@ -22,6 +22,7 @@ public class DiaryBean extends BmobObject {
     private String publish_time;
     private List<String> diary_image;
     private String diary_video;
+    private String diary_video_first;
 
     public String getUser_name() {
         return user_name;
@@ -117,5 +118,13 @@ public class DiaryBean extends BmobObject {
 
     public void setDiary_video(String diary_video) {
         this.diary_video = diary_video;
+    }
+
+    public String getDiary_video_first() {
+        return diary_video_first;
+    }
+
+    public void setDiary_video_first(String diary_video_first) {
+        this.diary_video_first = diary_video_first;
     }
 }

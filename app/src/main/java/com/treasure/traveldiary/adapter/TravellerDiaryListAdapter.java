@@ -57,15 +57,15 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
     public int getItemViewType(int position) {
         if (list.get(position).getDiary_type() == 0) {
             return 0;
-        } else if (list.get(position).getDiary_type() == 1){
+        } else if (list.get(position).getDiary_type() == 1) {
             if (list.get(position).getDiary_image().size() == 1) {
                 return 1;
             } else if (list.get(position).getDiary_image().size() == 2) {
                 return 2;
-            } else{
+            } else {
                 return 3;
             }
-        }else {
+        } else {
             return 4;
         }
     }
@@ -92,8 +92,8 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
                 ret = inflater.inflate(R.layout.diary_image2_list_item, viewGroup, false);
             } else if (getItemViewType(position) == 3) {
                 ret = inflater.inflate(R.layout.diary_image3_list_item, viewGroup, false);
-            }else {
-                ret = inflater.inflate(R.layout.diary_video_list_item,viewGroup,false);
+            } else {
+                ret = inflater.inflate(R.layout.diary_video_list_item, viewGroup, false);
             }
             holder = new ViewHolder(ret);
             ret.setTag(holder);
@@ -129,13 +129,9 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
                 }
             }
         }
-        if (listBean.getDiary_type() == 2){
-            if (!Tools.isNull(listBean.getDiary_video())){
-//                MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-//                mmr.setDataSource(listBean.getDiary_video());
-//                Bitmap bitmap = mmr.getFrameAtTime();//获取第一帧图片
-//                holder.video_image.setImageBitmap(bitmap);
-//                mmr.release();//释放资源
+        if (listBean.getDiary_type() == 2) {
+            if (!Tools.isNull(listBean.getDiary_video_first())) {
+                holder.video_image.setImageURI(Uri.parse(listBean.getDiary_video_first()));
             }
         }
         holder.text_layout.setOnClickListener(new View.OnClickListener() {
@@ -148,7 +144,7 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
     }
 
     public static class ViewHolder {
-        private ImageView video_image;
+        private SimpleDraweeView video_image;
         private SimpleDraweeView image1, image2, image3;
         private SimpleDraweeView user_icon;
         private TextView user_name, user_time, user_desc, user_title;
@@ -164,7 +160,7 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
             image1 = (SimpleDraweeView) view.findViewById(R.id.diary_list_image1);
             image2 = (SimpleDraweeView) view.findViewById(R.id.diary_list_image2);
             image3 = (SimpleDraweeView) view.findViewById(R.id.diary_list_image3);
-            video_image = (ImageView) view.findViewById(R.id.diary_list_video);
+            video_image = (SimpleDraweeView) view.findViewById(R.id.diary_list_video);
         }
     }
 

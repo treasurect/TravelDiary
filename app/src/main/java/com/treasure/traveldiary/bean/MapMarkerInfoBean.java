@@ -20,6 +20,7 @@ public class MapMarkerInfoBean implements Serializable {
     private List<String> user_image;
     private int diary_type;
     private String video_path;
+    private String video_path_first;
 
     public LatLng getLatLng() {
         return latLng;
@@ -99,5 +100,13 @@ public class MapMarkerInfoBean implements Serializable {
 
     public void setVideo_path(String video_path) {
         this.video_path = video_path;
+    }
+
+    public String getVideo_path_first() {
+        return video_path_first;
+    }
+
+    public void setVideo_path_first(String video_path_first) {
+        this.video_path_first = video_path_first;
     }
 }

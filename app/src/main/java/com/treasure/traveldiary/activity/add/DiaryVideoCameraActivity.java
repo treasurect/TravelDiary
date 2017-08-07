@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
@@ -128,7 +129,12 @@ public class DiaryVideoCameraActivity extends BaseActivity implements SurfaceHol
 
     private void startVideoRecoding() {
         mCamera.unlock();
-        mProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
+//        try {
+//            mProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
+//        }catch (Exception e){
+//            Toast.makeText(this, "您的设备支持的像素过低，特为您选择低画质录制", Toast.LENGTH_SHORT).show();
+            mProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_LOW);
+//        }
         File file = new File(getExternalFilesDir(null).getAbsolutePath() + "/diary_video.mp4");
         try {
             if (!file.exists()) {
@@ -174,18 +180,20 @@ public class DiaryVideoCameraActivity extends BaseActivity implements SurfaceHol
         scan_btn.setVisibility(View.VISIBLE);
         scan_btn.setClickable(false);
         scan2_btn.setClickable(false);
+        textCountTimer.setText("");
         btnSave.setVisibility(View.VISIBLE);
         btnCancel.setVisibility(View.VISIBLE);
     }
 
     private void openTimer() {
-        count = 20;
+        count = 10;
+        textCountTimer.setText(count+"");
         if (thread == null) {
             thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        for (int i = 0; i < 20; i++) {
+                        for (int i = 0; i < 10; i++) {
                             Thread.sleep(1000);
                             if (!isPageDestory){
                                 count --;

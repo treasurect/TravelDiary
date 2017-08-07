@@ -42,7 +42,7 @@
         android:background="@color/colorWhite"
         android:orientation="horizontal">
         <LinearLayout
-            android:id="@+id/mine_history_layout"
+            android:id="@+id/mine_signing_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -50,17 +50,16 @@
             android:layout_marginTop="10dp"
             android:orientation="vertical">
             <ImageView
-                android:id="@+id/mine_history_icon"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
-                android:src="@mipmap/ic_history2"/>
+                android:src="@mipmap/ic_signin"/>
             <TextView
                 android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="历史"/>
+                android:text="签到"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/mine_night_layout"
@@ -93,7 +92,6 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/mine_settings_icon"
                 android:layout_width="match_parent"
                 android:layout_marginTop="10dp"
                 android:layout_height="30dp"
@@ -107,27 +105,6 @@
                 android:text="设置"/>
         </LinearLayout>
     </LinearLayout>
-    <FrameLayout
-        android:id="@+id/mine_signIn_layout"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="签到"
-            android:textStyle="bold"
-            android:gravity="center_vertical"
-            android:paddingLeft="10dp"
-            android:background="@color/colorWhite"/>
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:src="@mipmap/ic_right"
-            android:layout_gravity="right|center_vertical"
-            android:layout_marginRight="10dp"/>
-    </FrameLayout>
     <FrameLayout
         android:id="@+id/mine_messagePush_layout"
         android:layout_marginTop="1dp"
@@ -143,11 +120,11 @@
             android:paddingLeft="10dp"
             android:background="@color/colorWhite"/>
         <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:src="@mipmap/ic_right"
             android:layout_gravity="right|center_vertical"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="20dp"/>
     </FrameLayout>
     <FrameLayout
         android:id="@+id/mine_feedBack_layout"
@@ -164,11 +141,11 @@
             android:paddingLeft="10dp"
             android:background="@color/colorWhite"/>
         <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:src="@mipmap/ic_right"
             android:layout_gravity="right|center_vertical"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="20dp"/>
     </FrameLayout>
     <FrameLayout
         android:id="@+id/mine_diary_layout"
@@ -185,11 +162,11 @@
             android:paddingLeft="10dp"
             android:background="@color/colorWhite"/>
         <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:src="@mipmap/ic_right"
             android:layout_gravity="right|center_vertical"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="20dp"/>
     </FrameLayout>
     <FrameLayout
         android:id="@+id/mine_evaluated_layout"
@@ -206,37 +183,16 @@
             android:paddingLeft="10dp"
             android:background="@color/colorWhite"/>
         <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:src="@mipmap/ic_right"
             android:layout_gravity="right|center_vertical"
-            android:layout_marginRight="10dp"/>
-    </FrameLayout>
-    <FrameLayout
-        android:id="@+id/mine_turing_layout"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="智能小助手"
-            android:textStyle="bold"
-            android:gravity="center_vertical"
-            android:paddingLeft="10dp"
-            android:background="@color/colorWhite"/>
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:src="@mipmap/ic_right"
-            android:layout_gravity="right|center_vertical"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="20dp"/>
     </FrameLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_weight="4"
         android:layout_marginTop="1dp"
         android:background="@color/colorWhite"/>
 </LinearLayout>

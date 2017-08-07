@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -19,10 +21,12 @@ import android.widget.Toast;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
+import com.treasure.traveldiary.activity.add.DiaryImageCameraActivity;
 import com.treasure.traveldiary.bean.UserInfoBean;
 import com.treasure.traveldiary.utils.StringContents;
 import com.treasure.traveldiary.utils.Tools;
 
+import java.io.File;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -59,7 +63,7 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
     private ImageView pass_visible;
     private boolean isHind = true;
     private SimpleDraweeView editIcon;
-    private String mFileUrl;
+    private String mFileUrl = "暂无头像";
     private String userPhone;
     private String mObjectId;
     @Override
@@ -108,7 +112,8 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
                     @Override
                     public void done(List<UserInfoBean> list, BmobException e) {
                         if (e==null){
-                            editIcon.setImageURI(Uri.parse(list.get(0).getUser_icon()));
+                            mFileUrl = list.get(0).getUser_icon();
+                            editIcon.setImageURI(Uri.parse(mFileUrl));
                         }else {
                             Toast.makeText(UserEditUserInfoActivity.this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -168,7 +173,7 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
                 }
                 break;
             case R.id.mine_edit_icon:
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Intent intent = new Intent(UserEditUserInfoActivity.this, DiaryImageCameraActivity.class);
                 startActivityForResult(intent, 200);
                 break;
         }
@@ -216,7 +221,7 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
         infoBean.setAge(Integer.parseInt(editAge.getText().toString().trim()));
         infoBean.setSex(sex);
         infoBean.setUser_desc(editDesc.getText().toString().trim() + "");
-        infoBean.setUser_icon("暂无头像");
+        infoBean.setUser_icon(mFileUrl);
         infoBean.update(objectId, new UpdateListener() {
             @Override
             public void done(BmobException e) {
@@ -226,7 +231,7 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
                     SharedPreferences preferences = getSharedPreferences("user", MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString("token", "login");
-                    editor.putString("user_icon", "暂无头像");
+                    editor.putString("user_icon", infoBean.getUser_icon());
                     editor.putString("user_name", infoBean.getUser_name());
                     editor.putString("user_nick", infoBean.getNick_name());
                     editor.putString("user_pwd", infoBean.getUser_pwd());
@@ -286,7 +291,7 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
         infoBean.setAge(Integer.parseInt(editAge.getText().toString().trim()));
         infoBean.setSex(sex);
         infoBean.setUser_desc(editDesc.getText().toString().trim() + "");
-        infoBean.setUser_icon("暂无头像");
+        infoBean.setUser_icon(mFileUrl);
 
         infoBean.save(new SaveListener<String>() {
             @Override
@@ -297,7 +302,7 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
                     SharedPreferences preferences = getSharedPreferences("user", MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString("token", "login");
-                    editor.putString("user_icon", "暂无头像");
+                    editor.putString("user_icon", infoBean.getUser_icon());
                     editor.putString("user_name", infoBean.getUser_name());
                     editor.putString("user_nick", infoBean.getNick_name());
                     editor.putString("user_pwd", infoBean.getUser_pwd());
@@ -334,8 +339,14 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 200) {
             if (resultCode == Activity.RESULT_OK) {
-                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                final BmobFile bmobFile = new BmobFile(Tools.compressImage(bitmap));
+
+                byte[] bitmaps = (byte[]) data.getExtras().get("camera_data");
+                Bitmap bm_camera1 = BitmapFactory.decodeByteArray(bitmaps, 0, bitmaps.length);
+                Matrix matrix = new Matrix();
+                matrix.setRotate(90);
+                bm_camera1 = Bitmap.createBitmap(bm_camera1,0,0,bm_camera1.getWidth(),bm_camera1.getHeight(),matrix,true);
+
+                final BmobFile bmobFile = new BmobFile(new File(Tools.saveBitmapToSD(UserEditUserInfoActivity.this,bm_camera1,"user_icon")));
                 bmobFile.uploadblock(new UploadFileListener() {
 
                     @Override

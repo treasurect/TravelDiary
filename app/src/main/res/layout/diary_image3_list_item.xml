@@ -73,19 +73,22 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="180dp"
-                    android:layout_margin="10dp"/>
+                    android:layout_margin="10dp"
+                    fresco:placeholderImage="@mipmap/pic_page_loading"/>
                 <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/diary_list_image2"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="180dp"
-                    android:layout_margin="10dp"/>
+                    android:layout_margin="10dp"
+                    fresco:placeholderImage="@mipmap/pic_page_loading"/>
                 <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/diary_list_image3"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="180dp"
-                    android:layout_margin="10dp"/>
+                    android:layout_margin="10dp"
+                    fresco:placeholderImage="@mipmap/pic_page_loading"/>
             </LinearLayout>
         <View
         android:layout_width="match_parent"

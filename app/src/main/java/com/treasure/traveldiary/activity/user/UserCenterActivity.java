@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Gravity;
@@ -45,32 +44,20 @@ import cn.bmob.v3.listener.FindListener;
 
 public class UserCenterActivity extends BaseActivity implements View.OnClickListener {
     private PopupWindow mPopupWindow;
-    private ImageView imageNight, mine_login_icon, imageHistory, imageSettings;
+    private ImageView imageNight, mine_login_icon;
     private TextView mine_login_username;
     private String user_name;
     private EditText editPwd, editPhone;
-    private FrameLayout signIn_layout, messagePush_layout, feedBack_layout, turing_layout;
+    private FrameLayout messagePush_layout, feedBack_layout,diary_layout,evaluated_layout;
     private TravelApplication application;
-    private LinearLayout layoutNight, layoutHistory, layoutSettings;
+    private LinearLayout layoutNight, layoutSigning, layoutSettings;
     private ImageView pass_visible;
     private boolean isHind = true;
     private SharedPreferences mPreferences;
-    private FrameLayout diary_layout;
     private IntentFilter filter;
     private CommonDataReceiver commonDataReceiver;
     private boolean pageLoaded;
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 200:
-
-                    break;
-            }
-        }
-    };
-    private FrameLayout evaluated_layout;
+    private boolean isSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +76,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus){
-            if (!pageLoaded){
+        if (hasFocus) {
+            if (!pageLoaded) {
                 receiveIntent();
                 pageLoaded = true;
             }
@@ -117,9 +104,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                         mine_login_username.setText(user_nick);
                     }
                     if (!Tools.isNull(user_icon)) {
-                        if (user_icon.equals("暂无头像")){
+                        if (user_icon.equals("暂无头像")) {
                             mine_login_icon.setImageResource(R.mipmap.ic_travel_logo);
-                        }else {
+                        } else {
                             mine_login_icon.setImageURI(Uri.parse(user_icon));
                         }
                     }
@@ -131,26 +118,23 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
 
     private void receiveIntent() {
         Intent intent = getIntent();
-        if (!Tools.isNull(intent.getStringExtra("type"))){
-            if (intent.getStringExtra("type").equals("toLogin")){
+        if (!Tools.isNull(intent.getStringExtra("type"))) {
+            if (intent.getStringExtra("type").equals("toLogin")) {
                 LogUtil.d("~~~~~~~~~~~~~加载完毕");
                 showPopupWindow();
             }
         }
     }
+
     private void initFindId() {
         mine_login_icon = (SimpleDraweeView) findViewById(R.id.mine_login_icon);
         mine_login_username = (TextView) findViewById(R.id.mine_login_username);
         imageNight = (ImageView) findViewById(R.id.mine_night_icon);
         layoutNight = (LinearLayout) findViewById(R.id.mine_night_layout);
-        imageHistory = (ImageView) findViewById(R.id.mine_history_icon);
-        layoutHistory = (LinearLayout) findViewById(R.id.mine_history_layout);
-        imageSettings = (ImageView) findViewById(R.id.mine_settings_icon);
+        layoutSigning = (LinearLayout) findViewById(R.id.mine_signing_layout);
         layoutSettings = (LinearLayout) findViewById(R.id.mine_settings_layout);
-        signIn_layout = (FrameLayout) findViewById(R.id.mine_signIn_layout);
         messagePush_layout = (FrameLayout) findViewById(R.id.mine_messagePush_layout);
         feedBack_layout = (FrameLayout) findViewById(R.id.mine_feedBack_layout);
-        turing_layout = (FrameLayout) findViewById(R.id.mine_turing_layout);
         diary_layout = (FrameLayout) findViewById(R.id.mine_diary_layout);
         evaluated_layout = (FrameLayout) findViewById(R.id.mine_evaluated_layout);
     }
@@ -158,37 +142,39 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private void initClick() {
         mine_login_icon.setOnClickListener(this);
         layoutNight.setOnClickListener(this);
-        layoutHistory.setOnClickListener(this);
+        layoutSigning.setOnClickListener(this);
         layoutSettings.setOnClickListener(this);
-        signIn_layout.setOnClickListener(this);
         messagePush_layout.setOnClickListener(this);
         feedBack_layout.setOnClickListener(this);
-        turing_layout.setOnClickListener(this);
         diary_layout.setOnClickListener(this);
         evaluated_layout.setOnClickListener(this);
     }
+
     private void initView() {
         //用户名 头像
         String token = mPreferences.getString("token", "");
         if (!Tools.isNull(token)) {
-            mine_login_icon.setImageResource(R.mipmap.ic_travel_logo);
             mine_login_username.setText(mPreferences.getString("user_nick", ""));
             BmobQuery<UserInfoBean> query = new BmobQuery<>();
-            query.addWhereEqualTo("user_name", mPreferences.getString("user_name",""));
+            query.addWhereEqualTo("user_name", mPreferences.getString("user_name", ""));
             query.findObjects(new FindListener<UserInfoBean>() {
                 @Override
                 public void done(List<UserInfoBean> list, BmobException e) {
-                    if (e == null){
-                        if (list.get(0).getUser_icon().equals("暂无头像")){
+                    if (e == null) {
+                        isSelected = true;
+                        if (list.get(0).getUser_icon().equals("暂无头像")) {
                             mine_login_icon.setImageResource(R.mipmap.ic_travel_logo);
-                        }else {
+                        } else {
                             mine_login_icon.setImageURI(Uri.parse(list.get(0).getUser_icon()));
                         }
-                    }else {
-                        Toast.makeText(UserCenterActivity.this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(UserCenterActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
+            if (!isSelected) {
+                mine_login_icon.setImageResource(R.mipmap.ic_travel_logo);
+            }
         } else {
             mine_login_icon.setImageResource(R.mipmap.ic_launcher_round);
             mine_login_username.setText("登录让内容更精彩");
@@ -208,61 +194,64 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             window.setAttributes(layoutParams);
         }
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mine_login_icon:
-                if (Tools.isNull(mPreferences.getString("token",""))){
+                if (Tools.isNull(mPreferences.getString("token", ""))) {
                     //Login
                     showPopupWindow();
-                }else {
+                } else {
                     //edit
                     Intent intent = new Intent(UserCenterActivity.this, UserEditUserInfoActivity.class);
-                    intent.putExtra("edit_type","normal");
+                    intent.putExtra("edit_type", "normal");
                     String user_name = mPreferences.getString("user_name", "");
                     intent.putExtra("UserPhone", user_name);
                     startActivity(intent);
                 }
                 break;
-            case R.id.mine_history_layout:
+            case R.id.mine_signing_layout:
+                Toast.makeText(UserCenterActivity.this, "此功能暂未开放！", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.mine_night_layout:
                 nightSwitch();
                 break;
             case R.id.mine_settings_layout:
-                startActivity(new Intent(UserCenterActivity.this,UserSettingsActivity.class));
-                break;
-            case R.id.mine_signIn_layout:
+                startActivity(new Intent(UserCenterActivity.this, UserSettingsActivity.class));
                 break;
             case R.id.mine_messagePush_layout:
-                if (Tools.isNull(mPreferences.getString("token",""))){
+                if (Tools.isNull(mPreferences.getString("token", ""))) {
                     showPopupWindow();
-                }else {
+                } else {
                     Intent intent = new Intent(UserCenterActivity.this, UserMessageListActivity.class);
                     startActivity(intent);
                 }
                 break;
             case R.id.mine_feedBack_layout:
-
+                if (Tools.isNull(mPreferences.getString("token", ""))) {
+                    showPopupWindow();
+                } else {
+                    Intent intent = new Intent(UserCenterActivity.this, UserFeedBackActivity.class);
+                    startActivity(intent);
+                }
                 break;
             case R.id.mine_diary_layout:
-                if (Tools.isNull(mPreferences.getString("token",""))){
+                if (Tools.isNull(mPreferences.getString("token", ""))) {
                     showPopupWindow();
-                }else {
+                } else {
                     Intent intent = new Intent(UserCenterActivity.this, UserDiaryActivity.class);
-                    intent.putExtra("type","mine");
+                    intent.putExtra("type", "mine");
                     startActivity(intent);
                 }
                 break;
             case R.id.mine_evaluated_layout:
-                if (Tools.isNull(mPreferences.getString("token",""))){
+                if (Tools.isNull(mPreferences.getString("token", ""))) {
                     showPopupWindow();
-                }else {
+                } else {
                     Intent intent = new Intent(UserCenterActivity.this, UserEvaluatedListActivity.class);
                     startActivity(intent);
                 }
-                break;
-            case R.id.mine_turing_layout:
                 break;
             case R.id.mine_popup_quit:
                 quitpopupWindow();
@@ -289,6 +278,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 break;
         }
     }
+
     /**
      * 显示 关闭 popupWindow
      */
@@ -335,6 +325,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         final AlertDialog dialog = builder.create();
         dialog.show();
     }
+
     /**
      * 夜间模式的切换
      */
@@ -357,6 +348,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             application.setNight(false);
         }
     }
+
     //不隐藏密码
     private void initNoHindPassInput() {
         pass_visible.setImageResource(R.mipmap.ic_eye_open);

@@ -8,7 +8,7 @@
     android:fitsSystemWindows="true"
     tools:context=".activity.traveller.DiaryCenterActivity">
 
-    <ListView
+    <com.treasure.traveldiary.widget.CustomRefreshListView
         android:id="@+id/diary_list_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

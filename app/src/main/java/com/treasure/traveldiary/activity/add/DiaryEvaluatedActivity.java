@@ -275,6 +275,7 @@ public class DiaryEvaluatedActivity extends BaseActivity implements View.OnClick
         String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Long(System.currentTimeMillis()));
         bean.setPublish_time(time.substring(5,7)+"月"+time.substring(8,10)+"日"+time.substring(11,16));
         bean.setStar_num(starNum);
+        bean.setUser_icon("暂无头像");
         bean.setUser_evaluated(star_edit.getText().toString().trim());
         bean.save(new SaveListener<String>() {
             @Override
