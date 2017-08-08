@@ -1,5 +1,7 @@
 package com.treasure.traveldiary.bean;
 
+import java.util.List;
+
 import cn.bmob.v3.BmobObject;
 
 /**
@@ -14,6 +16,8 @@ public class UserInfoBean extends BmobObject {
     private int sex;//0 男 1女
     private int age;
     private String user_desc;
+    private List<String> signing_date;
+    private int integral_count;
 
     public String getUser_name() {
         return user_name;
@@ -69,5 +73,21 @@ public class UserInfoBean extends BmobObject {
 
     public void setUser_desc(String user_desc) {
         this.user_desc = user_desc;
+    }
+
+    public List<String> getSigning_date() {
+        return signing_date;
+    }
+
+    public void setSigning_date(List<String> signing_date) {
+        this.signing_date = signing_date;
+    }
+
+    public int getIntegral_count() {
+        return integral_count;
+    }
+
+    public void setIntegral_count(int integral_count) {
+        this.integral_count = integral_count;
     }
 }

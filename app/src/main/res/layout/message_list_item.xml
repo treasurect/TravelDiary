@@ -25,12 +25,18 @@
                 android:id="@+id/message_item_title"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/colorOrange"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
             <TextView
                 android:id="@+id/message_item_time"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="20dp"/>
         </LinearLayout>
         <View
         android:layout_width="match_parent"
@@ -41,9 +47,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
-            android:paddingLeft="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:ellipsize="end"
             android:gravity="center_vertical"
+            android:textColor="@color/colorOrange"
             android:textSize="16sp" />
 
     </LinearLayout>

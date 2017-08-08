@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    tools:context="com.treasure.traveldiary.activity.user.UserSigningActivity">
+
+    <include layout="@layout/common_top_view" />
+
+    <CalendarView
+        android:id="@+id/user_signing_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_margin="25dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/user_signing_Sun"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@mipmap/ic_circle"
+            android:gravity="center"
+            android:text="日"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/colorBlock" />
+
+        <TextView
+            android:id="@+id/user_signing_Mon"
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:background="@mipmap/ic_circle"
+            android:gravity="center"
+            android:text="一"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/colorBlock" />
+
+        <TextView
+            android:id="@+id/user_signing_Tue"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@mipmap/ic_circle"
+            android:gravity="center"
+            android:text="二"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/colorBlock" />
+
+        <TextView
+            android:id="@+id/user_signing_Wed"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@mipmap/ic_circle"
+            android:gravity="center"
+            android:text="三"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/colorBlock" />
+
+        <TextView
+            android:id="@+id/user_signing_Thr"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@mipmap/ic_circle"
+            android:gravity="center"
+            android:text="四"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/colorBlock" />
+
+        <TextView
+            android:id="@+id/user_signing_Fri"
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:background="@mipmap/ic_circle"
+            android:gravity="center"
+            android:text="五"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/colorBlock"
+            android:gravity="center"
+            android:text="三"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/user_signing_Sat"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@mipmap/ic_circle"
+            android:gravity="center"
+            android:text="六"
+            android:textColor="@color/colorWhite" />
+    </LinearLayout>
+</LinearLayout>

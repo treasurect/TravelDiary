@@ -8,7 +8,7 @@
     <LinearLayout
         android:id="@+id/diary_list_layout"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="220dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="12dp"
@@ -51,7 +51,14 @@
                     android:gravity="center_vertical" />
             </LinearLayout>
         </LinearLayout>
-
+        <TextView
+            android:id="@+id/evaluated_list_addr"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:textColor="@color/colorOrange"
+            android:gravity="center_vertical"
+            android:textStyle="bold"/>
         <TextView
             android:id="@+id/evaluated_list_user_title"
             android:layout_width="match_parent"

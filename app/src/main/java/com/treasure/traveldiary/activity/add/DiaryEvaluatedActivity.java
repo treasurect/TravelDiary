@@ -29,6 +29,7 @@ import com.baidu.mapapi.search.poi.PoiSortType;
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.bean.EvaluatedBean;
+import com.treasure.traveldiary.utils.LogUtil;
 import com.treasure.traveldiary.utils.Tools;
 
 import java.text.SimpleDateFormat;
@@ -57,10 +58,8 @@ public class DiaryEvaluatedActivity extends BaseActivity implements View.OnClick
                     nearby_listView.setVisibility(View.GONE);
                     loading.setVisibility(View.GONE);
                     title.setText("点评/吐槽");
-                    if (user_addr.length() >7){
-                        user_addr = user_addr.substring(0,7);
-                    }
-                    nearby_loc.setText(user_addr);
+                    String[] split = user_addr.split("\\(");
+                    nearby_loc.setText(split[0]);
                     btn_send.setVisibility(View.VISIBLE);
                     btn_send.setClickable(false);
                     btn_send.setTextColor(getResources().getColor(R.color.colorGray2));

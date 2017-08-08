@@ -27,6 +27,7 @@ import com.treasure.traveldiary.utils.StringContents;
 import com.treasure.traveldiary.utils.Tools;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -66,6 +67,7 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
     private String mFileUrl = "暂无头像";
     private String userPhone;
     private String mObjectId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,11 +113,11 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
                 query.findObjects(new FindListener<UserInfoBean>() {
                     @Override
                     public void done(List<UserInfoBean> list, BmobException e) {
-                        if (e==null){
+                        if (e == null) {
                             mFileUrl = list.get(0).getUser_icon();
                             editIcon.setImageURI(Uri.parse(mFileUrl));
-                        }else {
-                            Toast.makeText(UserEditUserInfoActivity.this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(UserEditUserInfoActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -292,7 +294,10 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
         infoBean.setSex(sex);
         infoBean.setUser_desc(editDesc.getText().toString().trim() + "");
         infoBean.setUser_icon(mFileUrl);
-
+        infoBean.setIntegral_count(0);
+        List<String> list = new ArrayList<>();
+        list.add("0");
+        infoBean.setSigning_date(list);
         infoBean.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {
@@ -309,6 +314,7 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
                     editor.putString("user_age", String.valueOf(infoBean.getAge()));
                     editor.putString("user_sex", String.valueOf(infoBean.getSex()));
                     editor.putString("user_desc", infoBean.getUser_desc());
+                    editor.putInt("user_integral", infoBean.getIntegral_count());
                     editor.apply();
                     //发送登录成功 广播
                     Intent intent = new Intent();
@@ -344,9 +350,9 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
                 Bitmap bm_camera1 = BitmapFactory.decodeByteArray(bitmaps, 0, bitmaps.length);
                 Matrix matrix = new Matrix();
                 matrix.setRotate(90);
-                bm_camera1 = Bitmap.createBitmap(bm_camera1,0,0,bm_camera1.getWidth(),bm_camera1.getHeight(),matrix,true);
+                bm_camera1 = Bitmap.createBitmap(bm_camera1, 0, 0, bm_camera1.getWidth(), bm_camera1.getHeight(), matrix, true);
 
-                final BmobFile bmobFile = new BmobFile(new File(Tools.saveBitmapToSD(UserEditUserInfoActivity.this,bm_camera1,"user_icon")));
+                final BmobFile bmobFile = new BmobFile(new File(Tools.saveBitmapToSD(UserEditUserInfoActivity.this, bm_camera1, "user_icon")));
                 bmobFile.uploadblock(new UploadFileListener() {
 
                     @Override
@@ -366,9 +372,9 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
                                     userInfoBean.update(mObjectId, new UpdateListener() {
                                         @Override
                                         public void done(BmobException e) {
-                                            if (e == null){
+                                            if (e == null) {
                                                 SharedPreferences.Editor editor = getSharedPreferences("user", MODE_PRIVATE).edit();
-                                                editor.putString("user_icon",mFileUrl);
+                                                editor.putString("user_icon", mFileUrl);
                                                 editor.apply();
                                             }
                                         }

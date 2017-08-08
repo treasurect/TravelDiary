@@ -55,6 +55,7 @@
         android:layout_alignParentRight="true"
         android:textColor="@color/colorWhite"
         android:visibility="gone"/>
+
     <LinearLayout
         android:id="@+id/layout_map_loc"
         android:layout_width="wrap_content"
@@ -79,4 +80,16 @@
             android:paddingLeft="5dp"
             android:textColor="@color/colorWhite"/>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/text_integral"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="12dp"
+        android:layout_centerVertical="true"
+        android:textSize="15sp"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        android:visibility="gone"/>
 </RelativeLayout>

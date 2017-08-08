@@ -14,6 +14,9 @@
         android:id="@+id/user_evaluated_listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="45dp"/>
+        android:layout_marginTop="45dp"
+        android:divider="@color/colorWhite"
+        android:dividerHeight="0dp"
+        android:scrollbars="none"/>
     <include layout="@layout/common_loading_view"/>
 </FrameLayout>

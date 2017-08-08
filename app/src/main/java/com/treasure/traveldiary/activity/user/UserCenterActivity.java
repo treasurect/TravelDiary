@@ -212,7 +212,12 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 }
                 break;
             case R.id.mine_signing_layout:
-                Toast.makeText(UserCenterActivity.this, "此功能暂未开放！", Toast.LENGTH_SHORT).show();
+                if (Tools.isNull(mPreferences.getString("token", ""))) {
+                    //Login
+                    showPopupWindow();
+                } else {
+                    startActivity(new Intent(UserCenterActivity.this,UserSigningActivity.class));
+                }
                 break;
             case R.id.mine_night_layout:
                 nightSwitch();

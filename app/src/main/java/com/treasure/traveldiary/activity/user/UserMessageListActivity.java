@@ -3,6 +3,7 @@ package com.treasure.traveldiary.activity.user;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ public class UserMessageListActivity extends BaseActivity implements View.OnClic
     private ListView listView;
     private List<PushBean> list;
     private MineMessageListAdapter adapter;
+    private FrameLayout loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class UserMessageListActivity extends BaseActivity implements View.OnClic
 
     private void initFindId() {
         listView = (ListView) findViewById(R.id.user_message_list);
+        loading = (FrameLayout) findViewById(R.id.loading_layout);
     }
 
     private void initListView() {
@@ -65,6 +68,7 @@ public class UserMessageListActivity extends BaseActivity implements View.OnClic
     }
 
     private void getMessageList() {
+        loading.setVisibility(View.VISIBLE);
         BmobQuery<PushBean> query = new BmobQuery<>();
         query.findObjects(new FindListener<PushBean>() {
             @Override
@@ -79,6 +83,7 @@ public class UserMessageListActivity extends BaseActivity implements View.OnClic
                 }else {
                     Toast.makeText(UserMessageListActivity.this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
+                loading.setVisibility(View.GONE);
             }
         });
     }

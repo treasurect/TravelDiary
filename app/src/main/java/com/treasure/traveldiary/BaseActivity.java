@@ -17,6 +17,7 @@ public class BaseActivity extends FragmentActivity {
     public TextView btn_cancel;
     public LinearLayout mapLocLayout;
     public TextView text_map_loc;
+    public TextView text_integral;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,7 @@ public class BaseActivity extends FragmentActivity {
         btn_cancel = (TextView) findViewById(R.id.btn_cancel);
         mapLocLayout = (LinearLayout) findViewById(R.id.layout_map_loc);
         text_map_loc = (TextView) findViewById(R.id.text_map_loc);
+        text_integral = (TextView) findViewById(R.id.text_integral);
     }
 
 }

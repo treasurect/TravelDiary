@@ -78,6 +78,9 @@ public class TravellerEvaluatedListAdapter extends BaseAdapter{
             if (!Tools.isNull(evaluatedBean.getUser_evaluated())){
                 viewHolder.user_title.setText(evaluatedBean.getUser_evaluated());
             }
+            if (!Tools.isNull(evaluatedBean.getUser_addr())){
+                viewHolder.addr.setText(evaluatedBean.getUser_addr());
+            }
             if (!Tools.isNull(String.valueOf(evaluatedBean.getStar_num()))){
                 if (evaluatedBean.getStar_num() == 1){
                     viewHolder.star1.setImageResource(R.mipmap.ic_star_click);
@@ -115,6 +118,7 @@ public class TravellerEvaluatedListAdapter extends BaseAdapter{
         return ret;
     }
     public static class ViewHolder{
+        private TextView addr;
         private SimpleDraweeView user_icon;
         private TextView user_name,user_time,user_title;
         private ImageView star1,star2,star3,star4,star5;
@@ -128,6 +132,7 @@ public class TravellerEvaluatedListAdapter extends BaseAdapter{
             star3 = (ImageView) view.findViewById(R.id.evaluated_list_user_star3);
             star4 = (ImageView) view.findViewById(R.id.evaluated_list_user_star4);
             star5 = (ImageView) view.findViewById(R.id.evaluated_list_user_star5);
+            addr = (TextView) view.findViewById(R.id.evaluated_list_addr);
         }
     }
 }

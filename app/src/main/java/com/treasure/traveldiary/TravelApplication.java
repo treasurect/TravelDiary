@@ -35,7 +35,7 @@ public class TravelApplication extends Application {
         //fresco的初始化
         Fresco.initialize(this);
         //MobSMS初始化
-        MobSDK.init(getApplicationContext(), "1fd2ffd6b7ca0", "beebc6620a0ca7b6dd0999bb3ad67a96");
+        MobSDK.init(getApplicationContext(), StringContents.SMSSDK_APPKEY, StringContents.SMSSDK_APPSECRET);
         //JPUSH
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
