@@ -2,7 +2,6 @@ package com.treasure.traveldiary.fragments;
 
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.treasure.traveldiary.R;
@@ -21,14 +19,12 @@ import com.treasure.traveldiary.utils.LogUtil;
 import com.treasure.traveldiary.widget.CustomRefreshListView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.LogInListener;
 
 public class DiaryAllFragment extends BaseFragment implements TravellerDiaryListAdapter.DiaryTextClick, View.OnClickListener, CustomRefreshListView.OnRefreshListener {
     private com.treasure.traveldiary.widget.CustomRefreshListView listView;
@@ -36,10 +32,11 @@ public class DiaryAllFragment extends BaseFragment implements TravellerDiaryList
     private TravellerDiaryListAdapter adapter;
     private FrameLayout loading;
     private boolean isPrepared;
-    private int maxLendth = 0;
-    private int isLoadEndFlag = 0;
+    private int skip = 0;
+    private boolean isLoadEndFlag;
+    private int maxLength;
     private BmobQuery<DiaryBean> query = new BmobQuery<>();
-    private Handler handler  = new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -56,7 +53,8 @@ public class DiaryAllFragment extends BaseFragment implements TravellerDiaryList
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_diary_all, container, false);
         isPrepared = true;
-        isLoadEndFlag = 0;
+        isLoadEndFlag = false;
+        skip = 0;
         initFindId(view);
         initListView();
         initClick();
@@ -88,7 +86,7 @@ public class DiaryAllFragment extends BaseFragment implements TravellerDiaryList
     }
 
     private void initFindId(View view) {
-        listView = (com.treasure.traveldiary.widget.CustomRefreshListView) view.findViewById(R.id.diary_list_all);
+        listView = (CustomRefreshListView) view.findViewById(R.id.diary_list_all);
         loading = (FrameLayout) view.findViewById(R.id.loading_layout);
     }
 
@@ -110,34 +108,35 @@ public class DiaryAllFragment extends BaseFragment implements TravellerDiaryList
             @Override
             public void done(Integer integer, BmobException e) {
                 try {
-                    maxLendth = integer.intValue();
-                }catch (Exception error){
+                    maxLength = integer.intValue();
+                    if (maxLength <= 10) {
+                        isLoadEndFlag = true;
+                    }
+                } catch (Exception error) {
 
                 }
-                query.setLimit(10);
-                maxLendth = maxLendth - 10;
-                if (maxLendth < 10){
-                    query.setSkip(0);
-                }else {
-                    query.setSkip(maxLendth);
-                }
-                query.findObjects(new FindListener<DiaryBean>() {
-                    @Override
-                    public void done(List<DiaryBean> list, BmobException e) {
-                        if (e == null) {
-                            if (list != null) {
-                                loading.setVisibility(View.GONE);
-                                diaryList.clear();
-                                Collections.reverse(list);
-                                diaryList.addAll(list);
-                                adapter.notifyDataSetChanged();
+                query.setLimit(10)
+                        .setSkip(skip)
+                        .order("-publish_time")
+                        .findObjects(new FindListener<DiaryBean>() {
+                            @Override
+                            public void done(List<DiaryBean> list, BmobException e) {
+                                if (e == null) {
+                                    if (list != null) {
+                                        loading.setVisibility(View.GONE);
+                                        diaryList.clear();
+                                        diaryList.addAll(list);
+                                        for (int i = 0; i < diaryList.size(); i++) {
+                                            LogUtil.d("~~~~~~~~~~~~~~~~~~~diaryList" + diaryList.get(i).getUser_title());
+                                        }
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                } else {
+                                    loading.setVisibility(View.GONE);
+                                    Toast.makeText(getContext(), "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        } else {
-                            loading.setVisibility(View.GONE);
-                            Toast.makeText(getContext(), "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                        });
             }
         });
     }
@@ -174,39 +173,36 @@ public class DiaryAllFragment extends BaseFragment implements TravellerDiaryList
 
     @Override
     public void onLoadingMore() {
-        LogUtil.e("~~~~~~~~~~~~~~onLoadingMore~~~~");
-        query.setLimit(10);
-        maxLendth = maxLendth - 10;
-        if (maxLendth <0){
-            query.setSkip(0);
-            isLoadEndFlag ++;
-        }else {
-            query.setSkip(maxLendth);
+        skip += 10;
+        if (skip >= maxLength){
+            isLoadEndFlag = true;
         }
-        loading.setVisibility(View.VISIBLE);
-        query.findObjects(new FindListener<DiaryBean>() {
-            @Override
-            public void done(List<DiaryBean> list, BmobException e) {
-                if (isLoadEndFlag < 2){
-                    if (e == null) {
-                        if (list != null) {
-                            Collections.reverse(list);
-                            diaryList.addAll(list);
-                            adapter.notifyDataSetChanged();
-                            loading.setVisibility(View.GONE);
-                            listView.completeRefresh();
+        if (!isLoadEndFlag) {
+            loading.setVisibility(View.VISIBLE);
+            query.setLimit(10)
+                    .setSkip(skip)
+                    .order("-publish_time")
+                    .findObjects(new FindListener<DiaryBean>() {
+                        @Override
+                        public void done(List<DiaryBean> list, BmobException e) {
+                            if (e == null) {
+                                if (list != null) {
+                                    diaryList.addAll(list);
+                                    adapter.notifyDataSetChanged();
+                                    loading.setVisibility(View.GONE);
+                                    listView.completeRefresh();
+                                }
+                            } else {
+                                loading.setVisibility(View.GONE);
+                                listView.completeRefresh();
+                                Toast.makeText(getContext(), "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    } else {
-                        loading.setVisibility(View.GONE);
-                        listView.completeRefresh();
-                        Toast.makeText(getContext(), "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }else {
-                    Toast.makeText(getContext(), "数据加载完成", Toast.LENGTH_SHORT).show();
-                    loading.setVisibility(View.GONE);
-                    listView.completeRefresh();
-                }
-            }
-        });
+                    });
+        } else {
+            Toast.makeText(getContext(), "数据加载完成", Toast.LENGTH_SHORT).show();
+            loading.setVisibility(View.GONE);
+            listView.completeRefresh();
+        }
     }
 }

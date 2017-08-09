@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.treasure.traveldiary.BaseActivity;
@@ -17,7 +16,6 @@ import com.treasure.traveldiary.utils.Tools;
 import com.treasure.traveldiary.widget.CustomRefreshListView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -32,9 +30,10 @@ public class UserDiaryActivity extends BaseActivity implements View.OnClickListe
     private FrameLayout loading;
     private boolean isPageDestroy;
     private SharedPreferences mPreferences;
-    private int maxLendth = 0;
-    private int isLoadEndFlag = 0;
+    private int skip = 0;
+    private boolean isLoadEndFlag;
     private BmobQuery<DiaryBean> query = new BmobQuery<>();
+    private int maxLength;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +44,8 @@ public class UserDiaryActivity extends BaseActivity implements View.OnClickListe
         btn_back.setVisibility(View.VISIBLE);
         title.setText("我的日记");
         mPreferences = getSharedPreferences("user", MODE_PRIVATE);
-
+        isLoadEndFlag = false;
+        skip = 0;
         initFindId();
         initListView();
         initClick();
@@ -77,40 +77,38 @@ public class UserDiaryActivity extends BaseActivity implements View.OnClickListe
 
     private void getDiaryList() {
         loading.setVisibility(View.VISIBLE);
-        query.addWhereEqualTo("user_name",mPreferences.getString("user_name",""));
+        query.addWhereEqualTo("user_name", mPreferences.getString("user_name", ""));
         query.count(DiaryBean.class, new CountListener() {
             @Override
             public void done(Integer integer, BmobException e) {
                 try {
-                    maxLendth = integer.intValue();
-                }catch (Exception error){
+                     maxLength = integer.intValue();
+                    if (maxLength <= 10) {
+                        isLoadEndFlag = true;
+                    }
+                } catch (Exception error) {
 
                 }
-                query.setLimit(10);
-                maxLendth = maxLendth - 10;
-                if (maxLendth < 10){
-                    query.setSkip(0);
-                }else {
-                    query.setSkip(maxLendth);
-                }
-                query.addWhereEqualTo("user_name",mPreferences.getString("user_name",""));
-                query.findObjects(new FindListener<DiaryBean>() {
-                    @Override
-                    public void done(List<DiaryBean> list, BmobException e) {
-                        if (e == null) {
-                            if (list != null) {
-                                loading.setVisibility(View.GONE);
-                                diaryList.clear();
-                                Collections.reverse(list);
-                                diaryList.addAll(list);
-                                adapter.notifyDataSetChanged();
+                query.setLimit(10)
+                        .setSkip(skip)
+                        .order("-publish_time")
+                        .addWhereEqualTo("user_name", mPreferences.getString("user_name", ""))
+                        .findObjects(new FindListener<DiaryBean>() {
+                            @Override
+                            public void done(List<DiaryBean> list, BmobException e) {
+                                if (e == null) {
+                                    if (list != null) {
+                                        loading.setVisibility(View.GONE);
+                                        diaryList.clear();
+                                        diaryList.addAll(list);
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                } else {
+                                    loading.setVisibility(View.GONE);
+                                    Toast.makeText(UserDiaryActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        } else {
-                            loading.setVisibility(View.GONE);
-                            Toast.makeText(UserDiaryActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                        });
             }
         });
     }
@@ -126,20 +124,20 @@ public class UserDiaryActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void textClick(DiaryBean diaryBean) {
-        if (diaryBean.getDiary_type() == 0){
+        if (diaryBean.getDiary_type() == 0) {
             Intent intent = new Intent(UserDiaryActivity.this, TravellerDiaryDetailActivity.class);
-            intent.putExtra("diaryBean",diaryBean);
-            intent.putExtra("type","text");
+            intent.putExtra("diaryBean", diaryBean);
+            intent.putExtra("type", "text");
             startActivity(intent);
-        }else if (diaryBean.getDiary_type() == 1){
+        } else if (diaryBean.getDiary_type() == 1) {
             Intent intent = new Intent(UserDiaryActivity.this, TravellerDiaryDetailActivity.class);
-            intent.putExtra("diaryBean",diaryBean);
-            intent.putExtra("type","image");
+            intent.putExtra("diaryBean", diaryBean);
+            intent.putExtra("type", "image");
             startActivity(intent);
-        }else if (diaryBean.getDiary_type() == 2){
+        } else if (diaryBean.getDiary_type() == 2) {
             Intent intent = new Intent(UserDiaryActivity.this, TravellerDiaryDetailActivity.class);
-            intent.putExtra("diaryBean",diaryBean);
-            intent.putExtra("type","video");
+            intent.putExtra("diaryBean", diaryBean);
+            intent.putExtra("type", "video");
             startActivity(intent);
         }
     }
@@ -157,39 +155,37 @@ public class UserDiaryActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onLoadingMore() {
-        query.setLimit(10);
-        maxLendth = maxLendth - 10;
-        if (maxLendth <0){
-            query.setSkip(0);
-            isLoadEndFlag ++;
-        }else {
-            query.setSkip(maxLendth);
+        skip += 10;
+        if (skip >= maxLength){
+            isLoadEndFlag = true;
         }
-        loading.setVisibility(View.VISIBLE);
-        query.addWhereEqualTo("user_name",mPreferences.getString("user_name",""));
-        query.findObjects(new FindListener<DiaryBean>() {
-            @Override
-            public void done(List<DiaryBean> list, BmobException e) {
-                if (isLoadEndFlag < 2){
-                    if (e == null) {
-                        if (list != null) {
-                            Collections.reverse(list);
-                            diaryList.addAll(list);
-                            adapter.notifyDataSetChanged();
-                            loading.setVisibility(View.GONE);
-                            listView.completeRefresh();
+        if (!isLoadEndFlag) {
+            loading.setVisibility(View.VISIBLE);
+            query.setLimit(10)
+                    .setSkip(skip)
+                    .addWhereEqualTo("user_name", mPreferences.getString("user_name", ""))
+                    .order("-publish_time")
+                    .findObjects(new FindListener<DiaryBean>() {
+                        @Override
+                        public void done(List<DiaryBean> list, BmobException e) {
+                            if (e == null) {
+                                if (list != null) {
+                                    diaryList.addAll(list);
+                                    adapter.notifyDataSetChanged();
+                                    loading.setVisibility(View.GONE);
+                                    listView.completeRefresh();
+                                }
+                            } else {
+                                loading.setVisibility(View.GONE);
+                                listView.completeRefresh();
+                                Toast.makeText(UserDiaryActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    } else {
-                        loading.setVisibility(View.GONE);
-                        listView.completeRefresh();
-                        Toast.makeText(UserDiaryActivity.this ,"原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }else {
-                    Toast.makeText(UserDiaryActivity.this, "数据加载完成", Toast.LENGTH_SHORT).show();
-                    loading.setVisibility(View.GONE);
-                    listView.completeRefresh();
-                }
-            }
-        });
+                    });
+        } else {
+            Toast.makeText(UserDiaryActivity.this, "数据加载完成", Toast.LENGTH_SHORT).show();
+            loading.setVisibility(View.GONE);
+            listView.completeRefresh();
+        }
     }
 }

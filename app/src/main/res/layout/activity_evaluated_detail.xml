@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/home_joker_item_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
+    android:layout_height="match_parent"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include layout="@layout/common_top_view"/>
     <LinearLayout
-        android:id="@+id/evaluated_list_layout"
+        android:id="@+id/evaluated_detail_layout"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/bottom_yellow1_frame_gray_radius5"
         android:orientation="vertical">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -23,7 +27,7 @@
             android:paddingRight="10dp">
 
             <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/evaluated_list_user_icon"
+                android:id="@+id/evaluated_detail_user_icon"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center"
@@ -37,37 +41,38 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/evaluated_list_user_name"
+                    android:id="@+id/evaluated_detail_user_name"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="bottom" />
 
                 <TextView
-                    android:id="@+id/evaluated_list_user_time"
+                    android:id="@+id/evaluated_detail_user_time"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical" />
             </LinearLayout>
         </LinearLayout>
+
         <TextView
-            android:id="@+id/evaluated_list_addr"
+            android:id="@+id/evaluated_detail_addr"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:textColor="@color/colorOrange"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:textStyle="bold"/>
+            android:padding="10dp"
+            android:textColor="@color/colorOrange"
+            android:textStyle="bold" />
+
         <TextView
-            android:id="@+id/evaluated_list_user_title"
+            android:id="@+id/evaluated_detail_user_title"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="3"
-            android:ellipsize="end"
-            android:paddingLeft="10dp"
+            android:padding="20dp"
             android:textSize="16sp" />
 
         <View
@@ -77,49 +82,69 @@
 
 
         <LinearLayout
-            android:id="@+id/diary_list_user_desc"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:paddingLeft="10dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
             <ImageView
-                android:id="@+id/evaluated_list_user_star1"
+                android:id="@+id/evaluated_detail_user_star1"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@mipmap/ic_star_unclick"
+                android:layout_gravity="center_vertical"
                 android:layout_margin="5dp"
-                android:layout_gravity="center_vertical"/>
+                android:src="@mipmap/ic_star_unclick" />
+
             <ImageView
-                android:id="@+id/evaluated_list_user_star2"
+                android:id="@+id/evaluated_detail_user_star2"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@mipmap/ic_star_unclick"
+                android:layout_gravity="center_vertical"
                 android:layout_margin="5dp"
-                android:layout_gravity="center_vertical"/>
+                android:src="@mipmap/ic_star_unclick" />
+
             <ImageView
-                android:id="@+id/evaluated_list_user_star3"
+                android:id="@+id/evaluated_detail_user_star3"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@mipmap/ic_star_unclick"
+                android:layout_gravity="center_vertical"
                 android:layout_margin="5dp"
-                android:layout_gravity="center_vertical"/>
+                android:src="@mipmap/ic_star_unclick" />
+
             <ImageView
-                android:id="@+id/evaluated_list_user_star4"
+                android:id="@+id/evaluated_detail_user_star4"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
                 android:layout_margin="5dp"
-                android:src="@mipmap/ic_star_unclick"
-                android:layout_gravity="center_vertical"/>
+                android:src="@mipmap/ic_star_unclick" />
+
             <ImageView
-                android:id="@+id/evaluated_list_user_star5"
+                android:id="@+id/evaluated_detail_user_star5"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
                 android:layout_margin="5dp"
-                android:src="@mipmap/ic_star_unclick"
-                android:layout_gravity="center_vertical"/>
+                android:src="@mipmap/ic_star_unclick" />
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/colorAccent" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="留言"
+            android:textSize="16sp" />
+
+        <com.treasure.traveldiary.widget.CustomScrollListView
+            android:id="@+id/evaluated_detail_leaveMes_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
-</FrameLayout>
+    </LinearLayout>
+</ScrollView>

@@ -77,6 +77,8 @@ public class UserSigningActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int dayOfMonth) {
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+        String week = sdf.format(calendarView.getDate());
         int nowYear = Integer.parseInt(nowTime.substring(0, 4));
         int nowMonth = Integer.parseInt(nowTime.substring(5, 7));
         int nowDay = Integer.parseInt(nowTime.substring(8, 10));

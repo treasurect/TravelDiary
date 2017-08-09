@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -30,17 +31,16 @@ public class TravellerDiaryDetailActivity extends BaseActivity implements View.O
     private SimpleDraweeView user_icon;
     private TextView user_name, user_time, user_title, user_desc;
     private CustomScrollListView leaveMes_listView;
-    private SimpleDraweeView detail_image1, detail_image2, detail_image3;
-    private LinearLayout image_layout;
     private TravelApplication application;
     private SurfaceView surfaceView;
     private ImageView video_play;
-    private FrameLayout noText_layout;
     private MediaPlayer mediaPlayer;
     private SurfaceHolder holder;
     private FrameLayout video_layout;
     private SimpleDraweeView video_first;
     private ProgressBar video_loading;
+    private SimpleDraweeView image1, image01, image02, image001, image002, image003;
+    private LinearLayout image_layout2, image_layout3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,19 +64,29 @@ public class TravellerDiaryDetailActivity extends BaseActivity implements View.O
         user_title = (TextView) findViewById(R.id.diary_detail_user_title);
         user_desc = (TextView) findViewById(R.id.diary_detail_user_desc);
         leaveMes_listView = (CustomScrollListView) findViewById(R.id.diary_detail_leaveMes_list);
-        detail_image1 = (SimpleDraweeView) findViewById(R.id.diary_detail_user_image1);
-        detail_image2 = (SimpleDraweeView) findViewById(R.id.diary_detail_user_image2);
-        detail_image3 = (SimpleDraweeView) findViewById(R.id.diary_detail_user_image3);
-        image_layout = (LinearLayout) findViewById(R.id.diary_detail_user_image_layout);
+        //Video
+        video_layout = (FrameLayout) findViewById(R.id.diary_detail_user_video_layout);
         surfaceView = (SurfaceView) findViewById(R.id.diary_detail_user_video_view);
         video_play = (ImageView) findViewById(R.id.diary_detail_user_video_play);
-        noText_layout = (FrameLayout) findViewById(R.id.diary_detail_user_noText_layout);
-        video_layout = (FrameLayout) findViewById(R.id.diary_detail_user_video_layout);
         video_first = (SimpleDraweeView) findViewById(R.id.diary_detail_user_video_first);
         video_loading = (ProgressBar) findViewById(R.id.diary_detail_user_video_loading);
+        //Image  onePic
+        image1 = (SimpleDraweeView) findViewById(R.id.diary_detail_user_image1);
+        //Image twoPic
+        image_layout2 = (LinearLayout) findViewById(R.id.diary_detail_user_image_layout2);
+        image01 = (SimpleDraweeView) findViewById(R.id.diary_detail_user_image01);
+        image02 = (SimpleDraweeView) findViewById(R.id.diary_detail_user_image02);
+        //Image threePic
+        image_layout3 = (LinearLayout) findViewById(R.id.diary_detail_user_image_layout3);
+        image001 = (SimpleDraweeView) findViewById(R.id.diary_detail_user_image001);
+        image002 = (SimpleDraweeView) findViewById(R.id.diary_detail_user_image002);
+        image003 = (SimpleDraweeView) findViewById(R.id.diary_detail_user_image003);
     }
 
     private void receiveIntent() {
+        /**
+         * 列表进入
+         */
         Intent intent = getIntent();
         final DiaryBean diaryBean = (DiaryBean) intent.getExtras().get("diaryBean");
         if (diaryBean != null) {
@@ -96,28 +106,25 @@ public class TravellerDiaryDetailActivity extends BaseActivity implements View.O
                 user_desc.setText(diaryBean.getUser_desc());
             }
             if (!Tools.isNull(intent.getStringExtra("type"))) {
-                if (intent.getStringExtra("type").equals("text")) {
-                    noText_layout.setVisibility(View.GONE);
-                } else if (intent.getStringExtra("type").equals("image")) {
-                    video_layout.setVisibility(View.GONE);
+                if (intent.getStringExtra("type").equals("image")) {
                     if (diaryBean.getDiary_image() != null) {
                         if (diaryBean.getDiary_image().size() == 1) {
-                            detail_image1.setImageURI(Uri.parse(diaryBean.getDiary_image().get(0).toString()));
-                            detail_image2.setVisibility(View.GONE);
-                            detail_image3.setVisibility(View.GONE);
+                            image1.setVisibility(View.VISIBLE);
+                            image1.setImageURI(Uri.parse(diaryBean.getDiary_image().get(0).toString()));
                         } else if (diaryBean.getDiary_image().size() == 2) {
-                            detail_image1.setImageURI(Uri.parse(diaryBean.getDiary_image().get(0).toString()));
-                            detail_image2.setImageURI(Uri.parse(diaryBean.getDiary_image().get(1).toString()));
-                            detail_image3.setVisibility(View.GONE);
+                            image_layout2.setVisibility(View.VISIBLE);
+                            image01.setImageURI(Uri.parse(diaryBean.getDiary_image().get(0).toString()));
+                            image02.setImageURI(Uri.parse(diaryBean.getDiary_image().get(1).toString()));
                         } else if (diaryBean.getDiary_image().size() == 3) {
-                            detail_image1.setImageURI(Uri.parse(diaryBean.getDiary_image().get(0).toString()));
-                            detail_image2.setImageURI(Uri.parse(diaryBean.getDiary_image().get(1).toString()));
-                            detail_image3.setImageURI(Uri.parse(diaryBean.getDiary_image().get(2).toString()));
+                            image_layout3.setVisibility(View.VISIBLE);
+                            image001.setImageURI(Uri.parse(diaryBean.getDiary_image().get(0).toString()));
+                            image002.setImageURI(Uri.parse(diaryBean.getDiary_image().get(1).toString()));
+                            image003.setImageURI(Uri.parse(diaryBean.getDiary_image().get(2).toString()));
                         }
                     }
-                } else {
+                } else if (intent.getStringExtra("type").equals("video")){
                     if (!Tools.isNull(diaryBean.getDiary_video_first())) {
-                        image_layout.setVisibility(View.GONE);
+                        video_layout.setVisibility(View.VISIBLE);
                         video_first.setImageURI(Uri.parse(diaryBean.getDiary_video_first()));
                         new Thread(new Runnable() {
                             @Override
@@ -129,6 +136,10 @@ public class TravellerDiaryDetailActivity extends BaseActivity implements View.O
                 }
             }
         }
+
+        /**
+         * 小窗口进入
+         */
         if (!Tools.isNull(intent.getStringExtra("user_icon"))) {
             user_icon.setImageURI(Uri.parse(intent.getStringExtra("user_nick")));
         }
@@ -145,27 +156,8 @@ public class TravellerDiaryDetailActivity extends BaseActivity implements View.O
             user_desc.setText(intent.getStringExtra("user_desc"));
         }
         if (!Tools.isNull(intent.getStringExtra("type"))) {
-            if (intent.getStringExtra("type").equals("text")) {
-                noText_layout.setVisibility(View.GONE);
-            } else if (intent.getStringExtra("type").equals("image")) {
-                video_layout.setVisibility(View.GONE);
-                if (application.getDiary_image() != null) {
-                    if (application.getDiary_image().size() == 1) {
-                        detail_image1.setImageURI(Uri.parse(application.getDiary_image().get(0).toString()));
-                        detail_image2.setVisibility(View.GONE);
-                        detail_image3.setVisibility(View.GONE);
-                    } else if (application.getDiary_image().size() == 2) {
-                        detail_image1.setImageURI(Uri.parse(application.getDiary_image().get(0).toString()));
-                        detail_image2.setImageURI(Uri.parse(application.getDiary_image().get(1).toString()));
-                        detail_image3.setVisibility(View.GONE);
-                    } else if (application.getDiary_image().size() == 3) {
-                        detail_image1.setImageURI(Uri.parse(application.getDiary_image().get(0).toString()));
-                        detail_image2.setImageURI(Uri.parse(application.getDiary_image().get(1).toString()));
-                        detail_image3.setImageURI(Uri.parse(application.getDiary_image().get(2).toString()));
-                    }
-                }
-            } else {
-                image_layout.setVisibility(View.GONE);
+            if (intent.getStringExtra("type").equals("video")) {
+                video_layout.setVisibility(View.VISIBLE);
                 if (!Tools.isNull(intent.getStringExtra("path"))) {
                     final String path = intent.getStringExtra("path");
                     new Thread(new Runnable() {
@@ -178,6 +170,22 @@ public class TravellerDiaryDetailActivity extends BaseActivity implements View.O
                 if (!Tools.isNull(intent.getStringExtra("path_first"))) {
                     String path = intent.getStringExtra("path_first");
                     video_first.setImageURI(Uri.parse(path));
+                }
+            } else if (intent.getStringExtra("type").equals("image")) {
+                if (application.getDiary_image() != null) {
+                    if (application.getDiary_image().size() == 1) {
+                        image1.setVisibility(View.VISIBLE);
+                        image1.setImageURI(Uri.parse(application.getDiary_image().get(0).toString()));
+                    } else if (application.getDiary_image().size() == 2) {
+                        image_layout2.setVisibility(View.VISIBLE);
+                        image01.setImageURI(Uri.parse(application.getDiary_image().get(0).toString()));
+                        image02.setImageURI(Uri.parse(application.getDiary_image().get(1).toString()));
+                    } else if (application.getDiary_image().size() == 3) {
+                        image_layout3.setVisibility(View.VISIBLE);
+                        image001.setImageURI(Uri.parse(application.getDiary_image().get(0).toString()));
+                        image002.setImageURI(Uri.parse(application.getDiary_image().get(1).toString()));
+                        image003.setImageURI(Uri.parse(application.getDiary_image().get(2).toString()));
+                    }
                 }
             }
         }

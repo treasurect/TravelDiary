@@ -51,7 +51,7 @@ public class DiaryCenterActivity extends BaseActivity implements TabLayout.OnTab
         tabLayout.addTab(tabLayout.newTab().setText("图片"));
         tabLayout.addTab(tabLayout.newTab().setText("短视频"));
         tabLayout.addTab(tabLayout.newTab().setText("点评/吐槽"));
-        tabLayout.addTab(tabLayout.newTab().setText("小游戏"));
+//        tabLayout.addTab(tabLayout.newTab().setText("小游戏"));
     }
 
     private void initViewPager() {
@@ -61,7 +61,7 @@ public class DiaryCenterActivity extends BaseActivity implements TabLayout.OnTab
         list.add(new DiaryImageFragment());
         list.add(new DiaryVideoFragment());
         list.add(new EvaluatedFragment());
-        list.add(new SmallGameFragment());
+//        list.add(new SmallGameFragment());
         HomeFragmentPagerAdapter pagerAdapter = new HomeFragmentPagerAdapter(getSupportFragmentManager(), list);
         viewPager.setAdapter(pagerAdapter);
     }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -64,7 +65,7 @@ public class TravellerEvaluatedListAdapter extends BaseAdapter{
             viewHolder = new ViewHolder(ret);
             ret.setTag(viewHolder);
         }
-        EvaluatedBean evaluatedBean = list.get(i);
+        final EvaluatedBean evaluatedBean = list.get(i);
         if (evaluatedBean != null){
             if (!Tools.isNull(evaluatedBean.getUser_icon())){
                 viewHolder.user_icon.setImageURI(Uri.parse(evaluatedBean.getUser_icon()));
@@ -114,10 +115,17 @@ public class TravellerEvaluatedListAdapter extends BaseAdapter{
                     viewHolder.star5.setImageResource(R.mipmap.ic_star_click);
                 }
             }
+            viewHolder.layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    evaluatedListClick.ListClick(evaluatedBean);
+                }
+            });
         }
         return ret;
     }
     public static class ViewHolder{
+        private final LinearLayout layout;
         private TextView addr;
         private SimpleDraweeView user_icon;
         private TextView user_name,user_time,user_title;
@@ -133,6 +141,15 @@ public class TravellerEvaluatedListAdapter extends BaseAdapter{
             star4 = (ImageView) view.findViewById(R.id.evaluated_list_user_star4);
             star5 = (ImageView) view.findViewById(R.id.evaluated_list_user_star5);
             addr = (TextView) view.findViewById(R.id.evaluated_list_addr);
+            layout = (LinearLayout) view.findViewById(R.id.evaluated_list_layout);
         }
+    }
+    public interface EvaluatedListClick{
+        void ListClick(EvaluatedBean evaluatedBean);
+    }
+    private EvaluatedListClick evaluatedListClick;
+
+    public void setEvaluatedListClick(EvaluatedListClick evaluatedListClick) {
+        this.evaluatedListClick = evaluatedListClick;
     }
 }

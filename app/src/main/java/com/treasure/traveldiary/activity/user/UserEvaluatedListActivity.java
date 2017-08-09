@@ -1,5 +1,6 @@
 package com.treasure.traveldiary.activity.user;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
+import com.treasure.traveldiary.activity.traveller.EvaluatedDetailActivity;
 import com.treasure.traveldiary.adapter.TravellerEvaluatedListAdapter;
 import com.treasure.traveldiary.bean.EvaluatedBean;
 import com.treasure.traveldiary.utils.Tools;
@@ -25,16 +27,17 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.FindListener;
 
-public class UserEvaluatedListActivity extends BaseActivity implements View.OnClickListener, CustomRefreshListView.OnRefreshListener {
+public class UserEvaluatedListActivity extends BaseActivity implements View.OnClickListener, CustomRefreshListView.OnRefreshListener, TravellerEvaluatedListAdapter.EvaluatedListClick {
 
     private CustomRefreshListView listView;
-    private List<EvaluatedBean> list;
+    private List<EvaluatedBean> evaluated_list;
     private TravellerEvaluatedListAdapter adapter;
     private SharedPreferences mPreferences;
     private FrameLayout loading;
     private BmobQuery<EvaluatedBean> query = new BmobQuery<>();
-    private int maxLendth = 0;
-    private int isLoadEndFlag = 0;
+    private int skip = 0;
+    private boolean isLoadEndFlag;
+    private int maxLength;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +48,8 @@ public class UserEvaluatedListActivity extends BaseActivity implements View.OnCl
         mPreferences = getSharedPreferences("user", MODE_PRIVATE);
         title.setText("我的点评/吐槽");
         btn_back.setVisibility(View.VISIBLE);
-
+        isLoadEndFlag = false;
+        skip = 0;
         iniFindId();
         initListView();
         initClick();
@@ -58,14 +62,16 @@ public class UserEvaluatedListActivity extends BaseActivity implements View.OnCl
     }
 
     private void initListView() {
-        list = new ArrayList<>();
-        adapter = new TravellerEvaluatedListAdapter(this,list);
+        evaluated_list = new ArrayList<>();
+        adapter = new TravellerEvaluatedListAdapter(this, evaluated_list);
         listView.setAdapter(adapter);
         listView.setOnRefreshListener(this);
     }
 
     private void initClick() {
         btn_back.setOnClickListener(this);
+        loading.setOnClickListener(this);
+        adapter.setEvaluatedListClick(this);
     }
 
     @Override
@@ -83,26 +89,24 @@ public class UserEvaluatedListActivity extends BaseActivity implements View.OnCl
             @Override
             public void done(Integer integer, BmobException e) {
                 try {
-                    maxLendth = integer.intValue();
-                }catch (Exception error){
+                     maxLength = integer.intValue();
+                    if (maxLength <= 10) {
+                        isLoadEndFlag = true;
+                    }
+                } catch (Exception error) {
 
                 }
-                query.setLimit(10);
-                maxLendth = maxLendth - 10;
-                if (maxLendth < 10){
-                    query.setSkip(0);
-                }else {
-                    query.setSkip(maxLendth);
-                }
-                query.findObjects(new FindListener<EvaluatedBean>() {
+                query.setLimit(10)
+                        .setSkip(skip)
+                        .addWhereEqualTo("user_name", mPreferences.getString("user_name", ""))
+                        .order("-publish_time").findObjects(new FindListener<EvaluatedBean>() {
                     @Override
                     public void done(List<EvaluatedBean> list2, BmobException e) {
                         if (e == null) {
                             if (list2 != null) {
                                 loading.setVisibility(View.GONE);
-                                list.clear();
-                                Collections.reverse(list2);
-                                list.addAll(list2);
+                                evaluated_list.clear();
+                                evaluated_list.addAll(list2);
                                 adapter.notifyDataSetChanged();
                             }
                         } else {
@@ -122,38 +126,44 @@ public class UserEvaluatedListActivity extends BaseActivity implements View.OnCl
 
     @Override
     public void onLoadingMore() {
-        query.setLimit(10);
-        maxLendth = maxLendth - 10;
-        if (maxLendth <0){
-            query.setSkip(0);
-            isLoadEndFlag ++;
-        }else {
-            query.setSkip(maxLendth);
+        skip += 10;
+        if (skip >= maxLength){
+            isLoadEndFlag = true;
         }
-        loading.setVisibility(View.VISIBLE);
-        query.findObjects(new FindListener<EvaluatedBean>() {
-            @Override
-            public void done(List<EvaluatedBean> list2, BmobException e) {
-                if (isLoadEndFlag < 2){
-                    if (e == null) {
-                        if (list2 != null) {
-                            Collections.reverse(list2);
-                            list.addAll(list2);
-                            adapter.notifyDataSetChanged();
-                            loading.setVisibility(View.GONE);
-                            listView.completeRefresh();
+        if (!isLoadEndFlag) {
+            loading.setVisibility(View.VISIBLE);
+            query.setLimit(10)
+                    .setSkip(skip)
+                    .order("-publish_time")
+                    .addWhereEqualTo("user_name", mPreferences.getString("user_name", ""))
+                    .findObjects(new FindListener<EvaluatedBean>() {
+                        @Override
+                        public void done(List<EvaluatedBean> list, BmobException e) {
+                            if (e == null) {
+                                if (list != null) {
+                                    evaluated_list.addAll(list);
+                                    adapter.notifyDataSetChanged();
+                                    loading.setVisibility(View.GONE);
+                                    listView.completeRefresh();
+                                }
+                            } else {
+                                loading.setVisibility(View.GONE);
+                                listView.completeRefresh();
+                                Toast.makeText(UserEvaluatedListActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    } else {
-                        loading.setVisibility(View.GONE);
-                        listView.completeRefresh();
-                        Toast.makeText(UserEvaluatedListActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }else {
-                    Toast.makeText(UserEvaluatedListActivity.this, "数据加载完成", Toast.LENGTH_SHORT).show();
-                    loading.setVisibility(View.GONE);
-                    listView.completeRefresh();
-                }
-            }
-        });
+                    });
+        } else {
+            Toast.makeText(UserEvaluatedListActivity.this, "数据加载完成", Toast.LENGTH_SHORT).show();
+            loading.setVisibility(View.GONE);
+            listView.completeRefresh();
+        }
+    }
+
+    @Override
+    public void ListClick(EvaluatedBean evaluatedBean) {
+        Intent intent = new Intent(UserEvaluatedListActivity.this, EvaluatedDetailActivity.class);
+        intent.putExtra("evaluatedBean",evaluatedBean);
+        startActivity(intent);
     }
 }

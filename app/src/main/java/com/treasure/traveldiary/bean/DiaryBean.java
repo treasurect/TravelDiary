@@ -10,6 +10,7 @@ import cn.bmob.v3.BmobObject;
  */
 
 public class DiaryBean extends BmobObject {
+    private String publish_time;
     private String user_name;
     private String user_nick;
     private String user_icon;
@@ -19,7 +20,6 @@ public class DiaryBean extends BmobObject {
     private String user_desc;
     private String user_title;
     private int diary_type;
-    private String publish_time;
     private List<String> diary_image;
     private String diary_video;
     private String diary_video_first;

@@ -65,7 +65,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:gravity="center_vertical"/>
+                        android:gravity="center_vertical" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -77,10 +77,10 @@
             <TextView
                 android:id="@+id/diary_detail_user_title"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:gravity="center"
-                android:paddingLeft="10dp"
+                android:padding="10dp"
                 android:textColor="@color/colorOrange"
                 android:textSize="20sp" />
 
@@ -92,7 +92,7 @@
             <TextView
                 android:id="@+id/diary_detail_user_desc"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:padding="20dp"
                 android:textSize="16sp" />
@@ -101,64 +101,109 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:background="@color/colorAccent" />
+
             <FrameLayout
                 android:id="@+id/diary_detail_user_noText_layout"
                 android:layout_width="match_parent"
-                android:layout_height="180dp">
+                android:layout_height="wrap_content">
+                <!--Video  ；类型视图-->
                 <FrameLayout
                     android:id="@+id/diary_detail_user_video_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="300dp"
+                    android:visibility="gone">
+
                     <SurfaceView
                         android:id="@+id/diary_detail_user_video_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
+
                     <com.facebook.drawee.view.SimpleDraweeView
                         android:id="@+id/diary_detail_user_video_first"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        fresco:placeholderImage="@mipmap/pic_page_loading"/>
+                        fresco:placeholderImage="@mipmap/pic_page_loading" />
+
                     <ImageView
                         android:id="@+id/diary_detail_user_video_play"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@mipmap/ic_play"
                         android:layout_gravity="center"
-                        android:visibility="gone"/>
+                        android:src="@mipmap/ic_play"
+                        android:visibility="gone" />
+
                     <ProgressBar
                         android:id="@+id/diary_detail_user_video_loading"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_gravity="center"/>
+                        android:layout_gravity="center" />
                 </FrameLayout>
-                <LinearLayout
-                    android:id="@+id/diary_detail_user_image_layout"
+                <!--Image  单个图片-->
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/diary_detail_user_image1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_height="450dp"
+                    android:layout_margin="10dp"
+                    android:visibility="gone"
+                    fresco:placeholderImage="@mipmap/pic_page_loading" />
+                <!--Image 两个图片-->
+                <LinearLayout
+                    android:id="@+id/diary_detail_user_image_layout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="800dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
                     <com.facebook.drawee.view.SimpleDraweeView
-                        android:id="@+id/diary_detail_user_image1"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent"
+                        android:id="@+id/diary_detail_user_image01"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
                         android:layout_margin="10dp"
-                        fresco:placeholderImage="@mipmap/pic_page_loading"/>
+                        android:layout_weight="1"
+                        fresco:placeholderImage="@mipmap/pic_page_loading" />
+
                     <com.facebook.drawee.view.SimpleDraweeView
-                        android:id="@+id/diary_detail_user_image2"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent"
+                        android:id="@+id/diary_detail_user_image02"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
                         android:layout_margin="10dp"
-                        fresco:placeholderImage="@mipmap/pic_page_loading"/>
+                        android:layout_weight="1"
+                        fresco:placeholderImage="@mipmap/pic_page_loading" />
+                </LinearLayout>
+                <!--Image 三个图片-->
+                <LinearLayout
+                    android:id="@+id/diary_detail_user_image_layout3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1200dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
                     <com.facebook.drawee.view.SimpleDraweeView
-                        android:id="@+id/diary_detail_user_image3"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent"
+                        android:id="@+id/diary_detail_user_image001"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
                         android:layout_margin="10dp"
-                        fresco:placeholderImage="@mipmap/pic_page_loading"/>
+                        android:layout_weight="1"
+                        fresco:placeholderImage="@mipmap/pic_page_loading" />
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/diary_detail_user_image002"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        fresco:placeholderImage="@mipmap/pic_page_loading" />
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/diary_detail_user_image003"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        fresco:placeholderImage="@mipmap/pic_page_loading" />
                 </LinearLayout>
             </FrameLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"

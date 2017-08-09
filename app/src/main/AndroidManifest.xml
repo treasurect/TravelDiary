@@ -219,12 +219,16 @@
         <activity
             android:name=".activity.traveller.DiaryCenterActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.user.UserFeedBackActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.user.UserFeedBckHistoryActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.user.UserSigningActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.user.UserFeedBackActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user.UserFeedBckHistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user.UserSigningActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.traveller.EvaluatedDetailActivity"></activity>
     </application>
 
 </manifest>
