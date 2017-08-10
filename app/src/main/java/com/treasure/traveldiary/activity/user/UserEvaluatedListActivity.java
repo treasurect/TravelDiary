@@ -163,7 +163,8 @@ public class UserEvaluatedListActivity extends BaseActivity implements View.OnCl
     @Override
     public void ListClick(EvaluatedBean evaluatedBean) {
         Intent intent = new Intent(UserEvaluatedListActivity.this, EvaluatedDetailActivity.class);
-        intent.putExtra("evaluatedBean",evaluatedBean);
+        intent.putExtra("user_name",evaluatedBean.getUser_name());
+        intent.putExtra("user_time",evaluatedBean.getPublish_time());
         startActivity(intent);
     }
 }

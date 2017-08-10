@@ -17,6 +17,7 @@ public class MapMarkerInfoBean implements Serializable {
     private String user_desc;
     private String user_time;
     private String user_nick;
+    private String user_name;
     private List<String> user_image;
     private int diary_type;
     private String video_path;
@@ -108,5 +109,13 @@ public class MapMarkerInfoBean implements Serializable {
 
     public void setVideo_path_first(String video_path_first) {
         this.video_path_first = video_path_first;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 }

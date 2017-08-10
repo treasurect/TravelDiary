@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.bean.DiaryBean;
+import com.treasure.traveldiary.bean.LeaveMesBean;
 import com.treasure.traveldiary.utils.Tools;
 
 import java.text.SimpleDateFormat;
@@ -238,8 +239,13 @@ public class DiaryImagePublishActivity extends BaseActivity implements View.OnCl
         diaryBean.setPublish_time(time.substring(5, 7) + "月" + time.substring(8, 10) + "日" + time.substring(11, 16));
         diaryBean.setUser_desc(textDesc);
         diaryBean.setUser_title(textTitle);
-
         diaryBean.setDiary_image(list);
+        //生成一个空的数据占位，以方便更新
+        LeaveMesBean leaveMesBean = new LeaveMesBean();
+        leaveMesBean.setLeave_name(mPreferences.getString("user_name", ""));
+        List<LeaveMesBean> leaveMesBeen = new ArrayList<>();
+        leaveMesBeen.add(leaveMesBean);
+        diaryBean.setMesBeanList(leaveMesBeen);
         diaryBean.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {

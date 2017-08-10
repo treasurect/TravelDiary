@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#66000000">
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="220dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bottom_yellow1_frame_gray_radius5"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/leaveMes_content"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="@null"
+            android:gravity="start"
+            android:hint="留下你的神评论"
+            android:padding="10dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorOrange" />
+
+        <TextView
+            android:id="@+id/leaveMes_send"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="关闭"
+            android:textColor="@color/colorGray2"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</FrameLayout>

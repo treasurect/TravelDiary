@@ -23,6 +23,7 @@ public class DiaryBean extends BmobObject {
     private List<String> diary_image;
     private String diary_video;
     private String diary_video_first;
+    private List<LeaveMesBean> mesBeanList;
 
     public String getUser_name() {
         return user_name;
@@ -126,5 +127,13 @@ public class DiaryBean extends BmobObject {
 
     public void setDiary_video_first(String diary_video_first) {
         this.diary_video_first = diary_video_first;
+    }
+
+    public List<LeaveMesBean> getMesBeanList() {
+        return mesBeanList;
+    }
+
+    public void setMesBeanList(List<LeaveMesBean> mesBeanList) {
+        this.mesBeanList = mesBeanList;
     }
 }

@@ -11,4 +11,8 @@
         <item name="android:windowEnterAnimation">@anim/login_popup_enter</item>
         <item name="android:windowExitAnimation">@anim/login_popup_exit</item>
     </style>
+    <style name="leaveMesPopupWindow" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/in_alpha</item>
+        <item name="android:windowExitAnimation">@anim/out_alpha</item>
+    </style>
 </resources>

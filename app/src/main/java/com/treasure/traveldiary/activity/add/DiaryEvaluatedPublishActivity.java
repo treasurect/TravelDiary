@@ -29,7 +29,7 @@ import com.baidu.mapapi.search.poi.PoiSortType;
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.bean.EvaluatedBean;
-import com.treasure.traveldiary.utils.LogUtil;
+import com.treasure.traveldiary.bean.LeaveMesBean;
 import com.treasure.traveldiary.utils.Tools;
 
 import java.text.SimpleDateFormat;
@@ -39,7 +39,7 @@ import java.util.List;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
-public class DiaryEvaluatedActivity extends BaseActivity implements View.OnClickListener, OnGetPoiSearchResultListener, AdapterView.OnItemClickListener, TextWatcher {
+public class DiaryEvaluatedPublishActivity extends BaseActivity implements View.OnClickListener, OnGetPoiSearchResultListener, AdapterView.OnItemClickListener, TextWatcher {
     private LatLng latLng;
     private PoiSearch poiSearch;
     private List<PoiInfo> allPoi;
@@ -79,7 +79,7 @@ public class DiaryEvaluatedActivity extends BaseActivity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_diary_evaluated);
+        setContentView(R.layout.activity_evaluated_publish);
         initTitle();
         Tools.setTranslucentStatus(this);
         btn_back.setVisibility(View.VISIBLE);
@@ -144,7 +144,7 @@ public class DiaryEvaluatedActivity extends BaseActivity implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_back:
-                DiaryEvaluatedActivity.this.finish();
+                DiaryEvaluatedPublishActivity.this.finish();
                 break;
             case R.id.signin_nearby_star1:
                 initStar();
@@ -276,14 +276,20 @@ public class DiaryEvaluatedActivity extends BaseActivity implements View.OnClick
         bean.setStar_num(starNum);
         bean.setUser_icon("暂无头像");
         bean.setUser_evaluated(star_edit.getText().toString().trim());
+        //生成一个空的数据占位，以方便更新
+        LeaveMesBean leaveMesBean = new LeaveMesBean();
+        leaveMesBean.setLeave_name(preferences.getString("user_name", ""));
+        List<LeaveMesBean> leaveMesBeen = new ArrayList<>();
+        leaveMesBeen.add(leaveMesBean);
+        bean.setMesBeanList(leaveMesBeen);
         bean.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {
                 if (e==null){
-                    Toast.makeText(DiaryEvaluatedActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
-                    DiaryEvaluatedActivity.this.finish();
+                    Toast.makeText(DiaryEvaluatedPublishActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+                    DiaryEvaluatedPublishActivity.this.finish();
                 }else {
-                    Toast.makeText(DiaryEvaluatedActivity.this, "失败原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DiaryEvaluatedPublishActivity.this, "失败原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -12,7 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.treasure.traveldiary.R;
-import com.treasure.traveldiary.activity.traveller.TravellerDiaryDetailActivity;
+import com.treasure.traveldiary.activity.traveller.DiaryDetailActivity;
 import com.treasure.traveldiary.adapter.TravellerDiaryListAdapter;
 import com.treasure.traveldiary.bean.DiaryBean;
 import com.treasure.traveldiary.utils.LogUtil;
@@ -148,22 +148,10 @@ public class DiaryAllFragment extends BaseFragment implements TravellerDiaryList
 
     @Override
     public void textClick(DiaryBean diaryBean) {
-        if (diaryBean.getDiary_type() == 0) {
-            Intent intent = new Intent(getContext(), TravellerDiaryDetailActivity.class);
-            intent.putExtra("diaryBean", diaryBean);
-            intent.putExtra("type", "text");
-            startActivity(intent);
-        } else if (diaryBean.getDiary_type() == 1) {
-            Intent intent = new Intent(getContext(), TravellerDiaryDetailActivity.class);
-            intent.putExtra("diaryBean", diaryBean);
-            intent.putExtra("type", "image");
-            startActivity(intent);
-        } else if (diaryBean.getDiary_type() == 2) {
-            Intent intent = new Intent(getContext(), TravellerDiaryDetailActivity.class);
-            intent.putExtra("diaryBean", diaryBean);
-            intent.putExtra("type", "video");
-            startActivity(intent);
-        }
+        Intent intent = new Intent(getContext(), DiaryDetailActivity.class);
+        intent.putExtra("user_name",diaryBean.getUser_name());
+        intent.putExtra("user_time",diaryBean.getPublish_time());
+        startActivity(intent);
     }
 
     @Override

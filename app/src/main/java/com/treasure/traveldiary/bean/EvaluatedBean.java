@@ -1,5 +1,7 @@
 package com.treasure.traveldiary.bean;
 
+import java.util.List;
+
 import cn.bmob.v3.BmobObject;
 
 /**
@@ -14,6 +16,7 @@ public class EvaluatedBean extends BmobObject{
     private String user_addr;
     private int star_num;
     private String user_evaluated;
+    private List<LeaveMesBean> mesBeanList;
 
     public String getUser_name() {
         return user_name;
@@ -69,5 +72,13 @@ public class EvaluatedBean extends BmobObject{
 
     public void setUser_icon(String user_icon) {
         this.user_icon = user_icon;
+    }
+
+    public List<LeaveMesBean> getMesBeanList() {
+        return mesBeanList;
+    }
+
+    public void setMesBeanList(List<LeaveMesBean> mesBeanList) {
+        this.mesBeanList = mesBeanList;
     }
 }

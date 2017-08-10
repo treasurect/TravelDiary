@@ -10,7 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.treasure.traveldiary.R;
-import com.treasure.traveldiary.activity.traveller.TravellerDiaryDetailActivity;
+import com.treasure.traveldiary.activity.traveller.DiaryDetailActivity;
 import com.treasure.traveldiary.adapter.TravellerDiaryListAdapter;
 import com.treasure.traveldiary.bean.DiaryBean;
 import com.treasure.traveldiary.widget.CustomRefreshListView;
@@ -115,9 +115,9 @@ public class DiaryTextFragment extends BaseFragment implements TravellerDiaryLis
 
     @Override
     public void textClick(DiaryBean diaryBean) {
-        Intent intent = new Intent(getContext(), TravellerDiaryDetailActivity.class);
-        intent.putExtra("diaryBean", diaryBean);
-        intent.putExtra("type", "text");
+        Intent intent = new Intent(getContext(), DiaryDetailActivity.class);
+        intent.putExtra("user_name",diaryBean.getUser_name());
+        intent.putExtra("user_time",diaryBean.getPublish_time());
         startActivity(intent);
     }
 

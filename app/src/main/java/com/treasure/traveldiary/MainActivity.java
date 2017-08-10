@@ -46,13 +46,12 @@ import com.baidu.mapapi.model.LatLng;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.treasure.traveldiary.activity.add.DiaryImageCameraActivity;
 import com.treasure.traveldiary.activity.add.DiaryImagePublishActivity;
-import com.treasure.traveldiary.activity.add.DiaryEvaluatedActivity;
+import com.treasure.traveldiary.activity.add.DiaryEvaluatedPublishActivity;
 import com.treasure.traveldiary.activity.add.DiaryVideoCameraActivity;
 import com.treasure.traveldiary.activity.add.DiaryVideoPublishActivity;
 import com.treasure.traveldiary.activity.traveller.DiaryCenterActivity;
-import com.treasure.traveldiary.activity.traveller.TravellerDiaryDetailActivity;
+import com.treasure.traveldiary.activity.traveller.DiaryDetailActivity;
 import com.treasure.traveldiary.activity.add.DiaryTextPublishActivity;
-import com.treasure.traveldiary.activity.user.UserDiaryActivity;
 import com.treasure.traveldiary.activity.user.UserCenterActivity;
 import com.treasure.traveldiary.bean.DiaryBean;
 import com.treasure.traveldiary.bean.MapMarkerInfoBean;
@@ -298,7 +297,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             case R.id.add_diary_evaluated:
             case R.id.add_diary_evaluated_t:
-                Intent intent5 = new Intent(MainActivity.this, DiaryEvaluatedActivity.class);
+                Intent intent5 = new Intent(MainActivity.this, DiaryEvaluatedPublishActivity.class);
                 intent5.putExtra("user_lat",String.valueOf(user_latitude));
                 intent5.putExtra("user_lon",String.valueOf(user_longitude));
                 intent5.putExtra("user_addr",user_addr);
@@ -543,21 +542,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public void onClick(View view) {
                 map.hideInfoWindow();
-                Intent intent = new Intent(MainActivity.this, TravellerDiaryDetailActivity.class);
-                intent.putExtra("user_nick",markerInfo.getUser_nick());
-                intent.putExtra("user_icon",markerInfo.getUser_icon());
+                Intent intent = new Intent(MainActivity.this, DiaryDetailActivity.class);
+                intent.putExtra("user_name",markerInfo.getUser_name());
                 intent.putExtra("user_time",markerInfo.getUser_time());
-                intent.putExtra("user_title",markerInfo.getUser_title());
-                intent.putExtra("user_desc",markerInfo.getUser_desc());
-                if (markerInfo.getDiary_type() == 0){
-                    intent.putExtra("type","text");
-                }else if (markerInfo.getDiary_type() == 1){
-                    intent.putExtra("type","image");
-                }else if (markerInfo.getDiary_type() == 2){
-                    intent.putExtra("type","video");
-                    intent.putExtra("path",markerInfo.getVideo_path());
-                    intent.putExtra("path_first",markerInfo.getVideo_path_first());
-                }
                 startActivity(intent);
             }
         });
@@ -590,6 +577,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         LatLng latLng = new LatLng(list.get(i).getUser_lat(), list.get(i).getUser_long());
                         MapMarkerInfoBean mapMarkerInfoBean = new MapMarkerInfoBean();
                         mapMarkerInfoBean.setLatLng(latLng);
+                        mapMarkerInfoBean.setUser_name(list.get(i).getUser_name());
                         mapMarkerInfoBean.setUser_icon(list.get(i).getUser_icon());
                         mapMarkerInfoBean.setUser_addr(list.get(i).getUser_addr());
                         mapMarkerInfoBean.setUser_title(list.get(i).getUser_title());

@@ -18,6 +18,7 @@ public class UserInfoBean extends BmobObject {
     private String user_desc;
     private List<String> signing_date;
     private int integral_count;
+    private List<LeaveMesBean> leaveMesList;
 
     public String getUser_name() {
         return user_name;
@@ -89,5 +90,13 @@ public class UserInfoBean extends BmobObject {
 
     public void setIntegral_count(int integral_count) {
         this.integral_count = integral_count;
+    }
+
+    public List<LeaveMesBean> getLeaveMesList() {
+        return leaveMesList;
+    }
+
+    public void setLeaveMesList(List<LeaveMesBean> leaveMesList) {
+        this.leaveMesList = leaveMesList;
     }
 }

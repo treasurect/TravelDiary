@@ -196,10 +196,10 @@
             android:name=".activity.add.DiaryImagePublishActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.add.DiaryEvaluatedActivity"
+            android:name=".activity.add.DiaryEvaluatedPublishActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.traveller.TravellerDiaryDetailActivity"
+            android:name=".activity.traveller.DiaryDetailActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.add.DiaryImageCameraActivity"

@@ -156,7 +156,8 @@ public class EvaluatedFragment extends BaseFragment implements CustomRefreshList
     @Override
     public void ListClick(EvaluatedBean evaluatedBean) {
         Intent intent = new Intent(getContext(), EvaluatedDetailActivity.class);
-        intent.putExtra("evaluatedBean",evaluatedBean);
+        intent.putExtra("user_name",evaluatedBean.getUser_name());
+        intent.putExtra("user_time",evaluatedBean.getPublish_time());
         startActivity(intent);
     }
 }

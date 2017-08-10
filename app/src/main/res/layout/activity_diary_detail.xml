@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ScrollView
+            android:id="@+id/diary_detail_leaveMes_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <include layout="@layout/common_top_view" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bottom_yellow1_frame_gray_radius5"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <com.facebook.drawee.view.SimpleDraweeView
+                            android:id="@+id/diary_detail_user_icon"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:layout_gravity="center"
+                            fresco:placeholderImage="@mipmap/ic_travel_logo"
+                            fresco:roundAsCircle="true" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorOrange" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/diary_detail_user_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:gravity="bottom" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/colorOrange" />
+
+                            <TextView
+                                android:id="@+id/diary_detail_user_time"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorAccent" />
+
+                    <TextView
+                        android:id="@+id/diary_detail_user_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:textColor="@color/colorOrange"
+                        android:textSize="20sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/colorAccent" />
+
+                    <TextView
+                        android:id="@+id/diary_detail_user_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="20dp"
+                        android:textSize="16sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/colorAccent" />
+
+                    <FrameLayout
+                        android:id="@+id/diary_detail_user_noText_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <!--Video  ；类型视图-->
+                        <FrameLayout
+                            android:id="@+id/diary_detail_user_video_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="300dp"
+                            android:visibility="gone">
+
+                            <SurfaceView
+                                android:id="@+id/diary_detail_user_video_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+
+                            <com.facebook.drawee.view.SimpleDraweeView
+                                android:id="@+id/diary_detail_user_video_first"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                fresco:placeholderImage="@mipmap/pic_page_loading" />
+
+                            <ImageView
+                                android:id="@+id/diary_detail_user_video_play"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center"
+                                android:src="@mipmap/ic_play"
+                                android:visibility="gone" />
+
+                            <ProgressBar
+                                android:id="@+id/diary_detail_user_video_loading"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center" />
+                        </FrameLayout>
+                        <!--Image  单个图片-->
+                        <com.facebook.drawee.view.SimpleDraweeView
+                            android:id="@+id/diary_detail_user_image1"
+                            android:layout_width="match_parent"
+                            android:layout_height="450dp"
+                            android:layout_margin="10dp"
+                            android:visibility="gone"
+                            fresco:placeholderImage="@mipmap/pic_page_loading" />
+                        <!--Image 两个图片-->
+                        <LinearLayout
+                            android:id="@+id/diary_detail_user_image_layout2"
+                            android:layout_width="match_parent"
+                            android:layout_height="800dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <com.facebook.drawee.view.SimpleDraweeView
+                                android:id="@+id/diary_detail_user_image01"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_margin="10dp"
+                                android:layout_weight="1"
+                                fresco:placeholderImage="@mipmap/pic_page_loading" />
+
+                            <com.facebook.drawee.view.SimpleDraweeView
+                                android:id="@+id/diary_detail_user_image02"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_margin="10dp"
+                                android:layout_weight="1"
+                                fresco:placeholderImage="@mipmap/pic_page_loading" />
+                        </LinearLayout>
+                        <!--Image 三个图片-->
+                        <LinearLayout
+                            android:id="@+id/diary_detail_user_image_layout3"
+                            android:layout_width="match_parent"
+                            android:layout_height="1200dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <com.facebook.drawee.view.SimpleDraweeView
+                                android:id="@+id/diary_detail_user_image001"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_margin="10dp"
+                                android:layout_weight="1"
+                                fresco:placeholderImage="@mipmap/pic_page_loading" />
+
+                            <com.facebook.drawee.view.SimpleDraweeView
+                                android:id="@+id/diary_detail_user_image002"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_margin="10dp"
+                                android:layout_weight="1"
+                                fresco:placeholderImage="@mipmap/pic_page_loading" />
+
+                            <com.facebook.drawee.view.SimpleDraweeView
+                                android:id="@+id/diary_detail_user_image003"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_margin="10dp"
+                                android:layout_weight="1"
+                                fresco:placeholderImage="@mipmap/pic_page_loading" />
+                        </LinearLayout>
+                    </FrameLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/colorAccent" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="留言"
+                        android:textColor="@color/colorOrange"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <com.treasure.traveldiary.widget.CustomScrollListView
+                        android:id="@+id/diary_detail_leaveMes_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <include layout="@layout/common_loading_view" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/diary_detail_leaveMes_refresh"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="30dp"
+            android:src="@mipmap/ic_refresh"
+            app:backgroundTint="@color/colorOrange"
+            app:pressedTranslationZ="20dp"
+            app:rippleColor="@color/colorAccent" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/diary_detail_leaveMes_send"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:background="@color/colorYellow1">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="7dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="7dp"
+            android:background="@drawable/bottom_white_radius25"
+            android:gravity="center"
+            android:text="留下你的神评论"
+            android:textColor="@color/colorGray"
+            android:textStyle="bold" />
+    </FrameLayout>
+</LinearLayout>

@@ -22,6 +22,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.activity.add.DiaryImageCameraActivity;
+import com.treasure.traveldiary.bean.LeaveMesBean;
 import com.treasure.traveldiary.bean.UserInfoBean;
 import com.treasure.traveldiary.utils.StringContents;
 import com.treasure.traveldiary.utils.Tools;
@@ -298,7 +299,12 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
         List<String> list = new ArrayList<>();
         list.add("0");
         infoBean.setSigning_date(list);
-        infoBean.save(new SaveListener<String>() {
+        LeaveMesBean leaveMesBean = new LeaveMesBean();
+        leaveMesBean.setLeave_name(editPhone.getText().toString().trim());
+        List<LeaveMesBean> leaveMesBeen = new ArrayList<>();
+        leaveMesBeen.add(leaveMesBean);
+        infoBean.setLeaveMesList(leaveMesBeen);
+        infoBean.save(                                                                 new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {
                 if (e == null) {
