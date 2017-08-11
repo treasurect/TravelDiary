@@ -6,7 +6,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +28,7 @@ import java.util.List;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
-public class DiaryTextPublishActivity extends BaseActivity implements View.OnClickListener, TextWatcher {
+public class DiaryTextPublishActivity extends BaseActivity implements View.OnClickListener, TextWatcher, AdapterView.OnItemSelectedListener {
 
     private EditText diaryDesc;
     private SharedPreferences mPreferences;
@@ -32,6 +37,11 @@ public class DiaryTextPublishActivity extends BaseActivity implements View.OnCli
     private float user_long;
     private EditText diaryTitle;
     private TextView diaryLoc;
+    private FrameLayout loading;
+    private ImageView state_img;
+    private Spinner state_text;
+    private ArrayAdapter<String> adapter;
+    private String text_state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,30 +56,43 @@ public class DiaryTextPublishActivity extends BaseActivity implements View.OnCli
 
         initFindId();
         receiveData();
+        initSpinner();
         initClick();
 
         btn_send.setClickable(false);
         btn_send.setTextColor(getResources().getColor(R.color.colorGray2));
     }
 
-    private void receiveData() {
-        Intent intent = getIntent();
-        if (!Tools.isNull(intent.getStringExtra("user_addr"))){
-            user_addr = intent.getStringExtra("user_addr");
-            diaryLoc.setText(user_addr);
-        }
-        if (!Tools.isNull(intent.getStringExtra("user_lat"))){
-            user_lat = Float.parseFloat(intent.getStringExtra("user_lat"));
-        }
-        if (!Tools.isNull(intent.getStringExtra("user_long"))){
-            user_long = Float.parseFloat(intent.getStringExtra("user_long"));
-        }
-    }
-
     private void initFindId() {
         diaryDesc = (EditText) findViewById(R.id.diary_text_desc);
         diaryTitle = (EditText) findViewById(R.id.diary_text_title);
         diaryLoc = (TextView) findViewById(R.id.diary_text_loc);
+        loading = (FrameLayout) findViewById(R.id.loading_layout);
+        state_img = (ImageView) findViewById(R.id.diary_text_state_img);
+        state_text = (Spinner) findViewById(R.id.diary_text_state_text);
+    }
+
+    private void receiveData() {
+        Intent intent = getIntent();
+        if (!Tools.isNull(intent.getStringExtra("user_addr"))) {
+            user_addr = intent.getStringExtra("user_addr");
+            diaryLoc.setText(user_addr);
+        }
+        if (!Tools.isNull(intent.getStringExtra("user_lat"))) {
+            user_lat = Float.parseFloat(intent.getStringExtra("user_lat"));
+        }
+        if (!Tools.isNull(intent.getStringExtra("user_long"))) {
+            user_long = Float.parseFloat(intent.getStringExtra("user_long"));
+        }
+    }
+
+    private void initSpinner() {
+        List<String> list = new ArrayList<>();
+        list.add("公开");
+        list.add("私密");
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        state_text.setAdapter(adapter);
     }
 
     private void initClick() {
@@ -77,6 +100,8 @@ public class DiaryTextPublishActivity extends BaseActivity implements View.OnCli
         btn_send.setOnClickListener(this);
         diaryDesc.addTextChangedListener(this);
         diaryTitle.addTextChangedListener(this);
+        loading.setOnClickListener(this);
+        state_text.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -92,16 +117,31 @@ public class DiaryTextPublishActivity extends BaseActivity implements View.OnCli
     }
 
     @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        text_state = adapter.getItem(i);
+        if (text_state.equals("公开")) {
+            state_img.setImageResource(R.mipmap.ic_lock_open);
+        } else {
+            state_img.setImageResource(R.mipmap.ic_lock_close);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        text_state = "公开";
+    }
+
+    @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
     }
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (!Tools.isNull(diaryDesc.getText().toString().trim()) && !Tools.isNull(diaryTitle.getText().toString().trim())){
+        if (!Tools.isNull(diaryDesc.getText().toString().trim()) && !Tools.isNull(diaryTitle.getText().toString().trim())) {
             btn_send.setClickable(true);
             btn_send.setTextColor(getResources().getColor(R.color.colorWhite));
-        }else {
+        } else {
             btn_send.setClickable(false);
             btn_send.setTextColor(getResources().getColor(R.color.colorGray2));
         }
@@ -113,18 +153,20 @@ public class DiaryTextPublishActivity extends BaseActivity implements View.OnCli
     }
 
     private void sendDiary() {
+        loading.setVisibility(View.VISIBLE);
         String textDesc = diaryDesc.getText().toString().trim();
         String textTitle = diaryTitle.getText().toString().trim();
         DiaryBean diaryBean = new DiaryBean();
-        diaryBean.setUser_name(mPreferences.getString("user_name",""));
-        diaryBean.setUser_nick(mPreferences.getString("user_nick",""));
-        diaryBean.setUser_icon(mPreferences.getString("user_icon",""));
+        diaryBean.setUser_name(mPreferences.getString("user_name", ""));
+        diaryBean.setUser_nick(mPreferences.getString("user_nick", ""));
+        diaryBean.setUser_icon(mPreferences.getString("user_icon", ""));
         diaryBean.setUser_addr(user_addr);
         diaryBean.setUser_lat(user_lat);
         diaryBean.setUser_long(user_long);
         diaryBean.setDiary_type(0);
+        diaryBean.setState(text_state);
         String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Long(System.currentTimeMillis()));
-        diaryBean.setPublish_time(time.substring(5,7)+"月"+time.substring(8,10)+"日"+time.substring(11,16));
+        diaryBean.setPublish_time(time.substring(5, 7) + "月" + time.substring(8, 10) + "日" + time.substring(11, 16));
         diaryBean.setUser_desc(textDesc);
         diaryBean.setUser_title(textTitle);
         //生成一个空的数据占位，以方便更新
@@ -138,8 +180,10 @@ public class DiaryTextPublishActivity extends BaseActivity implements View.OnCli
             public void done(String s, BmobException e) {
                 if (e == null) {
                     Toast.makeText(DiaryTextPublishActivity.this, "恭喜你，日记发表成功", Toast.LENGTH_SHORT).show();
+                    loading.setVisibility(View.GONE);
                     DiaryTextPublishActivity.this.finish();
                 } else {
+                    loading.setVisibility(View.GONE);
                     Toast.makeText(DiaryTextPublishActivity.this, "很遗憾，发表失败\n原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }

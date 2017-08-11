@@ -12,9 +12,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +36,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadBatchListener;
 
-public class DiaryImagePublishActivity extends BaseActivity implements View.OnClickListener, TextWatcher {
+public class DiaryImagePublishActivity extends BaseActivity implements View.OnClickListener, TextWatcher, AdapterView.OnItemSelectedListener {
     private EditText diaryDesc;
     private SharedPreferences mPreferences;
     private String user_addr;
@@ -56,13 +59,17 @@ public class DiaryImagePublishActivity extends BaseActivity implements View.OnCl
                     sendDiary();
                     break;
                 case 400:
-                    Toast.makeText(DiaryImagePublishActivity.this, "上传失败："+error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DiaryImagePublishActivity.this, "上传失败：" + error, Toast.LENGTH_SHORT).show();
                     loading.setVisibility(View.GONE);
                     break;
             }
         }
     };
     private String error;
+    private ImageView state_img;
+    private Spinner state_text;
+    private ArrayAdapter<String> adapter;
+    private String image_state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +84,7 @@ public class DiaryImagePublishActivity extends BaseActivity implements View.OnCl
 
         initFindId();
         receiveData();
+        initSpinner();
         initClick();
         btn_send.setClickable(false);
         image3.setClickable(false);
@@ -92,6 +100,8 @@ public class DiaryImagePublishActivity extends BaseActivity implements View.OnCl
         image3 = (ImageView) findViewById(R.id.diary_image_camera3);
         loading = (FrameLayout) findViewById(R.id.loading_layout);
         image_add = (ImageView) findViewById(R.id.diary_image_add);
+        state_img = (ImageView) findViewById(R.id.diary_image_state_img);
+        state_text = (Spinner) findViewById(R.id.diary_image_state_text);
     }
 
     private void receiveData() {
@@ -111,10 +121,19 @@ public class DiaryImagePublishActivity extends BaseActivity implements View.OnCl
             bm_camera1 = BitmapFactory.decodeByteArray(bitmaps, 0, bitmaps.length);
             Matrix matrix = new Matrix();
             matrix.setRotate(90);
-            bm_camera1 = Bitmap.createBitmap(bm_camera1,0,0,bm_camera1.getWidth(),bm_camera1.getHeight(),matrix,true);
+            bm_camera1 = Bitmap.createBitmap(bm_camera1, 0, 0, bm_camera1.getWidth(), bm_camera1.getHeight(), matrix, true);
             image1.setImageBitmap(bm_camera1);
 
         }
+    }
+
+    private void initSpinner() {
+        List<String> list = new ArrayList<>();
+        list.add("公开");
+        list.add("私密");
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        state_text.setAdapter(adapter);
     }
 
     private void initClick() {
@@ -126,6 +145,7 @@ public class DiaryImagePublishActivity extends BaseActivity implements View.OnCl
         image2.setOnClickListener(this);
         image3.setOnClickListener(this);
         loading.setOnClickListener(this);
+        state_text.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -150,6 +170,21 @@ public class DiaryImagePublishActivity extends BaseActivity implements View.OnCl
                 startActivityForResult(intent3, 203);
                 break;
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        image_state = adapter.getItem(i);
+        if (image_state.equals("公开")) {
+            state_img.setImageResource(R.mipmap.ic_lock_open);
+        } else {
+            state_img.setImageResource(R.mipmap.ic_lock_close);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        image_state = "公开";
     }
 
     @Override
@@ -189,21 +224,21 @@ public class DiaryImagePublishActivity extends BaseActivity implements View.OnCl
                 }
                 final String[] image_list = new String[length];
                 if (bm_camera1 != null) {
-                    String path1 = Tools.saveBitmapToSD(DiaryImagePublishActivity.this,bm_camera1, "bm_camera1");
+                    String path1 = Tools.saveBitmapToSD(DiaryImagePublishActivity.this, bm_camera1, "bm_camera1");
                     image_list[0] = path1;
                 }
                 if (bm_camera2 != null) {
-                    String path2 =Tools.saveBitmapToSD(DiaryImagePublishActivity.this,bm_camera2, "bm_camera2");
+                    String path2 = Tools.saveBitmapToSD(DiaryImagePublishActivity.this, bm_camera2, "bm_camera2");
                     image_list[1] = path2;
                 }
                 if (bm_camera3 != null) {
-                    String path3 = Tools.saveBitmapToSD(DiaryImagePublishActivity.this,bm_camera3, "bm_camera3");
+                    String path3 = Tools.saveBitmapToSD(DiaryImagePublishActivity.this, bm_camera3, "bm_camera3");
                     image_list[2] = path3;
                 }
                 BmobFile.uploadBatch(image_list, new UploadBatchListener() {
                     @Override
                     public void onSuccess(List<BmobFile> list1, List<String> list2) {
-                        if (list2.size() == image_list.length){
+                        if (list2.size() == image_list.length) {
                             list.addAll(list2);
                             handler.sendMessage(handler.obtainMessage(200));
                         }
@@ -216,7 +251,7 @@ public class DiaryImagePublishActivity extends BaseActivity implements View.OnCl
 
                     @Override
                     public void onError(int i, String s) {
-                         error = s;
+                        error = s;
                         handler.sendMessage(handler.obtainMessage(400));
                     }
                 });
@@ -231,11 +266,12 @@ public class DiaryImagePublishActivity extends BaseActivity implements View.OnCl
         DiaryBean diaryBean = new DiaryBean();
         diaryBean.setUser_name(mPreferences.getString("user_name", ""));
         diaryBean.setUser_nick(mPreferences.getString("user_nick", ""));
-        diaryBean.setUser_icon(mPreferences.getString("user_icon",""));
+        diaryBean.setUser_icon(mPreferences.getString("user_icon", ""));
         diaryBean.setUser_addr(user_addr);
         diaryBean.setUser_lat(user_lat);
         diaryBean.setUser_long(user_long);
         diaryBean.setDiary_type(1);
+        diaryBean.setState(image_state);
         String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Long(System.currentTimeMillis()));
         diaryBean.setPublish_time(time.substring(5, 7) + "月" + time.substring(8, 10) + "日" + time.substring(11, 16));
         diaryBean.setUser_desc(textDesc);
@@ -267,31 +303,31 @@ public class DiaryImagePublishActivity extends BaseActivity implements View.OnCl
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 201 && resultCode == Activity.RESULT_OK) {
             byte[] bitmaps = (byte[]) data.getExtras().get("camera_data");
-            if (bitmaps != null){
+            if (bitmaps != null) {
                 bm_camera1 = BitmapFactory.decodeByteArray(bitmaps, 0, bitmaps.length);
                 Matrix matrix = new Matrix();
                 matrix.setRotate(90);
-                bm_camera1 = Bitmap.createBitmap(bm_camera1,0,0,bm_camera1.getWidth(),bm_camera1.getHeight(),matrix,true);
+                bm_camera1 = Bitmap.createBitmap(bm_camera1, 0, 0, bm_camera1.getWidth(), bm_camera1.getHeight(), matrix, true);
                 image1.setImageBitmap(bm_camera1);
             }
         } else if (requestCode == 202 && resultCode == Activity.RESULT_OK) {
             byte[] bitmaps = (byte[]) data.getExtras().get("camera_data");
-            if (bitmaps != null){
+            if (bitmaps != null) {
                 bm_camera2 = BitmapFactory.decodeByteArray(bitmaps, 0, bitmaps.length);
                 Matrix matrix = new Matrix();
                 matrix.setRotate(90);
-                bm_camera2 = Bitmap.createBitmap(bm_camera2,0,0,bm_camera2.getWidth(),bm_camera2.getHeight(),matrix,true);
+                bm_camera2 = Bitmap.createBitmap(bm_camera2, 0, 0, bm_camera2.getWidth(), bm_camera2.getHeight(), matrix, true);
                 image2.setImageBitmap(bm_camera2);
                 image_add.setVisibility(View.VISIBLE);
                 image3.setClickable(true);
             }
         } else if (requestCode == 203 && resultCode == Activity.RESULT_OK) {
             byte[] bitmaps = (byte[]) data.getExtras().get("camera_data");
-            if (bitmaps != null){
+            if (bitmaps != null) {
                 bm_camera3 = BitmapFactory.decodeByteArray(bitmaps, 0, bitmaps.length);
                 Matrix matrix = new Matrix();
                 matrix.setRotate(90);
-                bm_camera3 = Bitmap.createBitmap(bm_camera3,0,0,bm_camera3.getWidth(),bm_camera3.getHeight(),matrix,true);
+                bm_camera3 = Bitmap.createBitmap(bm_camera3, 0, 0, bm_camera3.getWidth(), bm_camera3.getHeight(), matrix, true);
                 image3.setImageBitmap(bm_camera3);
             }
         }

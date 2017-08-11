@@ -115,6 +115,15 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
         if (!Tools.isNull(listBean.getUser_title())) {
             holder.user_title.setText(listBean.getUser_title());
         }
+        if (!Tools.isNull(listBean.getState())){
+            if (listBean.getState().equals("公开")){
+                holder.state_img.setImageResource(R.mipmap.ic_lock_open);
+                holder.state_text.setText("公开");
+            }else {
+                holder.state_img.setImageResource(R.mipmap.ic_lock_close);
+                holder.state_text.setText("私密");
+            }
+        }
         if (listBean.getDiary_type() == 1) {
             if (listBean.getDiary_image() != null) {
                 if (listBean.getDiary_image().size() == 1) {
@@ -149,6 +158,8 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
         private SimpleDraweeView user_icon;
         private TextView user_name, user_time, user_desc, user_title;
         private LinearLayout text_layout;
+        private TextView state_text;
+        private ImageView state_img;
 
         public ViewHolder(View view) {
             user_icon = (SimpleDraweeView) view.findViewById(R.id.diary_list_user_icon);
@@ -161,6 +172,8 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
             image2 = (SimpleDraweeView) view.findViewById(R.id.diary_list_image2);
             image3 = (SimpleDraweeView) view.findViewById(R.id.diary_list_image3);
             video_image = (SimpleDraweeView) view.findViewById(R.id.diary_list_video);
+            state_text = (TextView)view.findViewById(R.id.diary_list_state_text);
+            state_img = (ImageView) view.findViewById(R.id.diary_list_state_img);
         }
     }
 

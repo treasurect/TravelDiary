@@ -102,4 +102,20 @@
     </LinearLayout>
 
     <include layout="@layout/common_loading_view" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="10dp">
+        <ImageView
+            android:id="@+id/diary_video_state_img"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/ic_lock_open"/>
+        <Spinner
+            android:id="@+id/diary_video_state_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 </FrameLayout>

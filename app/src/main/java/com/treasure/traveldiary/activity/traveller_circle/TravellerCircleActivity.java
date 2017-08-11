@@ -52,6 +52,7 @@ public class TravellerCircleActivity extends BaseActivity implements View.OnClic
 
         initFindid();
         user_icon.setImageURI(Uri.parse(mPreferences.getString("user_icon","")));
+        user_bg.setImageURI(Uri.parse("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1502446031559&di=696a4da07964841fe9c585b783df6fb0&imgtype=0&src=http%3A%2F%2Fimg1.3lian.com%2F2015%2Fa1%2F46%2Fd%2F198.jpg"));
         initListView();
         initScrollView();
         initClick();
@@ -115,10 +116,12 @@ public class TravellerCircleActivity extends BaseActivity implements View.OnClic
         query.setSkip(0)
                 .setLimit(50)
                 .order("-publish_time")
+                .addWhereEqualTo("state","公开")
                 .findObjects(new FindListener<DiaryBean>() {
                     @Override
                     public void done(List<DiaryBean> list2, BmobException e) {
                         if (e == null){
+                            list.clear();
                             list.addAll(list2);
                             adapter.notifyDataSetChanged();
                             loading.setVisibility(View.GONE);

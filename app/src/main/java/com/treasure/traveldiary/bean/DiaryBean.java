@@ -24,6 +24,7 @@ public class DiaryBean extends BmobObject {
     private String diary_video;
     private String diary_video_first;
     private List<LeaveMesBean> mesBeanList;
+    private String state;//公开or私密
 
     public String getUser_name() {
         return user_name;
@@ -135,5 +136,13 @@ public class DiaryBean extends BmobObject {
 
     public void setMesBeanList(List<LeaveMesBean> mesBeanList) {
         this.mesBeanList = mesBeanList;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

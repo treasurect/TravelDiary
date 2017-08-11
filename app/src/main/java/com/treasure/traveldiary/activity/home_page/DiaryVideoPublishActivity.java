@@ -12,9 +12,12 @@ import android.text.TextWatcher;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +38,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadBatchListener;
 
-public class DiaryVideoPublishActivity extends BaseActivity implements View.OnClickListener, TextWatcher, SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
+public class DiaryVideoPublishActivity extends BaseActivity implements View.OnClickListener, TextWatcher, SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, AdapterView.OnItemSelectedListener {
     private String user_addr;
     private float user_lat, user_long;
     private EditText diaryDesc, diaryTitle;
@@ -48,6 +51,10 @@ public class DiaryVideoPublishActivity extends BaseActivity implements View.OnCl
     private ImageView first_image;
     private SharedPreferences mPreferences;
     private String video_first = "";
+    private ImageView state_img;
+    private Spinner state_text;
+    private ArrayAdapter<String> adapter;
+    private String video_state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +71,7 @@ public class DiaryVideoPublishActivity extends BaseActivity implements View.OnCl
 
         initFindId();
         receiverIntent();
+        initSpinner();
         initMediaPlayer();
         initClick();
     }
@@ -77,6 +85,8 @@ public class DiaryVideoPublishActivity extends BaseActivity implements View.OnCl
         loading = (FrameLayout) findViewById(R.id.loading_layout);
         video_play = (ImageView) findViewById(R.id.diary_video_play);
         first_image = (ImageView) findViewById(R.id.diary_video_first_view);
+        state_img = (ImageView) findViewById(R.id.diary_video_state_img);
+        state_text = (Spinner) findViewById(R.id.diary_video_state_text);
     }
 
     private void receiverIntent() {
@@ -91,6 +101,15 @@ public class DiaryVideoPublishActivity extends BaseActivity implements View.OnCl
         if (!Tools.isNull(intent.getStringExtra("user_long"))) {
             user_long = Float.parseFloat(intent.getStringExtra("user_long"));
         }
+    }
+
+    private void initSpinner() {
+        List<String> list = new ArrayList<>();
+        list.add("公开");
+        list.add("私密");
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        state_text.setAdapter(adapter);
     }
 
     private void initMediaPlayer() {
@@ -127,6 +146,7 @@ public class DiaryVideoPublishActivity extends BaseActivity implements View.OnCl
         diaryTitle.addTextChangedListener(this);
         loading.setOnClickListener(this);
         video_play.setOnClickListener(this);
+        state_text.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -146,6 +166,20 @@ public class DiaryVideoPublishActivity extends BaseActivity implements View.OnCl
         }
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        video_state = adapter.getItem(i);
+        if (video_state.equals("公开")) {
+            state_img.setImageResource(R.mipmap.ic_lock_open);
+        } else {
+            state_img.setImageResource(R.mipmap.ic_lock_close);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        video_state = "公开";
+    }
 
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -172,16 +206,16 @@ public class DiaryVideoPublishActivity extends BaseActivity implements View.OnCl
         loading.setVisibility(View.VISIBLE);
         final String[] path = new String[2];
         path[0] = video_first;
-        path[1] = getExternalFilesDir(null).getAbsolutePath()+"/diary_video.mp4";
+        path[1] = getExternalFilesDir(null).getAbsolutePath() + "/diary_video.mp4";
         BmobFile.uploadBatch(path, new UploadBatchListener() {
             @Override
             public void onSuccess(List<BmobFile> list, List<String> list1) {
-                if (list1.size() == path.length){
-                    LogUtil.d("~~~~~~~~~~~~~~~~~~~~`"+list1.get(0).contains("mp4")+"........"+list1.get(1).contains("mp4"));
-                    if (list1.get(0).contains("mp4")){
-                        sendDiary(list1.get(0),list1.get(1));
-                    }else {
-                        sendDiary(list1.get(1),list1.get(0));
+                if (list1.size() == path.length) {
+                    LogUtil.d("~~~~~~~~~~~~~~~~~~~~`" + list1.get(0).contains("mp4") + "........" + list1.get(1).contains("mp4"));
+                    if (list1.get(0).contains("mp4")) {
+                        sendDiary(list1.get(0), list1.get(1));
+                    } else {
+                        sendDiary(list1.get(1), list1.get(0));
                     }
                 }
             }
@@ -197,17 +231,19 @@ public class DiaryVideoPublishActivity extends BaseActivity implements View.OnCl
             }
         });
     }
-    private void sendDiary(String fileUrl,String imageUrl) {
+
+    private void sendDiary(String fileUrl, String imageUrl) {
         String textDesc = diaryDesc.getText().toString().trim();
         String textTitle = diaryTitle.getText().toString().trim();
         DiaryBean diaryBean = new DiaryBean();
         diaryBean.setUser_name(mPreferences.getString("user_name", ""));
         diaryBean.setUser_nick(mPreferences.getString("user_nick", ""));
-        diaryBean.setUser_icon(mPreferences.getString("user_icon",""));
+        diaryBean.setUser_icon(mPreferences.getString("user_icon", ""));
         diaryBean.setUser_addr(user_addr);
         diaryBean.setUser_lat(user_lat);
         diaryBean.setUser_long(user_long);
         diaryBean.setDiary_type(2);
+        diaryBean.setState(video_state);
         String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Long(System.currentTimeMillis()));
         diaryBean.setPublish_time(time.substring(5, 7) + "月" + time.substring(8, 10) + "日" + time.substring(11, 16));
         diaryBean.setUser_desc(textDesc);
