@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.treasure.traveldiary.activity.user.UserMessageListActivity;
+import com.treasure.traveldiary.activity.user_center.UserMessageListActivity;
 import com.treasure.traveldiary.bean.PushBean;
 import com.treasure.traveldiary.utils.LogUtil;
 

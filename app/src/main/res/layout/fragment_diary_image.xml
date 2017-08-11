@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
-    tools:context=".activity.traveller.DiaryCenterActivity">
+    tools:context=".activity.diary_center.DiaryCenterActivity">
 
     <com.treasure.traveldiary.widget.CustomRefreshListView
         android:id="@+id/diary_list_image"

@@ -7,7 +7,7 @@
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".activity.user.UserSettingsActivity">
+    tools:context=".activity.user_center.UserSettingsActivity">
 
     <include layout="@layout/common_top_view"/>
 

@@ -44,15 +44,18 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.treasure.traveldiary.activity.add.DiaryImageCameraActivity;
-import com.treasure.traveldiary.activity.add.DiaryImagePublishActivity;
-import com.treasure.traveldiary.activity.add.DiaryEvaluatedPublishActivity;
-import com.treasure.traveldiary.activity.add.DiaryVideoCameraActivity;
-import com.treasure.traveldiary.activity.add.DiaryVideoPublishActivity;
-import com.treasure.traveldiary.activity.traveller.DiaryCenterActivity;
-import com.treasure.traveldiary.activity.traveller.DiaryDetailActivity;
-import com.treasure.traveldiary.activity.add.DiaryTextPublishActivity;
-import com.treasure.traveldiary.activity.user.UserCenterActivity;
+import com.treasure.traveldiary.activity.home_page.DiaryImageCameraActivity;
+import com.treasure.traveldiary.activity.home_page.DiaryImagePublishActivity;
+import com.treasure.traveldiary.activity.home_page.EvaluatedPublishActivity;
+import com.treasure.traveldiary.activity.home_page.DiaryVideoCameraActivity;
+import com.treasure.traveldiary.activity.home_page.DiaryVideoPublishActivity;
+import com.treasure.traveldiary.activity.home_page.ToolsTicketActivity;
+import com.treasure.traveldiary.activity.home_page.ToolsWeatherActivity;
+import com.treasure.traveldiary.activity.diary_center.DiaryCenterActivity;
+import com.treasure.traveldiary.activity.diary_center.DiaryDetailActivity;
+import com.treasure.traveldiary.activity.home_page.DiaryTextPublishActivity;
+import com.treasure.traveldiary.activity.traveller_circle.TravellerCircleActivity;
+import com.treasure.traveldiary.activity.user_center.UserCenterActivity;
 import com.treasure.traveldiary.bean.DiaryBean;
 import com.treasure.traveldiary.bean.MapMarkerInfoBean;
 import com.treasure.traveldiary.listener.MapOrientationListener;
@@ -68,8 +71,8 @@ import cn.bmob.v3.listener.FindListener;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, BDLocationListener, BaiduMap.OnMapLoadedCallback, BaiduMap.OnMarkerClickListener, BaiduMap.OnMapClickListener, RadioGroup.OnCheckedChangeListener {
 
-    private LinearLayout travellerLayout;
-    private LinearLayout settingsLayout;
+    private LinearLayout mineDiaryLayout;
+    private LinearLayout travellerCircleLayout;
     private MapView mapView;
     private BaiduMap map;
     private double user_latitude = 39.915168, user_longitude = 116.403875;
@@ -120,10 +123,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     };
     private boolean isPageDestroy;
     private FrameLayout loading;
-    private FloatingActionButton btnAdd,btnDiaryText,btnDiaryImage,btnDiaryEvaluated,btnDiaryVideo;
+    private FloatingActionButton btnAdd, btnDiaryText, btnDiaryImage, btnDiaryEvaluated, btnDiaryVideo;
     private boolean addShow;
     private int widthPixels;
-    private String user_city;
+    private int heightPixels;
+    private String user_city = "海淀";
     private String user_addr = "北京市";
     private SharedPreferences mPreferences;
     private InfoWindow mInfoWindow;
@@ -135,7 +139,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private MyLocationConfiguration.LocationMode mode = MyLocationConfiguration.LocationMode.NORMAL;
     private ImageView show_location;
     private TravelApplication application;
-    private TextView text_t,image_t, video_t,evaluated_t;
+    private TextView text_t, image_t, video_t, evaluated_t;
+    private FloatingActionButton btnTools;
+    private TextView tools_t;
+    private FloatingActionButton btnToolsWeather;
+    private FloatingActionButton btnToolsTicket;
+    private TextView weather_t;
+    private TextView ticket_t;
+    private boolean isToolsShow;
+    private String user_province = "北京";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +158,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mapLocLayout.setVisibility(View.VISIBLE);
 
         widthPixels = getResources().getDisplayMetrics().widthPixels;
+        heightPixels = getResources().getDisplayMetrics().heightPixels;
         application = (TravelApplication) getApplication();
         initFindId();
         mPreferences = getSharedPreferences("user", MODE_PRIVATE);
@@ -156,15 +169,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void initFindId() {
-        travellerLayout = (LinearLayout) findViewById(R.id.main_travel_layout);
-        settingsLayout = (LinearLayout) findViewById(R.id.main_settings_layout);
+        mineDiaryLayout = (LinearLayout) findViewById(R.id.mine_diary_layout);
+        travellerCircleLayout = (LinearLayout) findViewById(R.id.traveller_circle_layout);
         mapView = (MapView) findViewById(R.id.home_mapView);
         loading = (FrameLayout) findViewById(R.id.loading_layout);
         btnAdd = (FloatingActionButton) findViewById(R.id.main_add_image);
         btnDiaryText = (FloatingActionButton) findViewById(R.id.add_diary_text);
         btnDiaryImage = (FloatingActionButton) findViewById(R.id.add_diary_image);
         btnDiaryVideo = (FloatingActionButton) findViewById(R.id.add_diary_video);
-        btnDiaryEvaluated = (FloatingActionButton) findViewById(R.id.add_diary_evaluated);
+        btnDiaryEvaluated = (FloatingActionButton) findViewById(R.id.add_evaluated);
         addLayout = (ImageView) findViewById(R.id.add_diary_layout);
         map_type = (RadioGroup) findViewById(R.id.layout_map_type);
         map_type_normal = (RadioButton) findViewById(R.id.btn_map_normal);
@@ -174,7 +187,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         text_t = (TextView) findViewById(R.id.add_diary_text_t);
         image_t = (TextView) findViewById(R.id.add_diary_image_t);
         video_t = (TextView) findViewById(R.id.add_diary_video_t);
-        evaluated_t = (TextView) findViewById(R.id.add_diary_evaluated_t);
+        evaluated_t = (TextView) findViewById(R.id.add_evaluated_t);
+        btnTools = (FloatingActionButton) findViewById(R.id.add_tools);
+        tools_t = (TextView) findViewById(R.id.add_tools_t);
+        btnToolsWeather = (FloatingActionButton) findViewById(R.id.add_tools_weather);
+        weather_t = (TextView) findViewById(R.id.add_tools_weather_t);
+        btnToolsTicket = (FloatingActionButton) findViewById(R.id.add_tools_ticket);
+        ticket_t = (TextView) findViewById(R.id.add_tools_ticket_t);
     }
 
     private void useLocationOrientationListener() {
@@ -227,9 +246,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void initClick() {
-        travellerLayout.setOnClickListener(this);
+        mineDiaryLayout.setOnClickListener(this);
         btnAdd.setOnClickListener(this);
-        settingsLayout.setOnClickListener(this);
+        travellerCircleLayout.setOnClickListener(this);
         loading.setOnClickListener(this);
         btnDiaryText.setOnClickListener(this);
         btnDiaryImage.setOnClickListener(this);
@@ -244,17 +263,29 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         image_t.setOnClickListener(this);
         video_t.setOnClickListener(this);
         evaluated_t.setOnClickListener(this);
+        btnTools.setOnClickListener(this);
+        tools_t.setOnClickListener(this);
+        btnToolsWeather.setOnClickListener(this);
+        btnToolsWeather.setOnClickListener(this);
+        btnToolsTicket.setOnClickListener(this);
+        ticket_t.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.main_travel_layout:
-                Intent intent1 = new Intent(MainActivity.this, DiaryCenterActivity.class);
-                if (Build.VERSION.SDK_INT >= 21) {
-                    startActivity(intent1, ActivityOptions.makeSceneTransitionAnimation(this, travellerLayout, "traveller").toBundle());
+            case R.id.mine_diary_layout:
+                if (Tools.isNull(mPreferences.getString("token", ""))) {
+                    Intent intent = new Intent(MainActivity.this, UserCenterActivity.class);
+                    intent.putExtra("type", "toLogin");
+                    startActivity(intent);
                 } else {
-                    startActivity(intent1);
+                    Intent intent1 = new Intent(MainActivity.this, DiaryCenterActivity.class);
+                    if (Build.VERSION.SDK_INT >= 21) {
+                        startActivity(intent1, ActivityOptions.makeSceneTransitionAnimation(this, mineDiaryLayout, "diary").toBundle());
+                    } else {
+                        startActivity(intent1);
+                    }
                 }
                 break;
             case R.id.main_add_image:
@@ -295,18 +326,61 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 startActivityForResult(intent6, 201);
                 hindFloatActionButton();
                 break;
-            case R.id.add_diary_evaluated:
-            case R.id.add_diary_evaluated_t:
-                Intent intent5 = new Intent(MainActivity.this, DiaryEvaluatedPublishActivity.class);
-                intent5.putExtra("user_lat",String.valueOf(user_latitude));
-                intent5.putExtra("user_lon",String.valueOf(user_longitude));
-                intent5.putExtra("user_addr",user_addr);
+            case R.id.add_evaluated:
+            case R.id.add_evaluated_t:
+                Intent intent5 = new Intent(MainActivity.this, EvaluatedPublishActivity.class);
+                intent5.putExtra("user_lat", String.valueOf(user_latitude));
+                intent5.putExtra("user_lon", String.valueOf(user_longitude));
+                intent5.putExtra("user_addr", user_addr);
                 if (Build.VERSION.SDK_INT >= 21) {
-                    startActivity(intent5, ActivityOptions.makeSceneTransitionAnimation(this, btnDiaryEvaluated, "diary_evaluated").toBundle());
+                    startActivity(intent5, ActivityOptions.makeSceneTransitionAnimation(this, btnDiaryEvaluated, "evaluated").toBundle());
                 } else {
                     startActivity(intent5);
                 }
                 hindFloatActionButton();
+                break;
+            case R.id.add_tools:
+            case R.id.add_tools_t:
+                hindFloatActionButton();
+                if (!isToolsShow){
+                    Tools.setAnimation(btnTools,0,-heightPixels/2,0,1,0,-720,1,1,1000);
+                    btnToolsWeather.setVisibility(View.VISIBLE);
+                    weather_t.setVisibility(View.VISIBLE);
+                    btnToolsTicket.setVisibility(View.VISIBLE);
+                    ticket_t.setVisibility(View.VISIBLE);
+                    Tools.setAnimation(btnToolsWeather,0,0,0,1,0,720,1,1,2500);
+                    Tools.setAnimation(weather_t,0,0,0,1,0,0,1,1,2000);
+                    Tools.setAnimation(btnToolsTicket,0,0,0,1,0,-720,1,1,2500);
+                    Tools.setAnimation(ticket_t,0,0,0,1,0,0,1,1,2000);
+                    isToolsShow = true;
+                }else {
+                    isToolsShow = false;
+                }
+                break;
+            case R.id.add_tools_weather:
+            case R.id.add_tools_weather_t:
+                hindFloatActionButton();
+                Intent intent00 = new Intent(MainActivity.this, ToolsWeatherActivity.class);
+                intent00.putExtra("user_city", user_city);
+                intent00.putExtra("user_province", user_province);
+                if (Build.VERSION.SDK_INT >= 21) {
+                    startActivity(intent00, ActivityOptions.makeSceneTransitionAnimation(this,  btnAdd, "transition").toBundle());
+                } else {
+                    startActivity(intent00);
+                }
+                isToolsShow = false;
+                break;
+            case R.id.add_tools_ticket:
+            case R.id.add_tools_ticket_t:
+                hindFloatActionButton();
+                Intent intent01 = new Intent(MainActivity.this, ToolsTicketActivity.class);
+                intent01.putExtra("user_city", user_city);
+                if (Build.VERSION.SDK_INT >= 21) {
+                    startActivity(intent01, ActivityOptions.makeSceneTransitionAnimation(this, btnAdd, "transition").toBundle());
+                } else {
+                    startActivity(intent01);
+                }
+                isToolsShow = false;
                 break;
             case R.id.add_diary_layout:
                 if (addShow) {
@@ -316,12 +390,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.user_map_location:
                 showUserLocation();
                 break;
-            case R.id.main_settings_layout:
-                Intent intent = new Intent(MainActivity.this, UserCenterActivity.class);
-                if (Build.VERSION.SDK_INT >= 21) {
-                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this, settingsLayout, "settings").toBundle());
-                } else {
+            case R.id.traveller_circle_layout:
+                if (Tools.isNull(mPreferences.getString("token", ""))) {
+                    Intent intent = new Intent(MainActivity.this, UserCenterActivity.class);
+                    intent.putExtra("type", "toLogin");
                     startActivity(intent);
+                } else {
+                    Intent intent = new Intent(MainActivity.this, TravellerCircleActivity.class);
+                    if (Build.VERSION.SDK_INT >= 21) {
+                        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this, travellerCircleLayout, "travellercircle").toBundle());
+                    } else {
+                        startActivity(intent);
+                    }
                 }
                 break;
         }
@@ -351,15 +431,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void showFloatActionButton() {
-        Tools.setAnimation(btnDiaryText, -widthPixels / 3, -330, 0, 1,0,360,1,1,500);
-        Tools.setAnimation(btnDiaryImage, -widthPixels/9, -330, 0, 1,0,360,1,1,500);
-        Tools.setAnimation(btnDiaryVideo, widthPixels / 9, -330, 0, 1,0,-360,1,1,500);
-        Tools.setAnimation(btnDiaryEvaluated, widthPixels / 3, -330, 0, 1,0,-360,1,1,500);
-        Tools.setAnimation(text_t, -widthPixels / 3, -250, 0, 1,0,360,1,1,500);
-        Tools.setAnimation(image_t, -widthPixels/9, -250, 0, 1,0,360,1,1,500);
-        Tools.setAnimation(video_t, widthPixels / 9, -250, 0, 1,0,-360,1,1,500);
-        Tools.setAnimation(evaluated_t, widthPixels / 3, -250, 0, 1,0,-360,1,1,500);
-        Tools.setAnimation(btnAdd, 0,0,1,1,0, -45,1,1,500);
+        Tools.setAnimation(btnDiaryText, -widthPixels / 3, -heightPixels/3, 0, 1, 0, 360, 1, 1, 500);
+        Tools.setAnimation(btnDiaryImage, -widthPixels / 9, -heightPixels/3, 0, 1, 0, 360, 1, 1, 500);
+        Tools.setAnimation(btnDiaryVideo, widthPixels / 9, -heightPixels/3, 0, 1, 0, -360, 1, 1, 500);
+        Tools.setAnimation(btnDiaryEvaluated, widthPixels / 3, -heightPixels/3, 0, 1, 0, -360, 1, 1, 500);
+        Tools.setAnimation(btnTools, -widthPixels / 3, -heightPixels/6, 0, 1, 0, 360, 1, 1, 500);
+
+        Tools.setAnimation(text_t, -widthPixels / 3, -heightPixels/3 + 80, 0, 1, 0, 360, 1, 1, 500);
+        Tools.setAnimation(image_t, -widthPixels / 9, -heightPixels/3 + 80, 0, 1, 0, 360, 1, 1, 500);
+        Tools.setAnimation(video_t, widthPixels / 9, -heightPixels/3 + 80, 0, 1, 0, -360, 1, 1, 500);
+        Tools.setAnimation(evaluated_t, widthPixels / 3, -heightPixels/3 + 80, 0, 1, 0, -360, 1, 1, 500);
+        Tools.setAnimation(tools_t, -widthPixels / 3, -heightPixels/6 + 80, 0, 1, 0, 360, 1, 1, 500);
+
+        Tools.setAnimation(btnAdd, 0, 0, 1, 1, 0, -45, 1, 1, 500);
+        btnToolsWeather.setVisibility(View.GONE);
+        weather_t.setVisibility(View.GONE);
+        btnToolsTicket.setVisibility(View.GONE);
+        ticket_t.setVisibility(View.GONE);
         addLayout.setVisibility(View.VISIBLE);
         addLayout.setClickable(true);
         ObjectAnimator alpha = ObjectAnimator.ofFloat(addLayout, "alpha", 0, 1);
@@ -369,15 +457,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void hindFloatActionButton() {
-        Tools.setAnimation(btnDiaryText, 0, 0, 1, 0,-360,0,1,1,500);
-        Tools.setAnimation(btnDiaryImage, 0, 0, 1, 0,-360,0,1,1,500);
-        Tools.setAnimation(btnDiaryVideo, 0, 0, 1, 0,360,0,1,1,500);
-        Tools.setAnimation(btnDiaryEvaluated, 0, 0, 1, 0,360,0,1,1,500);
-        Tools.setAnimation(text_t, 0, 0, 1, 0,-360,0,1,1,500);
-        Tools.setAnimation(image_t, 0, 0, 1, 0,-360,0,1,1,500);
-        Tools.setAnimation(video_t, 0, 0, 1, 0,360,0,1,1,500);
-        Tools.setAnimation(evaluated_t, 0, 0, 1, 0,360,0,1,1,500);
-        Tools.setAnimation(btnAdd,0,0,1,1, -45, 0,1,1,500);
+        Tools.setAnimation(btnDiaryText, 0, 0, 1, 0, -360, 0, 1, 1, 500);
+        Tools.setAnimation(btnDiaryImage, 0, 0, 1, 0, -360, 0, 1, 1, 500);
+        Tools.setAnimation(btnDiaryVideo, 0, 0, 1, 0, 360, 0, 1, 1, 500);
+        Tools.setAnimation(btnDiaryEvaluated, 0, 0, 1, 0, 360, 0, 1, 1, 500);
+        Tools.setAnimation(btnTools, 0, 0, 1, 0, 360, 0, 1, 1, 500);
+
+        Tools.setAnimation(text_t, 0, 0, 1, 0, -360, 0, 1, 1, 500);
+        Tools.setAnimation(image_t, 0, 0, 1, 0, -360, 0, 1, 1, 500);
+        Tools.setAnimation(video_t, 0, 0, 1, 0, 360, 0, 1, 1, 500);
+        Tools.setAnimation(evaluated_t, 0, 0, 1, 0, 360, 0, 1, 1, 500);
+        Tools.setAnimation(tools_t, 0, 0, 1, 0, 360, 0, 1, 1, 500);
+
+        Tools.setAnimation(btnAdd, 0, 0, 1, 1, -45, 0, 1, 1, 500);
+        btnToolsWeather.setVisibility(View.GONE);
+        weather_t.setVisibility(View.GONE);
+        btnToolsTicket.setVisibility(View.GONE);
+        ticket_t.setVisibility(View.GONE);
         addLayout.setClickable(false);
         ObjectAnimator alpha = ObjectAnimator.ofFloat(addLayout, "alpha", 1, 0);
         alpha.setDuration(500);
@@ -400,6 +496,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 user_longitude = bdLocation.getLongitude();
                 user_city = bdLocation.getCity().substring(0, bdLocation.getCity().length() - 1);
                 user_addr = bdLocation.getAddrStr().replace(bdLocation.getCountry(), "").replace(bdLocation.getCity(), "");
+                user_province = bdLocation.getProvince().substring(0, bdLocation.getProvince().length() - 1);
                 handler.sendMessage(handler.obtainMessage(200));
                 if (!loading_gone_send) {
                     handler.sendMessage(handler.obtainMessage(401));
@@ -532,7 +629,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         TextView marker_join = (TextView) inflate.findViewById(R.id.map_marker_join);
         TextView marker_time = (TextView) inflate.findViewById(R.id.map_marker_time);
 
-        marker_icon.setImageURI(Uri.parse(markerInfo.getUser_icon()+""));
+        marker_icon.setImageURI(Uri.parse(markerInfo.getUser_icon() + ""));
         marker_addr.setText(markerInfo.getUser_addr() + "");
         marker_title.setText(markerInfo.getUser_title() + "");
         marker_desc.setText(markerInfo.getUser_desc() + "");
@@ -543,8 +640,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             public void onClick(View view) {
                 map.hideInfoWindow();
                 Intent intent = new Intent(MainActivity.this, DiaryDetailActivity.class);
-                intent.putExtra("user_name",markerInfo.getUser_name());
-                intent.putExtra("user_time",markerInfo.getUser_time());
+                intent.putExtra("user_name", markerInfo.getUser_name());
+                intent.putExtra("user_time", markerInfo.getUser_time());
                 startActivity(intent);
             }
         });
@@ -586,8 +683,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         mapMarkerInfoBean.setUser_nick(list.get(i).getUser_nick());
                         mapMarkerInfoBean.setUser_image(list.get(i).getDiary_image());
                         mapMarkerInfoBean.setDiary_type(list.get(i).getDiary_type());
-                        mapMarkerInfoBean.setVideo_path(list.get(i).getDiary_video()+"");
-                        mapMarkerInfoBean.setVideo_path_first(list.get(i).getDiary_video_first()+"");
+                        mapMarkerInfoBean.setVideo_path(list.get(i).getDiary_video() + "");
+                        mapMarkerInfoBean.setVideo_path_first(list.get(i).getDiary_video_first() + "");
                         addOverlay(mapMarkerInfoBean);
                     }
                 }
@@ -598,24 +695,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 200 && resultCode == Activity.RESULT_OK){
+        if (requestCode == 200 && resultCode == Activity.RESULT_OK) {
             byte[] camera_data = (byte[]) data.getExtras().get("camera_data");
-            if (camera_data != null){
+            if (camera_data != null) {
                 Intent intent2 = new Intent(MainActivity.this, DiaryImagePublishActivity.class);
-                intent2.putExtra("camera_data",camera_data);
+                intent2.putExtra("camera_data", camera_data);
                 intent2.putExtra("user_addr", user_addr);
                 intent2.putExtra("user_lat", String.valueOf(user_latitude));
                 intent2.putExtra("user_long", String.valueOf(user_longitude));
                 startActivity(intent2);
             }
         }
-        if (requestCode == 201 && resultCode == Activity.RESULT_OK){
-                Intent intent2 = new Intent(MainActivity.this, DiaryVideoPublishActivity.class);
-                intent2.putExtra("user_addr", user_addr);
-                intent2.putExtra("user_lat", String.valueOf(user_latitude));
-                intent2.putExtra("user_long", String.valueOf(user_longitude));
-                startActivity(intent2);
-            }
+        if (requestCode == 201 && resultCode == Activity.RESULT_OK) {
+            Intent intent2 = new Intent(MainActivity.this, DiaryVideoPublishActivity.class);
+            intent2.putExtra("user_addr", user_addr);
+            intent2.putExtra("user_lat", String.valueOf(user_latitude));
+            intent2.putExtra("user_long", String.valueOf(user_longitude));
+            startActivity(intent2);
+        }
     }
 
     /**

@@ -8,7 +8,7 @@
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".activity.user.UserFeedBackActivity">
+    tools:context=".activity.user_center.UserFeedBackActivity">
     <include layout="@layout/common_top_view"/>
     <ListView
         android:id="@+id/mine_history_feedBack_listView"

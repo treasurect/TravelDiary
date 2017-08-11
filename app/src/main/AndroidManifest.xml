@@ -172,63 +172,73 @@
             android:value="5d59b8892e5c42a4c3f154d8" /> <!-- </>值来自开发者平台取得的AppKey -->
 
         <activity
-            android:name=".activity.user.UserCenterActivity"
+            android:name=".activity.user_center.UserCenterActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.user.UserDiaryActivity"
+            android:name=".activity.user_center.UserDiaryActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.user.UserRegisterActivity"
+            android:name=".activity.user_center.UserRegisterActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.user.UserForgetPassActivity"
+            android:name=".activity.user_center.UserForgetPassActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.user.UserEditUserInfoActivity"
+            android:name=".activity.user_center.UserEditUserInfoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.user.UserSettingsActivity"
+            android:name=".activity.user_center.UserSettingsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.add.DiaryTextPublishActivity"
+            android:name=".activity.home_page.DiaryTextPublishActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.add.DiaryImagePublishActivity"
+            android:name=".activity.home_page.DiaryImagePublishActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.add.DiaryEvaluatedPublishActivity"
+            android:name=".activity.home_page.EvaluatedPublishActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.traveller.DiaryDetailActivity"
+            android:name=".activity.diary_center.DiaryDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.add.DiaryImageCameraActivity"
+            android:name=".activity.home_page.DiaryImageCameraActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.user.UserEvaluatedListActivity"
+            android:name=".activity.user_center.UserEvaluatedListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.user.UserMessageListActivity"
+            android:name=".activity.user_center.UserMessageListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.add.DiaryVideoCameraActivity"
+            android:name=".activity.home_page.DiaryVideoCameraActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.add.DiaryVideoPublishActivity"
+            android:name=".activity.home_page.DiaryVideoPublishActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.traveller.DiaryCenterActivity"
+            android:name=".activity.diary_center.DiaryCenterActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.user.UserFeedBackActivity"
+            android:name=".activity.user_center.UserFeedBackActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.user.UserFeedBckHistoryActivity"
+            android:name=".activity.user_center.UserFeedBckHistoryActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.user.UserSigningActivity"
+            android:name=".activity.user_center.UserSigningActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.traveller.EvaluatedDetailActivity"></activity>
+        <activity
+            android:name=".activity.diary_center.EvaluatedDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home_page.ToolsWeatherActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home_page.ToolsTicketActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.home_page.ToolsWeatherListActivity" />
+        <activity android:name=".activity.traveller_circle.TravellerCircleActivity"></activity>
     </application>
 
 </manifest>

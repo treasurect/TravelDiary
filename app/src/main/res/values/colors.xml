@@ -21,4 +21,7 @@
     <color name="colorGoldYellow">#c48c06</color>
     <color name="colorYellow1">#f5e4ba</color>
     <color name="colorFull">#00000000</color>
+    <color name="colorPurple">#b908ea</color>
+    <color name="colorSkyBlue">#07f4ec</color>
+    <color name="colorYellowGreen">#a5f407</color>
 </resources>

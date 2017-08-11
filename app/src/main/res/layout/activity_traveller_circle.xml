@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    tools:context=".activity.home_page.ToolsWeatherActivity">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:fitsSystemWindows="true">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:contentScrim="@color/colorOrange"
+                app:expandedTitleMarginStart="45dp"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp">
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/traveller_circle_user_bg"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        fresco:placeholderImage="@mipmap/pic_page_loading" />
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/traveller_circle_user_icon"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="bottom"
+                        android:layout_margin="25dp"
+                        fresco:placeholderImage="@mipmap/ic_travel_logo"
+                        fresco:roundAsCircle="true" />
+                </FrameLayout>
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/traveller_center_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    app:layout_collapseMode="pin">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/traveller_circle_return"
+                            android:layout_width="15dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:src="@mipmap/ic_return" />
+
+                        <TextView
+                            android:id="@+id/traveller_circle_title"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="驴友圈"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="18sp" />
+
+                        <ImageView
+                            android:id="@+id/traveller_circle_settings"
+                            android:layout_width="30dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="10dp"
+                            android:src="@mipmap/ic_setting_unclick" />
+                    </LinearLayout>
+                </android.support.v7.widget.Toolbar>
+            </android.support.design.widget.CollapsingToolbarLayout>
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/traveller_circle_scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.treasure.traveldiary.widget.CustomScrollListView
+                    android:id="@+id/traveller_circle_listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="720dp"
+                    android:divider="@color/colorWhite"
+                    android:dividerHeight="1dp"
+                    android:fadingEdge="none" />
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.design.widget.CoordinatorLayout>
+
+    <include layout="@layout/common_loading_view" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/traveller_circle_refresh"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="right|bottom"
+        android:layout_marginBottom="55dp"
+        android:layout_marginRight="30dp"
+        android:src="@mipmap/ic_refresh"
+        app:backgroundTint="@color/colorOrange"
+        app:rippleColor="@color/colorAccent" />
+</FrameLayout>
