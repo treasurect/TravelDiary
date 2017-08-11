@@ -67,7 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
-                android:src="@mipmap/ic_signing" />
+                android:src="@mipmap/ic_signing2" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -112,7 +112,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
-                android:src="@mipmap/ic_settings" />
+                android:src="@mipmap/ic_setting_click" />
 
             <TextView
                 android:layout_width="match_parent"

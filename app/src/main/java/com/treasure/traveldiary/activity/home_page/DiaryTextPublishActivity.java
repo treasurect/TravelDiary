@@ -118,6 +118,7 @@ public class DiaryTextPublishActivity extends BaseActivity implements View.OnCli
         DiaryBean diaryBean = new DiaryBean();
         diaryBean.setUser_name(mPreferences.getString("user_name",""));
         diaryBean.setUser_nick(mPreferences.getString("user_nick",""));
+        diaryBean.setUser_icon(mPreferences.getString("user_icon",""));
         diaryBean.setUser_addr(user_addr);
         diaryBean.setUser_lat(user_lat);
         diaryBean.setUser_long(user_long);

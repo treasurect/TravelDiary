@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:id="@+id/titleBar"
     android:layout_width="match_parent"
     android:layout_height="45dp"
@@ -11,50 +12,62 @@
         android:id="@+id/btn_back"
         android:layout_width="45dp"
         android:layout_height="match_parent"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:layout_gravity="center_vertical"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
         android:src="@mipmap/ic_return"
+        android:visibility="gone" />
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/image_user_icon"
+        android:layout_width="45dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:padding="5dp"
+        android:layout_marginLeft="5dp"
+        fresco:placeholderImage="@mipmap/ic_travel_logo"
+        fresco:roundAsCircle = "true"
         android:visibility="gone"/>
+
     <TextView
         android:id="@+id/btn_cancel"
         android:layout_width="45dp"
         android:layout_height="30dp"
-        android:text="取消"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="7dp"
         android:layout_marginLeft="12dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
-        android:textSize="16sp"
+        android:text="取消"
         android:textColor="@color/colorWhite"
-        android:visibility="gone"/>
+        android:textSize="16sp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/text_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:gravity="center_vertical"
-        android:maxLines="1"
+        android:drawablePadding="5dp"
         android:focusable="true"
         android:focusableInTouchMode="true"
+        android:gravity="center_vertical"
+        android:maxLines="1"
         android:textColor="#f8f8f8"
-        android:textSize="16sp"
-        android:drawablePadding="5dp"/>
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/btn_send"
         android:layout_width="45dp"
         android:layout_height="30dp"
-        android:text="发送"
-        android:layout_marginTop="8dp"
+        android:layout_alignParentRight="true"
         android:layout_marginBottom="7dp"
         android:layout_marginRight="12dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
-        android:textSize="16sp"
-        android:layout_alignParentRight="true"
+        android:text="发送"
         android:textColor="@color/colorWhite"
-        android:visibility="gone"/>
+        android:textSize="16sp"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/layout_map_loc"
@@ -62,34 +75,36 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:background="@drawable/frame_white_radius25"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:paddingBottom="2dp"
         android:paddingLeft="15dp"
         android:paddingRight="20dp"
         android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:gravity="center_vertical"
         android:visibility="gone">
+
         <ImageView
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:src="@mipmap/ic_location"/>
+            android:src="@mipmap/ic_location" />
+
         <TextView
             android:id="@+id/text_map_loc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="5dp"
-            android:textColor="@color/colorWhite"/>
+            android:textColor="@color/colorWhite" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/text_integral"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="12dp"
-        android:layout_centerVertical="true"
-        android:textSize="15sp"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="12dp"
         android:textColor="@color/colorWhite"
+        android:textSize="15sp"
         android:textStyle="bold"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 </RelativeLayout>

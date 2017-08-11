@@ -270,11 +270,11 @@ public class EvaluatedPublishActivity extends BaseActivity implements View.OnCli
         EvaluatedBean bean = new EvaluatedBean();
         bean.setUser_name(preferences.getString("user_name",""));
         bean.setUser_nick(preferences.getString("user_nick",""));
+        bean.setUser_icon(preferences.getString("user_icon",""));
         bean.setUser_addr(user_addr);
         String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Long(System.currentTimeMillis()));
         bean.setPublish_time(time.substring(5,7)+"月"+time.substring(8,10)+"日"+time.substring(11,16));
         bean.setStar_num(starNum);
-        bean.setUser_icon("暂无头像");
         bean.setUser_evaluated(star_edit.getText().toString().trim());
         //生成一个空的数据占位，以方便更新
         LeaveMesBean leaveMesBean = new LeaveMesBean();

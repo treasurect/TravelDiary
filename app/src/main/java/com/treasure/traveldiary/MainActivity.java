@@ -3,8 +3,12 @@ package com.treasure.traveldiary;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.ActivityOptions;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,12 +16,21 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.IdRes;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -56,9 +69,19 @@ import com.treasure.traveldiary.activity.diary_center.DiaryDetailActivity;
 import com.treasure.traveldiary.activity.home_page.DiaryTextPublishActivity;
 import com.treasure.traveldiary.activity.traveller_circle.TravellerCircleActivity;
 import com.treasure.traveldiary.activity.user_center.UserCenterActivity;
+import com.treasure.traveldiary.activity.user_center.UserEditUserInfoActivity;
+import com.treasure.traveldiary.activity.user_center.UserFeedBackActivity;
+import com.treasure.traveldiary.activity.user_center.UserForgetPassActivity;
+import com.treasure.traveldiary.activity.user_center.UserMessageListActivity;
+import com.treasure.traveldiary.activity.user_center.UserRegisterActivity;
+import com.treasure.traveldiary.activity.user_center.UserSettingsActivity;
+import com.treasure.traveldiary.activity.user_center.UserSigningActivity;
 import com.treasure.traveldiary.bean.DiaryBean;
 import com.treasure.traveldiary.bean.MapMarkerInfoBean;
+import com.treasure.traveldiary.bean.UserInfoBean;
 import com.treasure.traveldiary.listener.MapOrientationListener;
+import com.treasure.traveldiary.receiver.CommonDataReceiver;
+import com.treasure.traveldiary.utils.StringContents;
 import com.treasure.traveldiary.utils.Tools;
 
 import java.text.DecimalFormat;
@@ -148,6 +171,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private TextView ticket_t;
     private boolean isToolsShow;
     private String user_province = "北京";
+    private PopupWindow mPopupWindow;
+    private EditText editPhone, editPwd;
+    private ImageView pass_visible;
+    private boolean isHind = true;
+    private IntentFilter filter;
+    private CommonDataReceiver commonDataReceiver;
+    private SimpleDraweeView left_user_icon;
+    private TextView left_user_name;
+    private LinearLayout night_layout,signing_layout,message_layout,feedback_layout,settings_layout;
+    private ImageView night_icon;
+    private DrawerLayout drawer_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,16 +190,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         Tools.setTranslucentStatus(this);
         initTitle();
         mapLocLayout.setVisibility(View.VISIBLE);
+        user_icon.setVisibility(View.VISIBLE);
 
         widthPixels = getResources().getDisplayMetrics().widthPixels;
         heightPixels = getResources().getDisplayMetrics().heightPixels;
         application = (TravelApplication) getApplication();
+
         initFindId();
         mPreferences = getSharedPreferences("user", MODE_PRIVATE);
         useLocationOrientationListener();
         initMap();
         initLocation();
         initClick();
+        receiveBoradCast();
     }
 
     private void initFindId() {
@@ -194,6 +231,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         weather_t = (TextView) findViewById(R.id.add_tools_weather_t);
         btnToolsTicket = (FloatingActionButton) findViewById(R.id.add_tools_ticket);
         ticket_t = (TextView) findViewById(R.id.add_tools_ticket_t);
+        //侧边栏
+        left_user_icon = (SimpleDraweeView) findViewById(R.id.left_login_icon);
+        left_user_name = (TextView) findViewById(R.id.left_login_username);
+        night_icon = (ImageView) findViewById(R.id.left_night_icon);
+        night_layout = (LinearLayout) findViewById(R.id.left_night_layout);
+        signing_layout = (LinearLayout) findViewById(R.id.left_signing_layout);
+        message_layout = (LinearLayout) findViewById(R.id.left_message_layout);
+        feedback_layout = (LinearLayout) findViewById(R.id.left_feedback_layout);
+        settings_layout = (LinearLayout) findViewById(R.id.left_settings_layout);
+        drawer_layout = (DrawerLayout) findViewById(R.id.home_drawer_layout);
     }
 
     private void useLocationOrientationListener() {
@@ -269,6 +316,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         btnToolsWeather.setOnClickListener(this);
         btnToolsTicket.setOnClickListener(this);
         ticket_t.setOnClickListener(this);
+        user_icon.setOnClickListener(this);
+
+        left_user_icon.setOnClickListener(this);
+        left_user_name.setOnClickListener(this);
+        night_layout.setOnClickListener(this);
+        signing_layout.setOnClickListener(this);
+        message_layout.setOnClickListener(this);
+        feedback_layout.setOnClickListener(this);
+        settings_layout.setOnClickListener(this);
     }
 
     @Override
@@ -276,9 +332,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         switch (view.getId()) {
             case R.id.mine_diary_layout:
                 if (Tools.isNull(mPreferences.getString("token", ""))) {
-                    Intent intent = new Intent(MainActivity.this, UserCenterActivity.class);
-                    intent.putExtra("type", "toLogin");
-                    startActivity(intent);
+                    showPopupWindow();
                 } else {
                     Intent intent1 = new Intent(MainActivity.this, DiaryCenterActivity.class);
                     if (Build.VERSION.SDK_INT >= 21) {
@@ -290,9 +344,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             case R.id.main_add_image:
                 if (Tools.isNull(mPreferences.getString("token", ""))) {
-                    Intent intent = new Intent(MainActivity.this, UserCenterActivity.class);
-                    intent.putExtra("type", "toLogin");
-                    startActivity(intent);
+                    showPopupWindow();
                 } else {
                     if (!addShow) {
                         showFloatActionButton();
@@ -342,18 +394,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.add_tools:
             case R.id.add_tools_t:
                 hindFloatActionButton();
-                if (!isToolsShow){
-                    Tools.setAnimation(btnTools,0,-heightPixels/2,0,1,0,-720,1,1,1000);
+                if (!isToolsShow) {
+                    Tools.setAnimation(btnTools, 0, -heightPixels / 2, 0, 1, 0, -720, 1, 1, 1000);
                     btnToolsWeather.setVisibility(View.VISIBLE);
                     weather_t.setVisibility(View.VISIBLE);
                     btnToolsTicket.setVisibility(View.VISIBLE);
                     ticket_t.setVisibility(View.VISIBLE);
-                    Tools.setAnimation(btnToolsWeather,0,0,0,1,0,720,1,1,2500);
-                    Tools.setAnimation(weather_t,0,0,0,1,0,0,1,1,2000);
-                    Tools.setAnimation(btnToolsTicket,0,0,0,1,0,-720,1,1,2500);
-                    Tools.setAnimation(ticket_t,0,0,0,1,0,0,1,1,2000);
+                    Tools.setAnimation(btnToolsWeather, 0, 0, 0, 1, 0, 720, 1, 1, 2500);
+                    Tools.setAnimation(weather_t, 0, 0, 0, 1, 0, 0, 1, 1, 2000);
+                    Tools.setAnimation(btnToolsTicket, 0, 0, 0, 1, 0, -720, 1, 1, 2500);
+                    Tools.setAnimation(ticket_t, 0, 0, 0, 1, 0, 0, 1, 1, 2000);
                     isToolsShow = true;
-                }else {
+                } else {
                     isToolsShow = false;
                 }
                 break;
@@ -364,7 +416,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 intent00.putExtra("user_city", user_city);
                 intent00.putExtra("user_province", user_province);
                 if (Build.VERSION.SDK_INT >= 21) {
-                    startActivity(intent00, ActivityOptions.makeSceneTransitionAnimation(this,  btnAdd, "transition").toBundle());
+                    startActivity(intent00, ActivityOptions.makeSceneTransitionAnimation(this, btnAdd, "transition").toBundle());
                 } else {
                     startActivity(intent00);
                 }
@@ -392,9 +444,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             case R.id.traveller_circle_layout:
                 if (Tools.isNull(mPreferences.getString("token", ""))) {
-                    Intent intent = new Intent(MainActivity.this, UserCenterActivity.class);
-                    intent.putExtra("type", "toLogin");
-                    startActivity(intent);
+                    showPopupWindow();
                 } else {
                     Intent intent = new Intent(MainActivity.this, TravellerCircleActivity.class);
                     if (Build.VERSION.SDK_INT >= 21) {
@@ -403,6 +453,80 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         startActivity(intent);
                     }
                 }
+                break;
+            case R.id.image_user_icon:
+                if (Tools.isNull(mPreferences.getString("token", ""))) {
+                    showPopupWindow();
+                } else {
+                    drawer_layout.openDrawer(GravityCompat.START);
+                }
+                break;
+            case R.id.mine_popup_quit:
+                quitpopupWindow();
+                break;
+            case R.id.mine_popup_loginin:
+                Loginin();
+                break;
+            case R.id.mine_popup_register:
+                mPopupWindow.dismiss();
+                startActivity(new Intent(MainActivity.this, UserRegisterActivity.class));
+                break;
+            case R.id.mine_popup_forget_password:
+                mPopupWindow.dismiss();
+                startActivity(new Intent(MainActivity.this, UserForgetPassActivity.class));
+                break;
+            case R.id.mine_login_password_visible:
+                if (isHind) {
+                    initNoHindPassInput();
+                    isHind = false;
+                } else {
+                    initHindPassInput();
+                    isHind = true;
+                }
+                break;
+            case R.id.left_login_icon:
+            case R.id.left_login_username:
+                if (Tools.isNull(mPreferences.getString("token", ""))) {
+                    //Login
+                    showPopupWindow();
+                } else {
+                    //edit
+                    Intent intent = new Intent(MainActivity.this, UserEditUserInfoActivity.class);
+                    intent.putExtra("edit_type", "normal");
+                    String user_name = mPreferences.getString("user_name", "");
+                    intent.putExtra("UserPhone", user_name);
+                    startActivity(intent);
+                }
+                break;
+            case R.id.left_night_layout:
+                nightSwitch();
+                break;
+            case R.id.left_signing_layout:
+                if (Tools.isNull(mPreferences.getString("token", ""))) {
+                    //Login
+                    showPopupWindow();
+                } else {
+                    startActivity(new Intent(MainActivity.this,UserSigningActivity.class));
+                }
+                break;
+            case R.id.left_message_layout:
+                if (Tools.isNull(mPreferences.getString("token", ""))) {
+                    showPopupWindow();
+                } else {
+                    Intent intent = new Intent(MainActivity.this, UserMessageListActivity.class);
+                    startActivity(intent);
+                }
+                break;
+            case R.id.left_feedback_layout:
+                if (Tools.isNull(mPreferences.getString("token", ""))) {
+                    showPopupWindow();
+                } else {
+                    Intent intent = new Intent(MainActivity.this, UserFeedBackActivity.class);
+                    startActivity(intent);
+                }
+                break;
+            case R.id.left_settings_layout:
+                startActivity(new Intent(MainActivity.this, UserSettingsActivity.class));
                 break;
         }
     }
@@ -431,17 +555,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void showFloatActionButton() {
-        Tools.setAnimation(btnDiaryText, -widthPixels / 3, -heightPixels/3, 0, 1, 0, 360, 1, 1, 500);
-        Tools.setAnimation(btnDiaryImage, -widthPixels / 9, -heightPixels/3, 0, 1, 0, 360, 1, 1, 500);
-        Tools.setAnimation(btnDiaryVideo, widthPixels / 9, -heightPixels/3, 0, 1, 0, -360, 1, 1, 500);
-        Tools.setAnimation(btnDiaryEvaluated, widthPixels / 3, -heightPixels/3, 0, 1, 0, -360, 1, 1, 500);
-        Tools.setAnimation(btnTools, -widthPixels / 3, -heightPixels/6, 0, 1, 0, 360, 1, 1, 500);
+        Tools.setAnimation(btnDiaryText, -widthPixels / 3, -heightPixels / 3, 0, 1, 0, 360, 1, 1, 500);
+        Tools.setAnimation(btnDiaryImage, -widthPixels / 9, -heightPixels / 3, 0, 1, 0, 360, 1, 1, 500);
+        Tools.setAnimation(btnDiaryVideo, widthPixels / 9, -heightPixels / 3, 0, 1, 0, -360, 1, 1, 500);
+        Tools.setAnimation(btnDiaryEvaluated, widthPixels / 3, -heightPixels / 3, 0, 1, 0, -360, 1, 1, 500);
+        Tools.setAnimation(btnTools, -widthPixels / 3, -heightPixels / 6, 0, 1, 0, 360, 1, 1, 500);
 
-        Tools.setAnimation(text_t, -widthPixels / 3, -heightPixels/3 + 80, 0, 1, 0, 360, 1, 1, 500);
-        Tools.setAnimation(image_t, -widthPixels / 9, -heightPixels/3 + 80, 0, 1, 0, 360, 1, 1, 500);
-        Tools.setAnimation(video_t, widthPixels / 9, -heightPixels/3 + 80, 0, 1, 0, -360, 1, 1, 500);
-        Tools.setAnimation(evaluated_t, widthPixels / 3, -heightPixels/3 + 80, 0, 1, 0, -360, 1, 1, 500);
-        Tools.setAnimation(tools_t, -widthPixels / 3, -heightPixels/6 + 80, 0, 1, 0, 360, 1, 1, 500);
+        Tools.setAnimation(text_t, -widthPixels / 3, -heightPixels / 3 + 80, 0, 1, 0, 360, 1, 1, 500);
+        Tools.setAnimation(image_t, -widthPixels / 9, -heightPixels / 3 + 80, 0, 1, 0, 360, 1, 1, 500);
+        Tools.setAnimation(video_t, widthPixels / 9, -heightPixels / 3 + 80, 0, 1, 0, -360, 1, 1, 500);
+        Tools.setAnimation(evaluated_t, widthPixels / 3, -heightPixels / 3 + 80, 0, 1, 0, -360, 1, 1, 500);
+        Tools.setAnimation(tools_t, -widthPixels / 3, -heightPixels / 6 + 80, 0, 1, 0, 360, 1, 1, 500);
 
         Tools.setAnimation(btnAdd, 0, 0, 1, 1, 0, -45, 1, 1, 500);
         btnToolsWeather.setVisibility(View.GONE);
@@ -481,6 +605,159 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         addShow = false;
     }
 
+    /**
+     * 显示 关闭 popupWindow        登陆操作
+     */
+    public void showPopupWindow() {
+        View convertView = LayoutInflater.from(this).inflate(R.layout.popupwindow_mine_login, null);
+        mPopupWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        mPopupWindow.setAnimationStyle(R.style.loginPopupWindow);
+        mPopupWindow.setOutsideTouchable(false);
+        mPopupWindow.setBackgroundDrawable(new ColorDrawable(0x66000000));
+
+        ImageView quit = (ImageView) convertView.findViewById(R.id.mine_popup_quit);
+        editPhone = (EditText) convertView.findViewById(R.id.mine_login_phone);
+        editPwd = (EditText) convertView.findViewById(R.id.mine_login_password);
+        TextView login = (TextView) convertView.findViewById(R.id.mine_popup_loginin);
+        TextView register = (TextView) convertView.findViewById(R.id.mine_popup_register);
+        TextView forget = (TextView) convertView.findViewById(R.id.mine_popup_forget_password);
+        pass_visible = (ImageView) convertView.findViewById(R.id.mine_login_password_visible);
+
+        quit.setOnClickListener(this);
+        login.setOnClickListener(this);
+        register.setOnClickListener(this);
+        forget.setOnClickListener(this);
+        pass_visible.setOnClickListener(this);
+
+        View rootView = LayoutInflater.from(this).inflate(R.layout.activity_user_center, null);
+        mPopupWindow.showAtLocation(rootView, Gravity.BOTTOM, 0, 0);
+    }
+
+    private void quitpopupWindow() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("您确认放弃登录吗？");
+        builder.setPositiveButton("放弃", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mPopupWindow.dismiss();
+            }
+        });
+        builder.setNegativeButton("继续登录", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    //不隐藏密码
+    private void initNoHindPassInput() {
+        pass_visible.setImageResource(R.mipmap.ic_eye_open);
+        editPwd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        editPwd.setSelection(editPwd.getText().length());
+    }
+
+    //隐藏密码
+    private void initHindPassInput() {
+        pass_visible.setImageResource(R.mipmap.ic_eye_close);
+        editPwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        editPwd.setSelection(editPwd.getText().length());
+    }
+
+    /**
+     * 登录操作
+     */
+    private void Loginin() {
+        if (Tools.isNull(editPhone.getText().toString().trim())) {
+            Toast.makeText(MainActivity.this, "手机号不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (Tools.isNull(editPwd.getText().toString().trim())) {
+            Toast.makeText(MainActivity.this, "密码不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        BmobQuery<UserInfoBean> query = new BmobQuery<>();
+        query.addWhereEqualTo("user_name", editPhone.getText().toString().trim());
+        query.findObjects(new FindListener<UserInfoBean>() {
+            @Override
+            public void done(List<UserInfoBean> list, BmobException e) {
+                if (e == null) {
+                    if (list.size() == 0) {
+                        Toast.makeText(MainActivity.this, "用户名不存在", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (editPwd.getText().toString().trim().equals(list.get(0).getUser_pwd())) {
+                            Toast.makeText(MainActivity.this, "恭喜你，登陆成功", Toast.LENGTH_SHORT).show();
+                            //存入SharedPreferences
+                            SharedPreferences preferences = getSharedPreferences("user", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString("token", "login");
+                            editor.putString("user_icon", list.get(0).getUser_icon());
+                            editor.putString("user_name", list.get(0).getUser_name());
+                            editor.putString("user_nick", list.get(0).getNick_name());
+                            editor.putString("user_pwd", list.get(0).getUser_pwd());
+                            editor.putString("user_age", String.valueOf(list.get(0).getAge()));
+                            editor.putString("user_sex", String.valueOf(list.get(0).getSex()));
+                            editor.putString("user_desc", list.get(0).getUser_desc());
+                            editor.apply();
+
+                            //发送登录成功 广播
+                            Intent intent = new Intent();
+                            intent.setAction(StringContents.ACTION_COMMENTDATA);
+                            intent.putExtra("label", "login");
+                            sendBroadcast(intent);
+                            mPopupWindow.dismiss();
+                        } else {
+                            Toast.makeText(MainActivity.this, "密码错误", Toast.LENGTH_SHORT).show();
+                            editPwd.setText("");
+                        }
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void receiveBoradCast() {
+        filter = new IntentFilter();
+        filter.addAction(StringContents.ACTION_COMMENTDATA);
+        commonDataReceiver = new CommonDataReceiver();
+        commonDataReceiver.setDoUIReceiver(new CommonDataReceiver.DoUIReceiver() {
+            @Override
+            public void doUI(Context context, Intent intent) {
+                if (intent.getExtras().getString("label").equals("login")) {
+                    user_icon.setImageURI(Uri.parse(mPreferences.getString("user_icon", "")));
+                    left_user_icon.setImageURI(Uri.parse(mPreferences.getString("user_icon", "")));
+                    left_user_name.setText(mPreferences.getString("user_nick", ""));
+                }
+            }
+        });
+        registerReceiver(commonDataReceiver, filter);
+    }
+    /**
+     * 夜间模式的切换
+     */
+    private void nightSwitch() {
+        if (!application.isNight()) {
+            night_icon.setImageResource(R.mipmap.ic_night);
+            application.setNight(true);
+            Window window = getWindow();
+            WindowManager.LayoutParams layoutParams = window.getAttributes();
+            layoutParams.screenBrightness = 0.001f;
+            window.setAttributes(layoutParams);
+            application.setNight(true);
+        } else {
+            night_icon.setImageResource(R.mipmap.ic_daytime);
+            application.setNight(false);
+            Window window = getWindow();
+            WindowManager.LayoutParams layoutParams = window.getAttributes();
+            layoutParams.screenBrightness = -1;
+            window.setAttributes(layoutParams);
+            application.setNight(false);
+        }
+    }
     @Override
     public void onReceiveLocation(BDLocation bdLocation) {
 // 定位接口可能返回错误码,要根据结果错误码,来判断是否是正确的地址;
@@ -715,6 +992,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (drawer_layout.isDrawerOpen(GravityCompat.START)){
+            drawer_layout.closeDrawer(GravityCompat.START);
+        }else {
+            super.onBackPressed();
+        }
+    }
+
     /**
      * 生命周期的处理
      */
@@ -727,7 +1013,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         map.setMyLocationEnabled(true);
         requestDiaryList();
         if (!Tools.isNull(mPreferences.getString("token", ""))) {
+            user_icon.setImageURI(Uri.parse(mPreferences.getString("user_icon", "")));
+            left_user_icon.setImageURI(Uri.parse(mPreferences.getString("user_icon", "")));
+            left_user_name.setText(mPreferences.getString("user_nick", ""));
             requestDiaryList();
+        }else {
+            user_icon.setImageResource(R.mipmap.ic_no_icon);
+            left_user_icon.setImageResource(R.mipmap.ic_no_icon);
+            left_user_name.setText("登陆让生活更精彩");
         }
     }
 
@@ -748,6 +1041,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mLocationClient.unRegisterLocationListener(this);
         orientationListener.stop();
         isPageDestroy = true;
+        unregisterReceiver(commonDataReceiver);
         super.onDestroy();
     }
 }

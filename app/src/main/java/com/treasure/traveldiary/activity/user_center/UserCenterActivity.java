@@ -55,7 +55,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     private IntentFilter filter;
     private CommonDataReceiver commonDataReceiver;
     private boolean pageLoaded;
-    private boolean isSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,27 +151,8 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         //用户名 头像
         String token = mPreferences.getString("token", "");
         if (!Tools.isNull(token)) {
+            mine_login_icon.setImageURI(Uri.parse(mPreferences.getString("user_icon","")));
             mine_login_username.setText(mPreferences.getString("user_nick", ""));
-            BmobQuery<UserInfoBean> query = new BmobQuery<>();
-            query.addWhereEqualTo("user_name", mPreferences.getString("user_name", ""));
-            query.findObjects(new FindListener<UserInfoBean>() {
-                @Override
-                public void done(List<UserInfoBean> list, BmobException e) {
-                    if (e == null) {
-                        isSelected = true;
-                        if (list.get(0).getUser_icon().equals("暂无头像")) {
-                            mine_login_icon.setImageResource(R.mipmap.ic_travel_logo);
-                        } else {
-                            mine_login_icon.setImageURI(Uri.parse(list.get(0).getUser_icon()));
-                        }
-                    } else {
-                        Toast.makeText(UserCenterActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-            if (!isSelected) {
-                mine_login_icon.setImageResource(R.mipmap.ic_travel_logo);
-            }
         } else {
             mine_login_icon.setImageResource(R.mipmap.ic_launcher_round);
             mine_login_username.setText("登录让内容更精彩");
@@ -393,7 +373,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                             SharedPreferences preferences = getSharedPreferences("user", MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString("token", "login");
-                            editor.putString("user_icon", "暂无头像");
+                            editor.putString("user_icon", list.get(0).getUser_icon());
                             editor.putString("user_name", list.get(0).getUser_name());
                             editor.putString("user_nick", list.get(0).getNick_name());
                             editor.putString("user_pwd", list.get(0).getUser_pwd());

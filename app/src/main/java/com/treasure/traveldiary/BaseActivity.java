@@ -5,6 +5,8 @@ import android.support.v4.app.FragmentActivity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.treasure.traveldiary.utils.ACache;
 
 public class BaseActivity extends FragmentActivity {
@@ -18,6 +20,7 @@ public class BaseActivity extends FragmentActivity {
     public LinearLayout mapLocLayout;
     public TextView text_map_loc;
     public TextView text_integral;
+    public SimpleDraweeView user_icon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class BaseActivity extends FragmentActivity {
         mapLocLayout = (LinearLayout) findViewById(R.id.layout_map_loc);
         text_map_loc = (TextView) findViewById(R.id.text_map_loc);
         text_integral = (TextView) findViewById(R.id.text_integral);
+        user_icon = (SimpleDraweeView) findViewById(R.id.image_user_icon);
     }
 
 }

@@ -1,311 +1,539 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout
+    android:id="@+id/home_drawer_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
-    android:orientation="vertical">
+    tools:openDrawer="start">
+   <FrameLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+       <include layout="@layout/common_top_view" />
 
-    <include layout="@layout/common_top_view" />
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:layout_marginTop="45dp"
+           android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+           <com.baidu.mapapi.map.MapView
+               android:id="@+id/home_mapView"
+               android:layout_width="match_parent"
+               android:layout_height="0dp"
+               android:layout_weight="1"
+               android:clickable="true" />
+
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="50dp"
+               android:layout_gravity="bottom"
+               android:background="@color/colorGray6"
+               android:orientation="horizontal">
+
+               <LinearLayout
+                   android:id="@+id/mine_diary_layout"
+                   android:layout_width="0dp"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"
+                   android:gravity="center"
+                   android:orientation="vertical"
+                   android:transitionName="diary">
+
+                   <ImageView
+                       android:id="@+id/mine_diary_image"
+                       android:layout_width="23dp"
+                       android:layout_height="23dp"
+                       android:layout_gravity="center_horizontal"
+                       android:layout_marginBottom="5dp"
+                       android:src="@mipmap/ic_diary" />
+               </LinearLayout>
+
+               <FrameLayout
+                   android:layout_width="0dp"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"/>
+
+               <LinearLayout
+                   android:id="@+id/traveller_circle_layout"
+                   android:layout_width="0dp"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"
+                   android:gravity="center"
+                   android:orientation="vertical"
+                   android:transitionName="travellercircle">
+
+                   <ImageView
+                       android:id="@+id/traveller_center_image"
+                       android:layout_width="23dp"
+                       android:layout_height="23dp"
+                       android:layout_gravity="center_horizontal"
+                       android:layout_marginBottom="5dp"
+                       android:src="@mipmap/ic_traveller_center" />
+               </LinearLayout>
+           </LinearLayout>
+       </LinearLayout>
+
+       <ImageView
+           android:id="@+id/imageView"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:layout_marginBottom="50dp"
+           android:layout_marginTop="45dp"
+           android:background="@mipmap/pic_map_bg" />
+
+       <RadioGroup
+           android:id="@+id/layout_map_type"
+           android:layout_width="120dp"
+           android:layout_height="25dp"
+           android:layout_gravity="right"
+           android:layout_marginRight="10dp"
+           android:layout_marginTop="60dp"
+           android:background="@drawable/frame_white_radius25"
+           android:orientation="horizontal">
+
+           <RadioButton
+               android:id="@+id/btn_map_normal"
+               android:layout_width="40dp"
+               android:layout_height="match_parent"
+               android:background="@drawable/radiobutton_orange"
+               android:button="@null"
+               android:gravity="center"
+               android:text="普通"
+               android:textColor="@color/colorBlock" />
+
+           <RadioButton
+               android:id="@+id/btn_map_satellite"
+               android:layout_width="40dp"
+               android:layout_height="match_parent"
+               android:background="@drawable/radiobutton_orange"
+               android:button="@null"
+               android:gravity="center"
+               android:text="卫星"
+               android:textColor="@color/colorBlock" />
+
+           <RadioButton
+               android:id="@+id/btn_map_compass"
+               android:layout_width="40dp"
+               android:layout_height="match_parent"
+               android:background="@drawable/radiobutton_orange"
+               android:button="@null"
+               android:gravity="center"
+               android:text="罗盘"
+               android:textColor="@color/colorBlock" />
+       </RadioGroup>
+
+       <ImageView
+           android:id="@+id/user_map_location"
+           android:layout_width="30dp"
+           android:layout_height="30dp"
+           android:layout_gravity="bottom"
+           android:layout_marginBottom="100dp"
+           android:layout_marginLeft="10dp"
+           android:background="@drawable/bottom_gray_radius5"
+           android:padding="5dp"
+           android:src="@mipmap/ic_loc" />
+
+       <include layout="@layout/common_loading_view" />
+
+       <FrameLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+
+           <ImageView
+               android:id="@+id/add_diary_layout"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:background="@color/colorFullGray2"
+               android:visibility="gone" />
+
+           <TextView
+               android:id="@+id/add_diary_text_t"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_horizontal|bottom"
+               android:layout_marginBottom="25dp"
+               android:text="日记"
+               android:textColor="@color/colorWhite"
+               android:textStyle="bold" />
+
+           <TextView
+               android:id="@+id/add_diary_image_t"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_horizontal|bottom"
+               android:layout_marginBottom="25dp"
+               android:text="拍照"
+               android:textColor="@color/colorWhite"
+               android:textStyle="bold" />
+
+           <TextView
+               android:id="@+id/add_diary_video_t"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_horizontal|bottom"
+               android:layout_marginBottom="25dp"
+               android:text="短视频"
+               android:textColor="@color/colorWhite"
+               android:textStyle="bold" />
+
+           <TextView
+               android:id="@+id/add_evaluated_t"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_horizontal|bottom"
+               android:layout_marginBottom="25dp"
+               android:text="点评/吐槽"
+               android:textColor="@color/colorWhite"
+               android:textStyle="bold" />
+
+           <TextView
+               android:id="@+id/add_tools_t"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_horizontal|bottom"
+               android:layout_marginBottom="25dp"
+               android:text="出行工具"
+               android:textColor="@color/colorWhite"
+               android:textStyle="bold" />
+
+           <android.support.design.widget.FloatingActionButton
+               android:id="@+id/add_diary_text"
+               android:layout_width="50dp"
+               android:layout_height="50dp"
+               android:layout_gravity="center_horizontal|bottom"
+               android:layout_marginBottom="25dp"
+               android:src="@mipmap/ic_write"
+               android:transitionName="diary_text"
+               app:backgroundTint="@color/colorAccent"
+               app:rippleColor="@color/colorAccent" />
+
+           <android.support.design.widget.FloatingActionButton
+               android:id="@+id/add_diary_image"
+               android:layout_width="50dp"
+               android:layout_height="50dp"
+               android:layout_gravity="center_horizontal|bottom"
+               android:layout_marginBottom="25dp"
+               android:src="@mipmap/ic_camera"
+               app:backgroundTint="@color/colorRed"
+               app:rippleColor="@color/colorAccent" />
+
+           <android.support.design.widget.FloatingActionButton
+               android:id="@+id/add_diary_video"
+               android:layout_width="50dp"
+               android:layout_height="50dp"
+               android:layout_gravity="center_horizontal|bottom"
+               android:layout_marginBottom="25dp"
+               android:src="@mipmap/ic_video"
+               app:backgroundTint="@color/colorYellow"
+               app:rippleColor="@color/colorAccent" />
+
+           <android.support.design.widget.FloatingActionButton
+               android:id="@+id/add_evaluated"
+               android:layout_width="50dp"
+               android:layout_height="50dp"
+               android:layout_gravity="center_horizontal|bottom"
+               android:layout_marginBottom="25dp"
+               android:src="@mipmap/ic_signing"
+               android:transitionName="evaluated"
+               app:backgroundTint="@color/colorCambridgeBlue"
+               app:rippleColor="@color/colorAccent" />
+
+           <android.support.design.widget.FloatingActionButton
+               android:id="@+id/add_tools"
+               android:layout_width="50dp"
+               android:layout_height="50dp"
+               android:layout_gravity="center_horizontal|bottom"
+               android:layout_marginBottom="25dp"
+               android:src="@mipmap/ic_tools"
+               app:backgroundTint="@color/colorPurple"
+               app:rippleColor="@color/colorAccent" />
+
+           <android.support.design.widget.FloatingActionButton
+               android:id="@+id/main_add_image"
+               android:layout_width="60dp"
+               android:layout_height="60dp"
+               android:layout_gravity="center_horizontal|bottom"
+               android:layout_marginBottom="20dp"
+               android:src="@mipmap/ic_add"
+               app:backgroundTint="@color/colorOrange"
+               android:transitionName="transition"
+               app:pressedTranslationZ="20dp"
+               app:rippleColor="@color/colorAccent" />
+
+           <android.support.design.widget.FloatingActionButton
+               android:id="@+id/add_tools_weather"
+               android:layout_width="50dp"
+               android:layout_height="50dp"
+               android:layout_gravity="center"
+               android:layout_marginRight="50dp"
+               android:layout_marginTop="30dp"
+               android:src="@mipmap/ic_weather"
+               android:transitionName="weather"
+               app:backgroundTint="@color/colorAccent"
+               app:rippleColor="@color/colorPurple"
+               android:visibility="gone"/>
+
+           <TextView
+               android:id="@+id/add_tools_weather_t"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:layout_marginRight="50dp"
+               android:layout_marginTop="80dp"
+               android:text="天气"
+               android:textColor="@color/colorOrange"
+               android:textStyle="bold"
+               android:visibility="gone"/>
+
+           <android.support.design.widget.FloatingActionButton
+               android:id="@+id/add_tools_ticket"
+               android:layout_width="50dp"
+               android:layout_height="50dp"
+               android:layout_gravity="center"
+               android:layout_marginLeft="50dp"
+               android:layout_marginTop="30dp"
+               android:src="@mipmap/ic_ticket"
+               android:transitionName="ticket"
+               app:backgroundTint="@color/colorCambridgeBlue"
+               app:rippleColor="@color/colorAccent"
+               android:visibility="gone"/>
+           <TextView
+               android:id="@+id/add_tools_ticket_t"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:layout_marginLeft="50dp"
+               android:layout_marginTop="80dp"
+               android:text="票务"
+               android:textColor="@color/colorOrange"
+               android:textStyle="bold"
+               android:visibility="gone"/>
+       </FrameLayout>
+   </FrameLayout>
+    <android.support.design.widget.NavigationView
+        android:layout_width="250dp"
         android:layout_height="match_parent"
-        android:layout_marginTop="45dp"
-        android:orientation="vertical">
-
-        <com.baidu.mapapi.map.MapView
-            android:id="@+id/home_mapView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:clickable="true" />
-
+        android:layout_gravity="start"
+        app:itemTextColor="@color/colorOrange">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_gravity="bottom"
-            android:background="@color/colorGray6"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/mine_diary_layout"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3.4"
+                android:background="@color/colorOrange"
                 android:gravity="center"
-                android:orientation="vertical"
-                android:transitionName="diary">
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/mine_diary_image"
-                    android:layout_width="23dp"
-                    android:layout_height="23dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="5dp"
-                    android:src="@mipmap/ic_diary" />
+                <FrameLayout
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@mipmap/ic_travel_logo" />
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/left_login_icon"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        fresco:placeholderImage="@mipmap/ic_login"
+                        fresco:roundAsCircle="true" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/left_login_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="登录，记录精彩生活"
+                    android:textColor="#fff"
+                    android:textStyle="bold" />
             </LinearLayout>
-
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
 
             <LinearLayout
-                android:id="@+id/traveller_circle_layout"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.4"
+                android:background="@color/colorWhite"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/left_night_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/left_night_icon"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@mipmap/ic_daytime" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:text="夜间" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/left_signing_layout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:transitionName="travellercircle">
+                android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/traveller_center_image"
-                    android:layout_width="23dp"
-                    android:layout_height="23dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="5dp"
-                    android:src="@mipmap/ic_traveller_center" />
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/ic_signing2" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/colorWhite"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:text="签到"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:src="@mipmap/ic_right" />
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/left_message_layout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/ic_message" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/colorWhite"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:text="消息"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:src="@mipmap/ic_right" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/left_feedback_layout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/ic_feedback" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/colorWhite"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:text="反馈"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:src="@mipmap/ic_right" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/left_settings_layout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/ic_setting_click" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/colorWhite"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:text="设置"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:src="@mipmap/ic_right" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:layout_weight="4"
+                android:background="@color/colorWhite" />
         </LinearLayout>
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="50dp"
-        android:layout_marginTop="45dp"
-        android:background="@mipmap/pic_map_bg" />
-
-    <RadioGroup
-        android:id="@+id/layout_map_type"
-        android:layout_width="120dp"
-        android:layout_height="25dp"
-        android:layout_gravity="right"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="60dp"
-        android:background="@drawable/frame_white_radius25"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/btn_map_normal"
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/radiobutton_orange"
-            android:button="@null"
-            android:gravity="center"
-            android:text="普通"
-            android:textColor="@color/colorBlock" />
-
-        <RadioButton
-            android:id="@+id/btn_map_satellite"
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/radiobutton_orange"
-            android:button="@null"
-            android:gravity="center"
-            android:text="卫星"
-            android:textColor="@color/colorBlock" />
-
-        <RadioButton
-            android:id="@+id/btn_map_compass"
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/radiobutton_orange"
-            android:button="@null"
-            android:gravity="center"
-            android:text="罗盘"
-            android:textColor="@color/colorBlock" />
-    </RadioGroup>
-
-    <ImageView
-        android:id="@+id/user_map_location"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="100dp"
-        android:layout_marginLeft="10dp"
-        android:background="@drawable/bottom_gray_radius5"
-        android:padding="5dp"
-        android:src="@mipmap/ic_loc" />
-
-    <include layout="@layout/common_loading_view" />
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/add_diary_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorFullGray2"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/add_diary_text_t"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginBottom="25dp"
-            android:text="日记"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/add_diary_image_t"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginBottom="25dp"
-            android:text="拍照"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/add_diary_video_t"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginBottom="25dp"
-            android:text="短视频"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/add_evaluated_t"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginBottom="25dp"
-            android:text="点评/吐槽"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/add_tools_t"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginBottom="25dp"
-            android:text="出行工具"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_diary_text"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginBottom="25dp"
-            android:src="@mipmap/ic_write"
-            android:transitionName="diary_text"
-            app:backgroundTint="@color/colorAccent"
-            app:rippleColor="@color/colorAccent" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_diary_image"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginBottom="25dp"
-            android:src="@mipmap/ic_camera"
-            app:backgroundTint="@color/colorRed"
-            app:rippleColor="@color/colorAccent" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_diary_video"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginBottom="25dp"
-            android:src="@mipmap/ic_video"
-            app:backgroundTint="@color/colorYellow"
-            app:rippleColor="@color/colorAccent" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_evaluated"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginBottom="25dp"
-            android:src="@mipmap/ic_signing"
-            android:transitionName="evaluated"
-            app:backgroundTint="@color/colorCambridgeBlue"
-            app:rippleColor="@color/colorAccent" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_tools"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginBottom="25dp"
-            android:src="@mipmap/ic_tools"
-            app:backgroundTint="@color/colorPurple"
-            app:rippleColor="@color/colorAccent" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/main_add_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginBottom="20dp"
-            android:src="@mipmap/ic_add"
-            app:backgroundTint="@color/colorOrange"
-            android:transitionName="transition"
-            app:pressedTranslationZ="20dp"
-            app:rippleColor="@color/colorAccent" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_tools_weather"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_marginRight="50dp"
-            android:layout_marginTop="30dp"
-            android:src="@mipmap/ic_weather"
-            android:transitionName="weather"
-            app:backgroundTint="@color/colorAccent"
-            app:rippleColor="@color/colorPurple"
-            android:visibility="gone"/>
-
-        <TextView
-            android:id="@+id/add_tools_weather_t"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginRight="50dp"
-            android:layout_marginTop="80dp"
-            android:text="天气"
-            android:textColor="@color/colorOrange"
-            android:textStyle="bold"
-            android:visibility="gone"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_tools_ticket"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="30dp"
-            android:src="@mipmap/ic_ticket"
-            android:transitionName="ticket"
-            app:backgroundTint="@color/colorCambridgeBlue"
-            app:rippleColor="@color/colorAccent"
-            android:visibility="gone"/>
-        <TextView
-            android:id="@+id/add_tools_ticket_t"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="80dp"
-            android:text="票务"
-            android:textColor="@color/colorOrange"
-            android:textStyle="bold"
-            android:visibility="gone"/>
-    </FrameLayout>
-</FrameLayout>
+    </android.support.design.widget.NavigationView>
+</android.support.v4.widget.DrawerLayout>
