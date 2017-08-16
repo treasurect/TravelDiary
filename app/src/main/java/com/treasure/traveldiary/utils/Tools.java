@@ -24,7 +24,10 @@ import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
 import android.view.animation.AnticipateOvershootInterpolator;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
@@ -191,13 +194,6 @@ public class Tools {
      * 弹出吐司
      */
     public static void showToast(Context context, String content) {
-        Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * 弹出吐司
-     */
-    public static void showToast(Context context, int content) {
         Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
     }
 
@@ -608,21 +604,6 @@ public class Tools {
         return file;
     }
 
-    public static String getVersionName(Context context) {
-        // 获取PackageManager的实例
-        PackageManager packageManager = context.getPackageManager();
-        // getPackageName()是你当前类的包名，0代表是获取版本信息
-        PackageInfo packInfo = null;
-        try {
-            packInfo = packageManager.getPackageInfo(
-                    context.getPackageName(), 0);
-            return packInfo.versionName;
-        } catch (NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
     /**
      * 根据开始时间和结束时间返回时间段内的时间集合
      *
@@ -739,5 +720,34 @@ public class Tools {
         animatorSet.setDuration(duration);
         animatorSet.setInterpolator(new AnticipateOvershootInterpolator());
         animatorSet.start();
+    }
+    public static void setTransAnimation(View view, int trans_x_start, int trans_x_end,int trans_y_start,int trans_y_end,int duration) {
+        TranslateAnimation translateAnimation = new TranslateAnimation(trans_x_start, trans_x_end,trans_y_start, trans_y_end);
+        translateAnimation.setDuration(duration);
+        translateAnimation.setRepeatMode(Animation.REVERSE);
+        view.startAnimation(translateAnimation);
+    }
+
+    /**
+     * 获取版本号
+     */
+    public static String getVersionName(Context context) {
+        String versionName = "";
+        PackageManager manager = context.getPackageManager();
+        try {
+            PackageInfo packageInfo = manager.getPackageInfo(context.getPackageName(), 0);
+            versionName = packageInfo.versionName;
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return versionName;
+    }
+    /**
+     * 获取当前时间：格式：2017年8月16日00：00：00
+     */
+    public static String getNowTime(){
+        String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Long(System.currentTimeMillis()));
+        time = time.substring(0,4)+"年"+time.substring(5, 7) + "月" + time.substring(8, 10) + "日" + time.substring(11, 19);
+        return time;
     }
 }

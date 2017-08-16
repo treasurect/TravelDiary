@@ -1,8 +1,10 @@
 package com.treasure.traveldiary.activity.user_center;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -26,6 +28,8 @@ public class UserMessageListActivity extends BaseActivity implements View.OnClic
     private List<PushBean> list;
     private MineMessageListAdapter adapter;
     private FrameLayout loading;
+    private SharedPreferences mPreferences;
+    private LinearLayout nodata_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,7 @@ public class UserMessageListActivity extends BaseActivity implements View.OnClic
         Tools.setTranslucentStatus(this);
         btn_back.setVisibility(View.VISIBLE);
         title.setText("我的消息");
+        mPreferences = getSharedPreferences("user", MODE_PRIVATE);
 
         initFindId();
         initListView();
@@ -45,6 +50,7 @@ public class UserMessageListActivity extends BaseActivity implements View.OnClic
     private void initFindId() {
         listView = (ListView) findViewById(R.id.user_message_list);
         loading = (FrameLayout) findViewById(R.id.loading_layout);
+        nodata_layout = (LinearLayout) findViewById(R.id.no_data_layout);
     }
 
     private void initListView() {
@@ -69,21 +75,23 @@ public class UserMessageListActivity extends BaseActivity implements View.OnClic
     private void getMessageList() {
         loading.setVisibility(View.VISIBLE);
         BmobQuery<PushBean> query = new BmobQuery<>();
-        query.findObjects(new FindListener<PushBean>() {
-            @Override
-            public void done(List<PushBean> list1, BmobException e) {
-                if (e == null) {
-                    if (list1 != null) {
-                        list.clear();
-                        Collections.reverse(list1);
-                        list.addAll(list1);
-                        adapter.notifyDataSetChanged();
+        query.addWhereEqualTo("user_name", mPreferences.getString("user_name", ""))
+                .findObjects(new FindListener<PushBean>() {
+                    @Override
+                    public void done(List<PushBean> list1, BmobException e) {
+                        if (e == null) {
+                            list.clear();
+                            Collections.reverse(list1);
+                            list.addAll(list1);
+                            adapter.notifyDataSetChanged();
+                            if (list1.size() == 0){
+                                nodata_layout.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            Toast.makeText(UserMessageListActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                        loading.setVisibility(View.GONE);
                     }
-                }else {
-                    Toast.makeText(UserMessageListActivity.this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-                loading.setVisibility(View.GONE);
-            }
-        });
+                });
     }
 }

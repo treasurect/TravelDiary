@@ -15,12 +15,19 @@ import android.widget.Toast;
 
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
+import com.treasure.traveldiary.bean.UserInfoBean;
 import com.treasure.traveldiary.utils.StringContents;
 import com.treasure.traveldiary.utils.Tools;
 
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+
 public class UserSettingsActivity extends BaseActivity implements View.OnClickListener {
     private LinearLayout cache_clear;
-    private LinearLayout check_versions;
+    private LinearLayout btnCheck;
     private TextView logout;
     private ProgressDialog dialog;
     private Handler mHandler = new Handler() {
@@ -34,6 +41,10 @@ public class UserSettingsActivity extends BaseActivity implements View.OnClickLi
             }
         }
     };
+    private TextView version_num, version_state;
+    private SharedPreferences mPreferences;
+    private String version_name_online, version_name_phone;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,23 +53,32 @@ public class UserSettingsActivity extends BaseActivity implements View.OnClickLi
         Tools.setTranslucentStatus(this);//沉浸模式
         btn_back.setVisibility(View.VISIBLE);
         title.setText("设置");
+        mPreferences = getSharedPreferences("user", MODE_PRIVATE);
+        version_name_phone = Tools.getVersionName(this);
 
-        initFindViewById();
-        if (Tools.isNull(getSharedPreferences("user",MODE_PRIVATE).getString("token",""))){
-            logout.setVisibility(View.GONE);
-        }
+        initFindId();
         initClick();
+
+        if (Tools.isNull(mPreferences.getString("token", ""))) {
+            logout.setVisibility(View.GONE);
+        }else {
+            checkVersion();
+        }
+        version_num.setText("V " + version_name_phone);
     }
-    private void initFindViewById() {
+
+    private void initFindId() {
         cache_clear = (LinearLayout) findViewById(R.id.user_settings_cache_clear);
-        check_versions = (LinearLayout) findViewById(R.id.user_settings_check_versions);
+        btnCheck = (LinearLayout) findViewById(R.id.user_settings_check_versions);
         logout = (TextView) findViewById(R.id.user_personal_settings_logout);
+        version_num = (TextView) findViewById(R.id.user_settings_versions_num);
+        version_state = (TextView) findViewById(R.id.user_settings_versions_state);
     }
 
     private void initClick() {
         btn_back.setOnClickListener(this);
         cache_clear.setOnClickListener(this);
-        check_versions.setOnClickListener(this);
+        btnCheck.setOnClickListener(this);
         logout.setOnClickListener(this);
     }
 
@@ -75,7 +95,13 @@ public class UserSettingsActivity extends BaseActivity implements View.OnClickLi
                 requestLogout();
                 break;
             case R.id.user_settings_check_versions:
-
+                if (!Tools.isNull(version_name_online) && !Tools.isNull(version_name_phone)){
+                    if (version_name_online.equals(version_name_phone)){
+                        Toast.makeText(this, "已是最新版本", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(this, "请到应用商店更新应用", Toast.LENGTH_SHORT).show();
+                    }
+                }
                 break;
         }
     }
@@ -127,12 +153,32 @@ public class UserSettingsActivity extends BaseActivity implements View.OnClickLi
     private void requestLogout() {
         BaseActivity.aCache.clear();
         SharedPreferences.Editor editor = getSharedPreferences("user", MODE_PRIVATE).edit();
-        editor.putString("token","");
+        editor.putString("token", "");
         editor.apply();
         Intent intent = new Intent();
         intent.setAction(StringContents.ACTION_COMMENTDATA);
-        intent.putExtra("label","login");
+        intent.putExtra("label", "login");
         sendBroadcast(intent);
         UserSettingsActivity.this.finish();
+    }
+
+    private void checkVersion() {
+        BmobQuery<UserInfoBean> query = new BmobQuery<>();
+        query.addWhereEqualTo("user_name", mPreferences.getString("user_name", ""))
+                .findObjects(new FindListener<UserInfoBean>() {
+                    @Override
+                    public void done(List<UserInfoBean> list, BmobException e) {
+                        if (e == null) {
+                             version_name_online = list.get(0).getVersion_name();
+                            if (version_name_phone.equals(version_name_online)) {
+                                version_state.setText("已是最新版本");
+                            } else {
+                                version_state.setText("有新版本更新");
+                            }
+                        } else {
+                            Toast.makeText(UserSettingsActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }

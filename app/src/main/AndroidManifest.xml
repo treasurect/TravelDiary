@@ -172,9 +172,6 @@
             android:value="5d59b8892e5c42a4c3f154d8" /> <!-- </>值来自开发者平台取得的AppKey -->
 
         <activity
-            android:name=".activity.user_center.UserCenterActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.user_center.UserDiaryActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -237,8 +234,10 @@
         <activity
             android:name=".activity.home_page.ToolsTicketActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.home_page.ToolsWeatherListActivity" />
-        <activity android:name=".activity.traveller_circle.TravellerCircleActivity"></activity>
+        <activity android:name=".activity.home_page.ToolsWeatherListActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.traveller_circle.TravellerCircleActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

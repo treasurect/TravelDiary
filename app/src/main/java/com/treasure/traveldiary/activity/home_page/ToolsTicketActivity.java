@@ -1,14 +1,29 @@
 package com.treasure.traveldiary.activity.home_page;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
+import com.treasure.traveldiary.adapter.HomeFragmentPagerAdapter;
+import com.treasure.traveldiary.fragments.BaseFragment;
+import com.treasure.traveldiary.fragments.MineDiaryAllFragment;
+import com.treasure.traveldiary.fragments.MineDiaryImageFragment;
+import com.treasure.traveldiary.fragments.MineDiaryTextFragment;
+import com.treasure.traveldiary.fragments.MineDiaryVideoFragment;
+import com.treasure.traveldiary.fragments.MineEvaluatedFragment;
+import com.treasure.traveldiary.fragments.ToolsTicketAirFragment;
+import com.treasure.traveldiary.fragments.ToolsTicketTrainFragment;
 import com.treasure.traveldiary.utils.Tools;
 
-public class ToolsTicketActivity extends BaseActivity implements View.OnClickListener {
+import java.util.ArrayList;
+import java.util.List;
 
+public class ToolsTicketActivity extends BaseActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener {
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,10 +35,17 @@ public class ToolsTicketActivity extends BaseActivity implements View.OnClickLis
 
         initFindId();
         initClick();
+        tabLayout.addOnTabSelectedListener(this);
+        initTabLayout();
+        initViewPager();
+        //联动
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        viewPager.setCurrentItem(0, false);
     }
 
     private void initFindId() {
-
+        tabLayout = (TabLayout) findViewById(R.id.tools_ticket_tabLayout);
+        viewPager = (ViewPager) findViewById(R.id.tools_ticket_viewPager);
     }
 
     private void initClick() {
@@ -37,5 +59,33 @@ public class ToolsTicketActivity extends BaseActivity implements View.OnClickLis
                 ToolsTicketActivity.this.finish();
                 break;
         }
+    }
+
+    private void initTabLayout() {
+        tabLayout.addTab(tabLayout.newTab().setText("火车票"));
+        tabLayout.addTab(tabLayout.newTab().setText("机票"));
+    }
+
+    private void initViewPager() {
+        List<BaseFragment> list = new ArrayList<>();
+        list.add(new ToolsTicketTrainFragment());
+        list.add(new ToolsTicketAirFragment());
+        HomeFragmentPagerAdapter pagerAdapter = new HomeFragmentPagerAdapter(getSupportFragmentManager(), list);
+        viewPager.setAdapter(pagerAdapter);
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        viewPager.setCurrentItem(tab.getPosition(),false);
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
     }
 }

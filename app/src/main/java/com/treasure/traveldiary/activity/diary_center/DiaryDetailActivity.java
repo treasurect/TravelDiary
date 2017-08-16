@@ -180,7 +180,7 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
                             user_desc.setText(diaryBean.getUser_desc());
                         }
                         if (!Tools.isNull(String.valueOf(diaryBean.getDiary_type()))){
-                            if (diaryBean.getDiary_type() == 1) {
+                            if (diaryBean.getDiary_type().equals("1")) {
                                 if (diaryBean.getDiary_image().size() == 1) {
                                     image1.setVisibility(View.VISIBLE);
                                     image1.setImageURI(Uri.parse(diaryBean.getDiary_image().get(0).toString()));
@@ -194,7 +194,7 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
                                     image002.setImageURI(Uri.parse(diaryBean.getDiary_image().get(1).toString()));
                                     image003.setImageURI(Uri.parse(diaryBean.getDiary_image().get(2).toString()));
                                 }
-                            } else if (diaryBean.getDiary_type() == 2) {
+                            } else if (diaryBean.getDiary_type().equals("2")) {
                                 video_layout.setVisibility(View.VISIBLE);
                                 video_first.setImageURI(Uri.parse(diaryBean.getDiary_video_first()));
                                 new Thread(new Runnable() {
@@ -384,9 +384,9 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
                 if (e == null) {
                      objectId = list.get(0).getObjectId();
                     List<LeaveMesBean> leaveMesList3 = list.get(0).getMesBeanList();
-                    int diary_type = list.get(0).getDiary_type();
-                    float user_lat = list.get(0).getUser_lat();
-                    float user_long = list.get(0).getUser_long();
+                    String diary_type = list.get(0).getDiary_type();
+                    String user_lat = list.get(0).getUser_lat();
+                    String user_long = list.get(0).getUser_long();
                     saveLeaveMes(objectId, leaveMesList3,diary_type,user_lat,user_long);
                 } else {
                     Toast.makeText(DiaryDetailActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -396,7 +396,7 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
 
     }
 
-    private void saveLeaveMes(final String objectId, List<LeaveMesBean> leaveMesList4, int diary_type, float user_lat, float user_long)  {
+    private void saveLeaveMes(final String objectId, List<LeaveMesBean> leaveMesList4, String diary_type, String user_lat, String user_long)  {
         LeaveMesBean bean = new LeaveMesBean();
         bean.setLeave_content(editLeaveMes.getText().toString().trim());
         bean.setLeave_icon(mPreferences.getString("user_icon", ""));

@@ -17,7 +17,6 @@
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="300dp"
-
             android:fitsSystemWindows="true">
 
             <android.support.design.widget.CollapsingToolbarLayout
@@ -35,7 +34,16 @@
                         android:id="@+id/traveller_circle_user_bg"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:scaleType="fitXY"
                         fresco:placeholderImage="@mipmap/pic_page_loading" />
+
+                    <ImageView
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:layout_gravity="bottom"
+                        android:layout_margin="10dp"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/ic_camera_scan2" />
 
                     <com.facebook.drawee.view.SimpleDraweeView
                         android:id="@+id/traveller_circle_user_icon"
@@ -73,7 +81,8 @@
                             android:gravity="center"
                             android:text="驴友圈"
                             android:textColor="@color/colorWhite"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                         <ImageView
                             android:id="@+id/traveller_circle_settings"
@@ -94,10 +103,16 @@
             android:layout_marginRight="10dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="wrap_content">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp">
+
+                    <include layout="@layout/common_nodata_view" />
+                </FrameLayout>
 
                 <com.treasure.traveldiary.widget.CustomScrollListView
                     android:id="@+id/traveller_circle_listView"
@@ -106,7 +121,7 @@
                     android:divider="@color/colorWhite"
                     android:dividerHeight="1dp"
                     android:fadingEdge="none" />
-            </LinearLayout>
+            </FrameLayout>
         </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>
 

@@ -10,6 +10,7 @@ public class PushBean extends BmobObject{
     private String title;
     private String message;
     private String time;
+    private String user_name;
 
     public String getTitle() {
         return title;
@@ -33,5 +34,13 @@ public class PushBean extends BmobObject{
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 }

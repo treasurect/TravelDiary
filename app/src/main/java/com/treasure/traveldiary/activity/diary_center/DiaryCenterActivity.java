@@ -11,8 +11,10 @@ import com.treasure.traveldiary.fragments.BaseFragment;
 import com.treasure.traveldiary.fragments.MineDiaryAllFragment;
 import com.treasure.traveldiary.fragments.MineDiaryImageFragment;
 import com.treasure.traveldiary.fragments.MineDiaryTextFragment;
+import com.treasure.traveldiary.fragments.MineDiaryTimerShaftFragment;
 import com.treasure.traveldiary.fragments.MineDiaryVideoFragment;
 import com.treasure.traveldiary.fragments.MineEvaluatedFragment;
+import com.treasure.traveldiary.fragments.SmallGameFragment;
 import com.treasure.traveldiary.utils.Tools;
 
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public class DiaryCenterActivity extends BaseActivity implements TabLayout.OnTab
         initViewPager();
         //联动
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        viewPager.setCurrentItem(0, false);
+        viewPager.setCurrentItem(1, false);
     }
     private void initFindId() {
         tabLayout = (TabLayout) findViewById(R.id.diary_center_tabLayout);
@@ -44,22 +46,24 @@ public class DiaryCenterActivity extends BaseActivity implements TabLayout.OnTab
     }
 
     private void initTabLayout() {
+        tabLayout.addTab(tabLayout.newTab().setText("时间轴"));
         tabLayout.addTab(tabLayout.newTab().setText("全部"));
         tabLayout.addTab(tabLayout.newTab().setText("图片"));
         tabLayout.addTab(tabLayout.newTab().setText("日记"));
         tabLayout.addTab(tabLayout.newTab().setText("短视频"));
         tabLayout.addTab(tabLayout.newTab().setText("点评/吐槽"));
-//        tabLayout.addTab(tabLayout.newTab().setText("小游戏"));
+        tabLayout.addTab(tabLayout.newTab().setText("小游戏"));
     }
 
     private void initViewPager() {
         List<BaseFragment> list = new ArrayList<>();
+        list.add(new MineDiaryTimerShaftFragment());
         list.add(new MineDiaryAllFragment());
         list.add(new MineDiaryImageFragment());
         list.add(new MineDiaryTextFragment());
         list.add(new MineDiaryVideoFragment());
         list.add(new MineEvaluatedFragment());
-//        list.add(new SmallGameFragment());
+        list.add(new SmallGameFragment());
         HomeFragmentPagerAdapter pagerAdapter = new HomeFragmentPagerAdapter(getSupportFragmentManager(), list);
         viewPager.setAdapter(pagerAdapter);
     }

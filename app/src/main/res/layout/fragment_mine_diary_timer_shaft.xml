@@ -1,0 +1,23 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.treasure.traveldiary.fragments.MineDiaryTimerShaftFragment">
+    <include layout="@layout/common_nodata_view" />
+    <TextView
+        android:id="@+id/timer_shaft_nodata_text"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:text="没有数据？！  向下刷新试试||"
+        android:textColor="@color/colorOrange"
+        android:gravity="center"/>
+    <ListView
+        android:id="@+id/mine_diary_timer_shaft_listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/colorFull"
+        android:dividerHeight="0dp"
+        android:scrollbars="none" />
+
+    <include layout="@layout/common_loading_view" />
+</FrameLayout>

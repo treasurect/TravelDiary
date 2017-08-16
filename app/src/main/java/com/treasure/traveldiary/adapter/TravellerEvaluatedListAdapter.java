@@ -83,31 +83,31 @@ public class TravellerEvaluatedListAdapter extends BaseAdapter{
                 viewHolder.addr.setText(evaluatedBean.getUser_addr());
             }
             if (!Tools.isNull(String.valueOf(evaluatedBean.getStar_num()))){
-                if (evaluatedBean.getStar_num() == 1){
+                if (evaluatedBean.getStar_num().equals("1")){
                     viewHolder.star1.setImageResource(R.mipmap.ic_star_click);
                     viewHolder.star2.setImageResource(R.mipmap.ic_star_unclick);
                     viewHolder.star3.setImageResource(R.mipmap.ic_star_unclick);
                     viewHolder.star4.setImageResource(R.mipmap.ic_star_unclick);
                     viewHolder.star5.setImageResource(R.mipmap.ic_star_unclick);
-                }else if (evaluatedBean.getStar_num() == 2){
+                }else if (evaluatedBean.getStar_num().equals("2")){
                     viewHolder.star1.setImageResource(R.mipmap.ic_star_click);
                     viewHolder.star2.setImageResource(R.mipmap.ic_star_click);
                     viewHolder.star3.setImageResource(R.mipmap.ic_star_unclick);
                     viewHolder.star4.setImageResource(R.mipmap.ic_star_unclick);
                     viewHolder.star5.setImageResource(R.mipmap.ic_star_unclick);
-                }else if (evaluatedBean.getStar_num() == 3){
+                }else if (evaluatedBean.getStar_num().equals("3")){
                     viewHolder.star1.setImageResource(R.mipmap.ic_star_click);
                     viewHolder.star2.setImageResource(R.mipmap.ic_star_click);
                     viewHolder.star3.setImageResource(R.mipmap.ic_star_click);
                     viewHolder.star4.setImageResource(R.mipmap.ic_star_unclick);
                     viewHolder.star5.setImageResource(R.mipmap.ic_star_unclick);
-                }else if (evaluatedBean.getStar_num() == 4){
+                }else if (evaluatedBean.getStar_num().equals("4")){
                     viewHolder.star1.setImageResource(R.mipmap.ic_star_click);
                     viewHolder.star2.setImageResource(R.mipmap.ic_star_click);
                     viewHolder.star3.setImageResource(R.mipmap.ic_star_click);
                     viewHolder.star4.setImageResource(R.mipmap.ic_star_click);
                     viewHolder.star5.setImageResource(R.mipmap.ic_star_unclick);
-                }else if (evaluatedBean.getStar_num() == 5){
+                }else if (evaluatedBean.getStar_num().equals("5")){
                     viewHolder.star1.setImageResource(R.mipmap.ic_star_click);
                     viewHolder.star2.setImageResource(R.mipmap.ic_star_click);
                     viewHolder.star3.setImageResource(R.mipmap.ic_star_click);

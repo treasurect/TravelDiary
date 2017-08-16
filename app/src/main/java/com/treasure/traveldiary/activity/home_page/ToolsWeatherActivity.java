@@ -172,14 +172,14 @@ public class ToolsWeatherActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.traveller_circle_return:
+            case R.id.tools_weather_return:
                 ToolsWeatherActivity.this.finish();
                 break;
-            case R.id.traveller_circle_settings:
+            case R.id.tools_weather_cityList:
                 startActivityForResult(new Intent(ToolsWeatherActivity.this,ToolsWeatherListActivity.class),201);
                 break;
-            case R.id.traveller_circle_refresh:
-                Tools.setAnimation(refresh,0,0,0,1,0,-720,1,1,2000);
+            case R.id.tools_weather_refresh:
+                Tools.setAnimation(refresh,0,0,1,1,0,-720,1,1,2000);
                 getWeatherDetail(StringContents.SMSSDK_APPKEY,city,province);
                 Toast.makeText(this, "最新数据已更新", Toast.LENGTH_SHORT).show();
                 break;
@@ -189,7 +189,7 @@ public class ToolsWeatherActivity extends BaseActivity implements View.OnClickLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 201 && resultCode == 201){
+        if (requestCode == 201 && resultCode == RESULT_OK){
             province = data.getStringExtra("province");
             city = data.getStringExtra("city");
             getWeatherDetail(StringContents.SMSSDK_APPKEY, city, province);

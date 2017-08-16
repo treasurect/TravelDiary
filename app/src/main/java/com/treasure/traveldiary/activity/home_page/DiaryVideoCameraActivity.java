@@ -15,10 +15,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
-import com.treasure.traveldiary.utils.LogUtil;
 
 import java.io.File;
 
@@ -28,7 +28,7 @@ public class DiaryVideoCameraActivity extends BaseActivity implements SurfaceHol
     private Camera mCamera;
     private boolean mIsSurfaceCreated = false;
     private int CAMERA_ID = 0; //后置摄像头
-    private ImageView scan_btn,scan2_btn;
+    private ImageView scan_btn, scan2_btn;
     private MediaRecorder mMediaRecorder;
     private CamcorderProfile mProfile;
     private ImageView btnSave;
@@ -37,13 +37,13 @@ public class DiaryVideoCameraActivity extends BaseActivity implements SurfaceHol
     private Thread thread;
     private boolean isPageDestory;
     private int count;
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 200:
-                    textCountTimer.setText(count+"");
+                    textCountTimer.setText(count + "");
                     if (count == 0) {
                         stopVideoRecoding();
                     }
@@ -67,7 +67,7 @@ public class DiaryVideoCameraActivity extends BaseActivity implements SurfaceHol
             mHolder.addCallback(this);
             mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         } catch (Exception e) {
-            LogUtil.e("~~~~~~~~~~~~~~~~~~~~", e.getMessage());
+            Toast.makeText(this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -105,10 +105,10 @@ public class DiaryVideoCameraActivity extends BaseActivity implements SurfaceHol
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.diary_video_camera_scan:
-                    startVideoRecoding();
+                startVideoRecoding();
                 break;
             case R.id.diary_video_camera_scan2:
-                    stopVideoRecoding();
+                stopVideoRecoding();
                 break;
             case R.id.diary_video_camera_save:
                 scan_btn.setClickable(true);
@@ -128,12 +128,12 @@ public class DiaryVideoCameraActivity extends BaseActivity implements SurfaceHol
 
     private void startVideoRecoding() {
         mCamera.unlock();
-//        try {
-//            mProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
-//        }catch (Exception e){
-//            Toast.makeText(this, "您的设备支持的像素过低，特为您选择低画质录制", Toast.LENGTH_SHORT).show();
-            mProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_LOW);
-//        }
+        try {
+            mProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_CIF);
+        }catch (Exception e){
+            Toast.makeText(this, "您的设备支持的像素过低，特为您选择低画质录制", Toast.LENGTH_SHORT).show();
+        mProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_QVGA);
+        }
         File file = new File(getExternalFilesDir(null).getAbsolutePath() + "/diary_video.mp4");
         try {
             if (!file.exists()) {
@@ -168,7 +168,7 @@ public class DiaryVideoCameraActivity extends BaseActivity implements SurfaceHol
         }
     }
 
-    private void stopVideoRecoding() {
+        private void stopVideoRecoding() {
         try {
             mMediaRecorder.stop();
             mMediaRecorder.reset();
@@ -186,7 +186,7 @@ public class DiaryVideoCameraActivity extends BaseActivity implements SurfaceHol
 
     private void openTimer() {
         count = 10;
-        textCountTimer.setText(count+"");
+        textCountTimer.setText(count + "");
         if (thread == null) {
             thread = new Thread(new Runnable() {
                 @Override
@@ -194,8 +194,8 @@ public class DiaryVideoCameraActivity extends BaseActivity implements SurfaceHol
                     try {
                         for (int i = 0; i < 10; i++) {
                             Thread.sleep(1000);
-                            if (!isPageDestory){
-                                count --;
+                            if (!isPageDestory) {
+                                count--;
                                 handler.sendMessage(handler.obtainMessage(200));
                             }
                         }
@@ -242,7 +242,7 @@ public class DiaryVideoCameraActivity extends BaseActivity implements SurfaceHol
             mCamera.setPreviewDisplay(mHolder);
             mCamera.startPreview();
         } catch (Exception e) {
-            LogUtil.e("~~~~~~~~~~~~~~~~~", e.getMessage());
+            Toast.makeText(this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -256,7 +256,7 @@ public class DiaryVideoCameraActivity extends BaseActivity implements SurfaceHol
                 mCamera.release();
                 mCamera = null;
             } catch (Exception e) {
-                LogUtil.e("~~~~~~~~~~~~~~~~~", e.getMessage());
+                Toast.makeText(this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
     }

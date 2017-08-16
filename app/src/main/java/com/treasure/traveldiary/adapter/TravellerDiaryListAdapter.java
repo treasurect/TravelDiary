@@ -1,8 +1,7 @@
 package com.treasure.traveldiary.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.media.MediaMetadataRetriever;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +16,7 @@ import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.bean.DiaryBean;
 import com.treasure.traveldiary.utils.Tools;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,11 +27,14 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
     private Context context;
     private List<DiaryBean> list;
     private LayoutInflater inflater;
+    private SharedPreferences mPreferences;
+    private boolean isClickLike;
 
     public TravellerDiaryListAdapter(Context context, List<DiaryBean> list) {
         this.context = context;
         this.list = list;
         inflater = LayoutInflater.from(context);
+        mPreferences = context.getSharedPreferences("user",Context.MODE_PRIVATE);
     }
 
     @Override
@@ -55,9 +58,9 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (list.get(position).getDiary_type() == 0) {
+        if (list.get(position).getDiary_type().equals("0")) {
             return 0;
-        } else if (list.get(position).getDiary_type() == 1) {
+        } else if (list.get(position).getDiary_type().equals("1")) {
             if (list.get(position).getDiary_image().size() == 1) {
                 return 1;
             } else if (list.get(position).getDiary_image().size() == 2) {
@@ -124,7 +127,21 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
                 holder.state_text.setText("私密");
             }
         }
-        if (listBean.getDiary_type() == 1) {
+        if (listBean.getLikeBean() != null){
+            holder.like_num.setText((listBean.getLikeBean().size() - 1)+"");
+            for (int i = 0; i < listBean.getLikeBean().size(); i++) {
+                if (listBean.getLikeBean().get(i).equals(mPreferences.getString("user_name",""))){
+                    isClickLike = true;
+                }
+            }
+            if (isClickLike){
+                holder.like_img.setImageResource(R.mipmap.ic_like_click);
+                isClickLike = false;
+            }else {
+                holder.like_img.setImageResource(R.mipmap.ic_like_unclick);
+            }
+        }
+        if (listBean.getDiary_type().equals("1")) {
             if (listBean.getDiary_image() != null) {
                 if (listBean.getDiary_image().size() == 1) {
                     holder.image1.setImageURI(Uri.parse(listBean.getDiary_image().get(0).toString()));
@@ -138,7 +155,7 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
                 }
             }
         }
-        if (listBean.getDiary_type() == 2) {
+        if (listBean.getDiary_type().equals("2")) {
             if (!Tools.isNull(listBean.getDiary_video_first())) {
                 holder.video_image.setImageURI(Uri.parse(listBean.getDiary_video_first()));
             }
@@ -146,13 +163,21 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
         holder.text_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                diaryTextClick.textClick(listBean);
+                diaryTextClick.layoutClick(listBean);
+            }
+        });
+        holder.like_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                diaryTextClick.likeClick(listBean);
             }
         });
         return ret;
     }
 
     public static class ViewHolder {
+        private ImageView like_img;
+        private TextView like_num;
         private SimpleDraweeView video_image;
         private SimpleDraweeView image1, image2, image3;
         private SimpleDraweeView user_icon;
@@ -174,11 +199,14 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
             video_image = (SimpleDraweeView) view.findViewById(R.id.diary_list_video);
             state_text = (TextView)view.findViewById(R.id.diary_list_state_text);
             state_img = (ImageView) view.findViewById(R.id.diary_list_state_img);
+            like_img = (ImageView) view.findViewById(R.id.diary_list_like_img);
+            like_num = (TextView) view.findViewById(R.id.diary_list_like_num);
         }
     }
 
     public interface DiaryTextClick {
-        void textClick(DiaryBean diaryBean);
+        void layoutClick(DiaryBean diaryBean);
+        void likeClick(DiaryBean diaryBean);
     }
 
     public DiaryTextClick diaryTextClick = null;

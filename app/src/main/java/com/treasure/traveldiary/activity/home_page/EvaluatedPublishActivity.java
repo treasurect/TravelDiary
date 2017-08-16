@@ -73,8 +73,8 @@ public class EvaluatedPublishActivity extends BaseActivity implements View.OnCli
     private ImageView star1, star2, star3, star4, star5;
     private EditText star_edit;
     private TextView nearby_loc;
-    private int starNum = 0;
-    private SharedPreferences preferences;
+    private String starNum = "0";
+    private SharedPreferences mPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +84,7 @@ public class EvaluatedPublishActivity extends BaseActivity implements View.OnCli
         Tools.setTranslucentStatus(this);
         btn_back.setVisibility(View.VISIBLE);
         title.setText("景区选择");
-        preferences = getSharedPreferences("user", MODE_PRIVATE);
+        mPreferences = getSharedPreferences("user", MODE_PRIVATE);
 
         initFindId();
         receiverIntent();
@@ -152,7 +152,7 @@ public class EvaluatedPublishActivity extends BaseActivity implements View.OnCli
                 Tools.setAnimation(star1, 0, 0, 1, 1, 0, 0, 2f, 1f, 1000);
                 star_text.setText("很差");
                 star_text.setTextColor(getResources().getColor(R.color.colorOrange));
-                starNum = 1;
+                starNum = "1";
                 break;
             case R.id.signin_nearby_star2:
                 initStar();
@@ -162,7 +162,7 @@ public class EvaluatedPublishActivity extends BaseActivity implements View.OnCli
                 Tools.setAnimation(star2, 0, 0, 1, 1, 0, 0, 2f, 1f, 1000);
                 star_text.setText("一般");
                 star_text.setTextColor(getResources().getColor(R.color.colorOrange));
-                starNum = 2;
+                starNum = "2";
                 break;
             case R.id.signin_nearby_star3:
                 initStar();
@@ -174,7 +174,7 @@ public class EvaluatedPublishActivity extends BaseActivity implements View.OnCli
                 Tools.setAnimation(star3, 0, 0, 1, 1, 0, 0, 2f, 1f, 1000);
                 star_text.setText("还行");
                 star_text.setTextColor(getResources().getColor(R.color.colorOrange));
-                starNum = 3;
+                starNum = "3";
                 break;
             case R.id.signin_nearby_star4:
                 initStar();
@@ -188,7 +188,7 @@ public class EvaluatedPublishActivity extends BaseActivity implements View.OnCli
                 Tools.setAnimation(star4, 0, 0, 1, 1, 0, 0, 2f, 1f, 1000);
                 star_text.setText("推荐");
                 star_text.setTextColor(getResources().getColor(R.color.colorOrange));
-                starNum = 4;
+                starNum = "4";
                 break;
             case R.id.signin_nearby_star5:
                 star1.setImageResource(R.mipmap.ic_star_click);
@@ -203,7 +203,7 @@ public class EvaluatedPublishActivity extends BaseActivity implements View.OnCli
                 Tools.setAnimation(star5, 0, 0, 1, 1, 0, 0, 2f, 1f, 1000);
                 star_text.setText("怒赞");
                 star_text.setTextColor(getResources().getColor(R.color.colorOrange));
-                starNum = 5;
+                starNum = "5";
                 break;
             case R.id.btn_send:
                 sendEvaluated();
@@ -243,7 +243,7 @@ public class EvaluatedPublishActivity extends BaseActivity implements View.OnCli
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        if (!Tools.isNull(star_edit.getText().toString().trim()) && starNum > 0) {
+        if (!Tools.isNull(star_edit.getText().toString().trim()) && !starNum.equals("0")) {
             btn_send.setTextColor(getResources().getColor(R.color.colorWhite));
             btn_send.setClickable(true);
         }
@@ -268,28 +268,28 @@ public class EvaluatedPublishActivity extends BaseActivity implements View.OnCli
 
     private void sendEvaluated() {
         EvaluatedBean bean = new EvaluatedBean();
-        bean.setUser_name(preferences.getString("user_name",""));
-        bean.setUser_nick(preferences.getString("user_nick",""));
-        bean.setUser_icon(preferences.getString("user_icon",""));
+        bean.setUser_name(mPreferences.getString("user_name", ""));
+        bean.setUser_nick(mPreferences.getString("user_nick", ""));
+        bean.setUser_icon(mPreferences.getString("user_icon", ""));
         bean.setUser_addr(user_addr);
-        String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Long(System.currentTimeMillis()));
-        bean.setPublish_time(time.substring(5,7)+"月"+time.substring(8,10)+"日"+time.substring(11,16));
+        String nowTime = Tools.getNowTime();
+        bean.setPublish_time(nowTime);
         bean.setStar_num(starNum);
         bean.setUser_evaluated(star_edit.getText().toString().trim());
         //生成一个空的数据占位，以方便更新
         LeaveMesBean leaveMesBean = new LeaveMesBean();
-        leaveMesBean.setLeave_name(preferences.getString("user_name", ""));
+        leaveMesBean.setLeave_name(mPreferences.getString("user_name", ""));
         List<LeaveMesBean> leaveMesBeen = new ArrayList<>();
         leaveMesBeen.add(leaveMesBean);
         bean.setMesBeanList(leaveMesBeen);
         bean.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {
-                if (e==null){
+                if (e == null) {
                     Toast.makeText(EvaluatedPublishActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
                     EvaluatedPublishActivity.this.finish();
-                }else {
-                    Toast.makeText(EvaluatedPublishActivity.this, "失败原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(EvaluatedPublishActivity.this, "失败原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });

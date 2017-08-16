@@ -3,6 +3,8 @@ package com.treasure.traveldiary.activity.user_center;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -23,6 +25,8 @@ public class UserFeedBckHistoryActivity extends BaseActivity implements View.OnC
     private ListView listView;
     private List<String> list;
     private ArrayAdapter adapter;
+    private FrameLayout loading;
+    private LinearLayout nodata;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,8 @@ public class UserFeedBckHistoryActivity extends BaseActivity implements View.OnC
 
     private void initFindId() {
         listView = (ListView) findViewById(R.id.mine_history_feedBack_listView);
+        loading = (FrameLayout) findViewById(R.id.loading_layout);
+        nodata = (LinearLayout) findViewById(R.id.no_data_layout);
     }
 
     private void initListView() {
@@ -63,20 +69,24 @@ public class UserFeedBckHistoryActivity extends BaseActivity implements View.OnC
     }
 
     private void getFeedBackList() {
+        loading.setVisibility(View.VISIBLE);
         BmobQuery<FeedBackBean> query = new BmobQuery<>();
-        query.addWhereEqualTo("user_name",getSharedPreferences("user",MODE_PRIVATE).getString("user_name",""));
-        query.findObjects(new FindListener<FeedBackBean>() {
+        query.addWhereEqualTo("user_name",getSharedPreferences("user",MODE_PRIVATE).getString("user_name",""))
+        .findObjects(new FindListener<FeedBackBean>() {
             @Override
             public void done(List<FeedBackBean> list1, BmobException e) {
                 if (e == null){
-                    if (list1 != null){
                         for (int i = 0; i < list1.size(); i++) {
                             list.add(list1.get(i).getUser_content());
                         }
                         adapter.notifyDataSetChanged();
+                    loading.setVisibility(View.GONE);
+                    if (list1.size() == 0){
+                        nodata.setVisibility(View.VISIBLE);
                     }
                 }else {
                     Toast.makeText(UserFeedBckHistoryActivity.this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    loading.setVisibility(View.GONE);
                 }
             }
         });

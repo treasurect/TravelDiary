@@ -14,7 +14,7 @@ public class EvaluatedBean extends BmobObject{
     private String user_icon;
     private String publish_time;
     private String user_addr;
-    private int star_num;
+    private String star_num;
     private String user_evaluated;
     private List<LeaveMesBean> mesBeanList;
 
@@ -50,11 +50,11 @@ public class EvaluatedBean extends BmobObject{
         this.user_addr = user_addr;
     }
 
-    public int getStar_num() {
+    public String getStar_num() {
         return star_num;
     }
 
-    public void setStar_num(int star_num) {
+    public void setStar_num(String star_num) {
         this.star_num = star_num;
     }
 

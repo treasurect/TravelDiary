@@ -169,7 +169,7 @@ public class ToolsWeatherListActivity extends BaseActivity implements AdapterVie
                 Intent intent = new Intent();
                 intent.putExtra("province",province);
                 intent.putExtra("city",city_list.get(position));
-                setResult(201,intent);
+                setResult(RESULT_OK,intent);
                 ToolsWeatherListActivity.this.finish();
                 break;
         }

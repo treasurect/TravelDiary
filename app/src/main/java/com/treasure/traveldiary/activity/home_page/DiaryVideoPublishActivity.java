@@ -25,7 +25,7 @@ import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.bean.DiaryBean;
 import com.treasure.traveldiary.bean.LeaveMesBean;
-import com.treasure.traveldiary.utils.LogUtil;
+import com.treasure.traveldiary.bean.UserInfoBean;
 import com.treasure.traveldiary.utils.Tools;
 
 import java.io.IOException;
@@ -33,14 +33,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadBatchListener;
 
 public class DiaryVideoPublishActivity extends BaseActivity implements View.OnClickListener, TextWatcher, SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, AdapterView.OnItemSelectedListener {
     private String user_addr;
-    private float user_lat, user_long;
+    private String user_lat, user_long;
     private EditText diaryDesc, diaryTitle;
     private TextView diaryLoc, surfacePlay;
     private SurfaceView surfaceView;
@@ -96,10 +99,10 @@ public class DiaryVideoPublishActivity extends BaseActivity implements View.OnCl
             diaryLoc.setText(user_addr);
         }
         if (!Tools.isNull(intent.getStringExtra("user_lat"))) {
-            user_lat = Float.parseFloat(intent.getStringExtra("user_lat"));
+            user_lat = intent.getStringExtra("user_lat");
         }
         if (!Tools.isNull(intent.getStringExtra("user_long"))) {
-            user_long = Float.parseFloat(intent.getStringExtra("user_long"));
+            user_long = intent.getStringExtra("user_long");
         }
     }
 
@@ -211,7 +214,6 @@ public class DiaryVideoPublishActivity extends BaseActivity implements View.OnCl
             @Override
             public void onSuccess(List<BmobFile> list, List<String> list1) {
                 if (list1.size() == path.length) {
-                    LogUtil.d("~~~~~~~~~~~~~~~~~~~~`" + list1.get(0).contains("mp4") + "........" + list1.get(1).contains("mp4"));
                     if (list1.get(0).contains("mp4")) {
                         sendDiary(list1.get(0), list1.get(1));
                     } else {
@@ -233,6 +235,28 @@ public class DiaryVideoPublishActivity extends BaseActivity implements View.OnCl
     }
 
     private void sendDiary(String fileUrl, String imageUrl) {
+        final String nowTime = Tools.getNowTime();
+        //保存时间轴
+        BmobQuery<UserInfoBean> query = new BmobQuery<>();
+        query.addWhereEqualTo("user_name",mPreferences.getString("user_name",""))
+                .findObjects(new FindListener<UserInfoBean>() {
+                    @Override
+                    public void done(List<UserInfoBean> list, BmobException e) {
+                        if (e == null){
+                            String objectId = list.get(0).getObjectId();
+                            List<String> timer_shaft = list.get(0).getTimer_shaft();
+                            UserInfoBean userInfoBean = new UserInfoBean();
+                            timer_shaft.add(nowTime);
+                            userInfoBean.setTimer_shaft(timer_shaft);
+                            userInfoBean.update(objectId, new UpdateListener() {
+                                @Override
+                                public void done(BmobException e) {
+
+                                }
+                            });
+                        }
+                    }
+                });
         String textDesc = diaryDesc.getText().toString().trim();
         String textTitle = diaryTitle.getText().toString().trim();
         DiaryBean diaryBean = new DiaryBean();
@@ -242,10 +266,9 @@ public class DiaryVideoPublishActivity extends BaseActivity implements View.OnCl
         diaryBean.setUser_addr(user_addr);
         diaryBean.setUser_lat(user_lat);
         diaryBean.setUser_long(user_long);
-        diaryBean.setDiary_type(2);
+        diaryBean.setDiary_type("2");
         diaryBean.setState(video_state);
-        String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Long(System.currentTimeMillis()));
-        diaryBean.setPublish_time(time.substring(5, 7) + "月" + time.substring(8, 10) + "日" + time.substring(11, 16));
+        diaryBean.setPublish_time(nowTime);
         diaryBean.setUser_desc(textDesc);
         diaryBean.setUser_title(textTitle);
         diaryBean.setDiary_video(fileUrl);
@@ -256,6 +279,10 @@ public class DiaryVideoPublishActivity extends BaseActivity implements View.OnCl
         List<LeaveMesBean> leaveMesBeen = new ArrayList<>();
         leaveMesBeen.add(leaveMesBean);
         diaryBean.setMesBeanList(leaveMesBeen);
+        //生成一个空的数据占位，以方便更新
+        List<String> list = new ArrayList<>();
+        list.add("0");
+        diaryBean.setLikeBean(list);
         diaryBean.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {

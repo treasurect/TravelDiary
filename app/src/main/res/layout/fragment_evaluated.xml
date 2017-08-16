@@ -7,6 +7,14 @@
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     tools:context=".activity.diary_center.DiaryCenterActivity">
+    <include layout="@layout/common_nodata_view" />
+    <TextView
+        android:id="@+id/evaluated_list_nodata_text"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:text="没有数据？！  向下刷新试试||"
+        android:textColor="@color/colorOrange"
+        android:gravity="center"/>
     <com.treasure.traveldiary.widget.CustomRefreshListView
         android:id="@+id/evaluated_listView"
         android:layout_width="match_parent"

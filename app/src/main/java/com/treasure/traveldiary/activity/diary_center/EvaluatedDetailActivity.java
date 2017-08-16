@@ -148,27 +148,27 @@ public class EvaluatedDetailActivity extends BaseActivity implements View.OnClic
                         if (!Tools.isNull(evaluatedBean.getUser_addr())){
                             addr.setText(evaluatedBean.getUser_addr());
                         }
-                        int star_num = evaluatedBean.getStar_num();
+                        String star_num = evaluatedBean.getStar_num();
                         if (!Tools.isNull(String.valueOf(star_num))){
-                            if (star_num == 1){
+                            if (star_num.equals("1")){
                                 star1.setImageResource(R.mipmap.ic_star_click);
                             }
-                            if (star_num == 2){
+                            if (star_num.equals("2")){
                                 star1.setImageResource(R.mipmap.ic_star_click);
                                 star2.setImageResource(R.mipmap.ic_star_click);
                             }
-                            if (star_num == 3){
+                            if (star_num.equals("3")){
                                 star1.setImageResource(R.mipmap.ic_star_click);
                                 star2.setImageResource(R.mipmap.ic_star_click);
                                 star3.setImageResource(R.mipmap.ic_star_click);
                             }
-                            if (star_num == 4){
+                            if (star_num.equals("4")){
                                 star1.setImageResource(R.mipmap.ic_star_click);
                                 star2.setImageResource(R.mipmap.ic_star_click);
                                 star3.setImageResource(R.mipmap.ic_star_click);
                                 star4.setImageResource(R.mipmap.ic_star_click);
                             }
-                            if (star_num == 5){
+                            if (star_num.equals("5")){
                                 star1.setImageResource(R.mipmap.ic_star_click);
                                 star2.setImageResource(R.mipmap.ic_star_click);
                                 star3.setImageResource(R.mipmap.ic_star_click);
@@ -299,7 +299,7 @@ public class EvaluatedDetailActivity extends BaseActivity implements View.OnClic
                 if (e == null) {
                     objectId = list.get(0).getObjectId();
                     List<LeaveMesBean> leaveMesList3 = list.get(0).getMesBeanList();
-                    int star_num = list.get(0).getStar_num();
+                    String star_num = list.get(0).getStar_num();
                     saveLeaveMes(objectId, leaveMesList3,star_num);
                 } else {
                     Toast.makeText(EvaluatedDetailActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -309,7 +309,7 @@ public class EvaluatedDetailActivity extends BaseActivity implements View.OnClic
 
     }
 
-    private void saveLeaveMes(final String objectId, List<LeaveMesBean> leaveMesList4, int star_num)  {
+    private void saveLeaveMes(final String objectId, List<LeaveMesBean> leaveMesList4, String star_num)  {
         LeaveMesBean bean = new LeaveMesBean();
         bean.setLeave_content(editLeaveMes.getText().toString().trim());
         bean.setLeave_icon(mPreferences.getString("user_icon", ""));

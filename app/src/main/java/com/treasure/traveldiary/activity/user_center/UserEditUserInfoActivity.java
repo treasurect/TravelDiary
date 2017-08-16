@@ -48,7 +48,7 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
     private RadioButton sex_man;
     private RadioButton sex_woman;
     private TextView btnEnter;
-    private int sex;
+    private String sex;
     /**
      * 大陆手机号码11位数，匹配格式：前三位固定格式+后8位任意数
      * 此方法中前三位格式有：
@@ -201,28 +201,33 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
             @Override
             public void done(List<UserInfoBean> object, BmobException e) {
                 if (e == null) {
-                    for (UserInfoBean gameScore : object) {
-                        toUpdate(gameScore.getObjectId());
+                    if (object != null){
+                        String objectId = object.get(0).getObjectId();
+                        String integral_count = object.get(0).getIntegral_count();
+                        String traveller_circle_bg = object.get(0).getTraveller_circle_bg();
+                        toUpdate(objectId,integral_count,traveller_circle_bg);
                     }
                 }
             }
         });
     }
 
-    private void toUpdate(String objectId) {
+    private void toUpdate(String objectId, String integral_count, String traveller_circle_bg) {
         if (sex_man.isChecked()) {
-            sex = 0;
+            sex = "男";
         } else if (sex_woman.isChecked()) {
-            sex = 1;
+            sex = "女";
         }
         final UserInfoBean infoBean = new UserInfoBean();
         infoBean.setUser_name(editPhone.getText().toString().trim());
         infoBean.setNick_name(editNick.getText().toString().trim() + "");
         infoBean.setUser_pwd(editPwd.getText().toString().trim());
-        infoBean.setAge(Integer.parseInt(editAge.getText().toString().trim()));
+        infoBean.setAge(editAge.getText().toString().trim());
         infoBean.setSex(sex);
         infoBean.setUser_desc(editDesc.getText().toString().trim() + "");
         infoBean.setUser_icon(mFileUrl);
+        infoBean.setTraveller_circle_bg(traveller_circle_bg);
+        infoBean.setIntegral_count(integral_count);
         infoBean.update(objectId, new UpdateListener() {
             @Override
             public void done(BmobException e) {
@@ -239,6 +244,8 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
                     editor.putString("user_age", String.valueOf(infoBean.getAge()));
                     editor.putString("user_sex", String.valueOf(infoBean.getSex()));
                     editor.putString("user_desc", infoBean.getUser_desc());
+                    editor.putString("user_integral", infoBean.getIntegral_count());
+                    editor.putString("traveller_circle_bg",infoBean.getTraveller_circle_bg());
                     editor.apply();
                     //发送登录成功 广播
                     Intent intent = new Intent();
@@ -281,28 +288,27 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
          * 注册
          */
         if (sex_man.isChecked()) {
-            sex = 0;
+            sex = "男";
         } else if (sex_woman.isChecked()) {
-            sex = 1;
+            sex = "女";
         }
+        String nowTime = Tools.getNowTime();
         final UserInfoBean infoBean = new UserInfoBean();
         infoBean.setUser_name(editPhone.getText().toString().trim());
         infoBean.setNick_name(editNick.getText().toString().trim() + "");
         infoBean.setUser_pwd(editPwd.getText().toString().trim());
-        infoBean.setAge(Integer.parseInt(editAge.getText().toString().trim()));
+        infoBean.setAge(editAge.getText().toString().trim());
         infoBean.setSex(sex);
         infoBean.setUser_desc(editDesc.getText().toString().trim() + "");
         infoBean.setUser_icon(mFileUrl);
-        infoBean.setIntegral_count(0);
+        infoBean.setRegister_time(nowTime);
+        infoBean.setIntegral_count("0");
         List<String> list = new ArrayList<>();
-        list.add("0");
+        list.add(nowTime);
         infoBean.setSigning_date(list);
-        LeaveMesBean leaveMesBean = new LeaveMesBean();
-        leaveMesBean.setLeave_name(editPhone.getText().toString().trim());
-        List<LeaveMesBean> leaveMesBeen = new ArrayList<>();
-        leaveMesBeen.add(leaveMesBean);
-        infoBean.setLeaveMesList(leaveMesBeen);
-        infoBean.save(                                                                 new SaveListener<String>() {
+        infoBean.setTimer_shaft(list);
+        infoBean.setTraveller_circle_bg("http://bmob-cdn-13238.b0.upaiyun.com/2017/08/16/2104cdfa5c5c40f59310479a4244429f.png");
+        infoBean.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {
                 if (e == null) {
@@ -318,7 +324,8 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
                     editor.putString("user_age", String.valueOf(infoBean.getAge()));
                     editor.putString("user_sex", String.valueOf(infoBean.getSex()));
                     editor.putString("user_desc", infoBean.getUser_desc());
-                    editor.putInt("user_integral", infoBean.getIntegral_count());
+                    editor.putString("user_integral", infoBean.getIntegral_count());
+                    editor.putString("traveller_circle_bg",infoBean.getTraveller_circle_bg());
                     editor.apply();
                     //发送登录成功 广播
                     Intent intent = new Intent();
@@ -367,22 +374,23 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
                             BmobQuery<UserInfoBean> query = new BmobQuery<>();
                             query.addWhereEqualTo("user_name", userPhone);
                             query.findObjects(new FindListener<UserInfoBean>() {
-
                                 @Override
                                 public void done(List<UserInfoBean> list, BmobException e) {
-                                    mObjectId = list.get(0).getObjectId();
-                                    UserInfoBean userInfoBean = new UserInfoBean();
-                                    userInfoBean.setUser_icon(mFileUrl);
-                                    userInfoBean.update(mObjectId, new UpdateListener() {
-                                        @Override
-                                        public void done(BmobException e) {
-                                            if (e == null) {
-                                                SharedPreferences.Editor editor = getSharedPreferences("user", MODE_PRIVATE).edit();
-                                                editor.putString("user_icon", mFileUrl);
-                                                editor.apply();
+                                    if (e==null){
+                                        mObjectId = list.get(0).getObjectId();
+                                        UserInfoBean userInfoBean = new UserInfoBean();
+                                        userInfoBean.setUser_icon(mFileUrl);
+                                        userInfoBean.update(mObjectId, new UpdateListener() {
+                                            @Override
+                                            public void done(BmobException e) {
+                                                if (e == null) {
+                                                    SharedPreferences.Editor editor = getSharedPreferences("user", MODE_PRIVATE).edit();
+                                                    editor.putString("user_icon", mFileUrl);
+                                                    editor.apply();
+                                                }
                                             }
-                                        }
-                                    });
+                                        });
+                                    }
                                 }
                             });
 

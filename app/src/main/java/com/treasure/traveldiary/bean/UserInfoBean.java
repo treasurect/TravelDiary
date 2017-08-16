@@ -13,12 +13,15 @@ public class UserInfoBean extends BmobObject {
     private String user_icon;
     private String nick_name;
     private String user_pwd;
-    private int sex;//0 男 1女
-    private int age;
+    private String sex;//0 男 1女
+    private String age;
     private String user_desc;
+    private String register_time;
     private List<String> signing_date;
-    private int integral_count;
-    private List<LeaveMesBean> leaveMesList;
+    private String integral_count;
+    private String traveller_circle_bg;
+    private String version_name;
+    private List<String> timer_shaft;
 
     public String getUser_name() {
         return user_name;
@@ -52,19 +55,19 @@ public class UserInfoBean extends BmobObject {
         this.user_pwd = user_pwd;
     }
 
-    public int getSex() {
+    public String getSex() {
         return sex;
     }
 
-    public void setSex(int sex) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 
-    public int getAge() {
+    public String getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(String age) {
         this.age = age;
     }
 
@@ -76,6 +79,14 @@ public class UserInfoBean extends BmobObject {
         this.user_desc = user_desc;
     }
 
+    public String getRegister_time() {
+        return register_time;
+    }
+
+    public void setRegister_time(String register_time) {
+        this.register_time = register_time;
+    }
+
     public List<String> getSigning_date() {
         return signing_date;
     }
@@ -84,19 +95,35 @@ public class UserInfoBean extends BmobObject {
         this.signing_date = signing_date;
     }
 
-    public int getIntegral_count() {
+    public String getIntegral_count() {
         return integral_count;
     }
 
-    public void setIntegral_count(int integral_count) {
+    public void setIntegral_count(String integral_count) {
         this.integral_count = integral_count;
     }
 
-    public List<LeaveMesBean> getLeaveMesList() {
-        return leaveMesList;
+    public String getTraveller_circle_bg() {
+        return traveller_circle_bg;
     }
 
-    public void setLeaveMesList(List<LeaveMesBean> leaveMesList) {
-        this.leaveMesList = leaveMesList;
+    public void setTraveller_circle_bg(String traveller_circle_bg) {
+        this.traveller_circle_bg = traveller_circle_bg;
+    }
+
+    public String getVersion_name() {
+        return version_name;
+    }
+
+    public void setVersion_name(String version_name) {
+        this.version_name = version_name;
+    }
+
+    public List<String> getTimer_shaft() {
+        return timer_shaft;
+    }
+
+    public void setTimer_shaft(List<String> timer_shaft) {
+        this.timer_shaft = timer_shaft;
     }
 }

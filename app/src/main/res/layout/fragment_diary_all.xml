@@ -8,13 +8,21 @@
     android:fitsSystemWindows="true"
     tools:context=".activity.diary_center.DiaryCenterActivity">
 
-        <com.treasure.traveldiary.widget.CustomRefreshListView
-            android:id="@+id/diary_list_all"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@color/colorWhite"
-            android:dividerHeight="0dp"
-            android:scrollbars="none" />
+    <include layout="@layout/common_nodata_view" />
+    <TextView
+        android:id="@+id/diary_list_all_nodata_text"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:text="没有数据？！  向下刷新试试||"
+        android:textColor="@color/colorOrange"
+        android:gravity="center"/>
+    <com.treasure.traveldiary.widget.CustomRefreshListView
+        android:id="@+id/diary_list_all"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/colorWhite"
+        android:dividerHeight="0dp"
+        android:scrollbars="none" />
 
-        <include layout="@layout/common_loading_view"/>
+    <include layout="@layout/common_loading_view" />
 </FrameLayout>

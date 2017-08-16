@@ -15,8 +15,6 @@ import android.support.v4.app.ActivityCompat;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.treasure.traveldiary.utils.LogUtil;
-
 public class WelcomeActivity extends BaseActivity {
     private Handler handler = new Handler();
 

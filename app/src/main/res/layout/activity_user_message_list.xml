@@ -16,5 +16,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="50dp" />
+    <include layout="@layout/common_nodata_view"/>
     <include layout="@layout/common_loading_view"/>
 </FrameLayout>

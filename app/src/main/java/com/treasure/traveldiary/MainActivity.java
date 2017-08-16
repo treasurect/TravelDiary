@@ -68,7 +68,6 @@ import com.treasure.traveldiary.activity.diary_center.DiaryCenterActivity;
 import com.treasure.traveldiary.activity.diary_center.DiaryDetailActivity;
 import com.treasure.traveldiary.activity.home_page.DiaryTextPublishActivity;
 import com.treasure.traveldiary.activity.traveller_circle.TravellerCircleActivity;
-import com.treasure.traveldiary.activity.user_center.UserCenterActivity;
 import com.treasure.traveldiary.activity.user_center.UserEditUserInfoActivity;
 import com.treasure.traveldiary.activity.user_center.UserFeedBackActivity;
 import com.treasure.traveldiary.activity.user_center.UserForgetPassActivity;
@@ -154,7 +153,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private String user_addr = "北京市";
     private SharedPreferences mPreferences;
     private InfoWindow mInfoWindow;
-    private ImageView addLayout;
+    private ImageView map_bg2_layout;
     private RadioGroup map_type;
     private RadioButton map_type_normal;
     private RadioButton map_type_satellite;
@@ -163,11 +162,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private ImageView show_location;
     private TravelApplication application;
     private TextView text_t, image_t, video_t, evaluated_t;
+    private FloatingActionButton btnScenic;
+    private TextView scenic_t;
+    private FloatingActionButton btnLive;
+    private TextView live_t;
     private FloatingActionButton btnTools;
     private TextView tools_t;
     private FloatingActionButton btnToolsWeather;
-    private FloatingActionButton btnToolsTicket;
     private TextView weather_t;
+    private FloatingActionButton btnToolsTicket;
     private TextView ticket_t;
     private boolean isToolsShow;
     private String user_province = "北京";
@@ -215,7 +218,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         btnDiaryImage = (FloatingActionButton) findViewById(R.id.add_diary_image);
         btnDiaryVideo = (FloatingActionButton) findViewById(R.id.add_diary_video);
         btnDiaryEvaluated = (FloatingActionButton) findViewById(R.id.add_evaluated);
-        addLayout = (ImageView) findViewById(R.id.add_diary_layout);
+        map_bg2_layout = (ImageView) findViewById(R.id.add_map_bg2);
         map_type = (RadioGroup) findViewById(R.id.layout_map_type);
         map_type_normal = (RadioButton) findViewById(R.id.btn_map_normal);
         map_type_satellite = (RadioButton) findViewById(R.id.btn_map_satellite);
@@ -225,6 +228,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         image_t = (TextView) findViewById(R.id.add_diary_image_t);
         video_t = (TextView) findViewById(R.id.add_diary_video_t);
         evaluated_t = (TextView) findViewById(R.id.add_evaluated_t);
+        btnScenic = (FloatingActionButton) findViewById(R.id.add_scenic);
+        scenic_t = (TextView) findViewById(R.id.add_scenic_t);
+        btnLive = (FloatingActionButton) findViewById(R.id.add_live);
+        live_t = (TextView) findViewById(R.id.add_live_t);
         btnTools = (FloatingActionButton) findViewById(R.id.add_tools);
         tools_t = (TextView) findViewById(R.id.add_tools_t);
         btnToolsWeather = (FloatingActionButton) findViewById(R.id.add_tools_weather);
@@ -303,14 +310,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         btnDiaryEvaluated.setOnClickListener(this);
         map.setOnMarkerClickListener(this);
         map.setOnMapClickListener(this);
-        addLayout.setOnClickListener(this);
+        map_bg2_layout.setOnClickListener(this);
         map_type.setOnCheckedChangeListener(this);
         show_location.setOnClickListener(this);
         text_t.setOnClickListener(this);
         image_t.setOnClickListener(this);
         video_t.setOnClickListener(this);
         evaluated_t.setOnClickListener(this);
+        btnScenic.setOnClickListener(this);
+        btnLive.setOnClickListener(this);
         btnTools.setOnClickListener(this);
+        scenic_t.setOnClickListener(this);
+        live_t.setOnClickListener(this);
         tools_t.setOnClickListener(this);
         btnToolsWeather.setOnClickListener(this);
         btnToolsWeather.setOnClickListener(this);
@@ -346,10 +357,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 if (Tools.isNull(mPreferences.getString("token", ""))) {
                     showPopupWindow();
                 } else {
-                    if (!addShow) {
+                    //加号    如果主btn显示，点击后隐藏，如果隐藏，点击后显示    如果Tools btn显示，点击后隐藏
+                    if (!addShow && !isToolsShow) {
                         showFloatActionButton();
                     } else {
                         hindFloatActionButton();
+                    }
+                    if (isToolsShow){
+                        isToolsShow = false;
+                        Tools.setAnimation(btnTools, 0, 0, 1, 0, 0, -720, 1, 1, 1000);
+                        btnToolsWeather.setVisibility(View.GONE);
+                        weather_t.setVisibility(View.GONE);
+                        btnToolsTicket.setVisibility(View.GONE);
+                        ticket_t.setVisibility(View.GONE);
+                        Tools.setAnimation(btnToolsWeather, 0, 0, 1, 0, 0, 720, 1, 1, 2500);
+                        Tools.setAnimation(weather_t, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
+                        Tools.setAnimation(btnToolsTicket, 0, 0, 1, 0, 0, -720, 1, 1, 2500);
+                        Tools.setAnimation(ticket_t, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
+                        Tools.setAnimation(map_bg2_layout,0,0,1,0,0,0,1,1,2000);
+                        map_bg2_layout.setClickable(false);
                     }
                 }
                 break;
@@ -391,10 +417,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }
                 hindFloatActionButton();
                 break;
+            case R.id.add_scenic:
+            case R.id.add_scenic_t:
+                Toast.makeText(this, "该功能暂未开放！", Toast.LENGTH_SHORT).show();
+                hindFloatActionButton();
+                break;
+            case R.id.add_live:
+            case R.id.add_live_t:
+                Toast.makeText(this, "该功能尚未开放！", Toast.LENGTH_SHORT).show();
+                hindFloatActionButton();
+                break;
             case R.id.add_tools:
             case R.id.add_tools_t:
-                hindFloatActionButton();
+                //Tools btn    如果Tools显示，点击后隐藏    如果Tools隐藏，点击后显示
                 if (!isToolsShow) {
+                    hindFloatActionButton();
                     Tools.setAnimation(btnTools, 0, -heightPixels / 2, 0, 1, 0, -720, 1, 1, 1000);
                     btnToolsWeather.setVisibility(View.VISIBLE);
                     weather_t.setVisibility(View.VISIBLE);
@@ -404,14 +441,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     Tools.setAnimation(weather_t, 0, 0, 0, 1, 0, 0, 1, 1, 2000);
                     Tools.setAnimation(btnToolsTicket, 0, 0, 0, 1, 0, -720, 1, 1, 2500);
                     Tools.setAnimation(ticket_t, 0, 0, 0, 1, 0, 0, 1, 1, 2000);
+                    Tools.setAnimation(map_bg2_layout,0,0,0,1,0,0,1,1,2000);
+                    map_bg2_layout.setClickable(true);
                     isToolsShow = true;
                 } else {
                     isToolsShow = false;
+                    Tools.setAnimation(btnTools, 0, 0, 1, 0, 0, -720, 1, 1, 1000);
+                    btnToolsWeather.setVisibility(View.GONE);
+                    weather_t.setVisibility(View.GONE);
+                    btnToolsTicket.setVisibility(View.GONE);
+                    ticket_t.setVisibility(View.GONE);
+                    Tools.setAnimation(btnToolsWeather, 0, 0, 1, 0, 0, 720, 1, 1, 2500);
+                    Tools.setAnimation(weather_t, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
+                    Tools.setAnimation(btnToolsTicket, 0, 0, 1, 0, 0, -720, 1, 1, 2500);
+                    Tools.setAnimation(ticket_t, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
+                    Tools.setAnimation(map_bg2_layout,0,0,1,0,0,0,1,1,2000);
+                    map_bg2_layout.setClickable(false);
                 }
+
                 break;
             case R.id.add_tools_weather:
             case R.id.add_tools_weather_t:
-                hindFloatActionButton();
                 Intent intent00 = new Intent(MainActivity.this, ToolsWeatherActivity.class);
                 intent00.putExtra("user_city", user_city);
                 intent00.putExtra("user_province", user_province);
@@ -420,11 +470,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 } else {
                     startActivity(intent00);
                 }
-                isToolsShow = false;
+                if (isToolsShow){
+                    isToolsShow = false;
+                    Tools.setAnimation(btnTools, 0, 0, 1, 0, 0, -720, 1, 1, 1000);
+                    btnToolsWeather.setVisibility(View.GONE);
+                    weather_t.setVisibility(View.GONE);
+                    btnToolsTicket.setVisibility(View.GONE);
+                    ticket_t.setVisibility(View.GONE);
+                    Tools.setAnimation(btnToolsWeather, 0, 0, 1, 0, 0, 720, 1, 1, 2500);
+                    Tools.setAnimation(weather_t, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
+                    Tools.setAnimation(btnToolsTicket, 0, 0, 1, 0, 0, -720, 1, 1, 2500);
+                    Tools.setAnimation(ticket_t, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
+                    Tools.setAnimation(map_bg2_layout,0,0,1,0,0,0,1,1,2000);
+                    map_bg2_layout.setClickable(false);
+                }
                 break;
             case R.id.add_tools_ticket:
             case R.id.add_tools_ticket_t:
-                hindFloatActionButton();
                 Intent intent01 = new Intent(MainActivity.this, ToolsTicketActivity.class);
                 intent01.putExtra("user_city", user_city);
                 if (Build.VERSION.SDK_INT >= 21) {
@@ -432,11 +494,39 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 } else {
                     startActivity(intent01);
                 }
-                isToolsShow = false;
+                if (isToolsShow){
+                    isToolsShow = false;
+                    Tools.setAnimation(btnTools, 0, 0, 1, 0, 0, -720, 1, 1, 1000);
+                    btnToolsWeather.setVisibility(View.GONE);
+                    weather_t.setVisibility(View.GONE);
+                    btnToolsTicket.setVisibility(View.GONE);
+                    ticket_t.setVisibility(View.GONE);
+                    Tools.setAnimation(btnToolsWeather, 0, 0, 1, 0, 0, 720, 1, 1, 2500);
+                    Tools.setAnimation(weather_t, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
+                    Tools.setAnimation(btnToolsTicket, 0, 0, 1, 0, 0, -720, 1, 1, 2500);
+                    Tools.setAnimation(ticket_t, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
+                    Tools.setAnimation(map_bg2_layout,0,0,1,0,0,0,1,1,2000);
+                    map_bg2_layout.setClickable(false);
+                }
                 break;
-            case R.id.add_diary_layout:
+            case R.id.add_map_bg2:
+                //背景    如果主btn显示，点击后隐藏    如果Tools btn显示，点击后隐藏
                 if (addShow) {
                     hindFloatActionButton();
+                }
+                if (isToolsShow){
+                    isToolsShow = false;
+                    Tools.setAnimation(btnTools, 0, 0, 1, 0, 0, -720, 1, 1, 1000);
+                    btnToolsWeather.setVisibility(View.GONE);
+                    weather_t.setVisibility(View.GONE);
+                    btnToolsTicket.setVisibility(View.GONE);
+                    ticket_t.setVisibility(View.GONE);
+                    Tools.setAnimation(btnToolsWeather, 0, 0, 1, 0, 0, 720, 1, 1, 2500);
+                    Tools.setAnimation(weather_t, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
+                    Tools.setAnimation(btnToolsTicket, 0, 0, 1, 0, 0, -720, 1, 1, 2500);
+                    Tools.setAnimation(ticket_t, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
+                    Tools.setAnimation(map_bg2_layout,0,0,1,0,0,0,1,1,2000);
+                    map_bg2_layout.setClickable(false);
                 }
                 break;
             case R.id.user_map_location:
@@ -559,22 +649,28 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         Tools.setAnimation(btnDiaryImage, -widthPixels / 9, -heightPixels / 3, 0, 1, 0, 360, 1, 1, 500);
         Tools.setAnimation(btnDiaryVideo, widthPixels / 9, -heightPixels / 3, 0, 1, 0, -360, 1, 1, 500);
         Tools.setAnimation(btnDiaryEvaluated, widthPixels / 3, -heightPixels / 3, 0, 1, 0, -360, 1, 1, 500);
-        Tools.setAnimation(btnTools, -widthPixels / 3, -heightPixels / 6, 0, 1, 0, 360, 1, 1, 500);
+
+        Tools.setAnimation(btnScenic, -widthPixels / 3, -heightPixels / 6, 0, 1, 0, 360, 1, 1, 500);
+        Tools.setAnimation(btnLive, -widthPixels / 9, -heightPixels / 6, 0, 1, 0, 360, 1, 1, 500);
+        Tools.setAnimation(btnTools, widthPixels / 9, -heightPixels / 6, 0, 1, 0, -360, 1, 1, 500);
 
         Tools.setAnimation(text_t, -widthPixels / 3, -heightPixels / 3 + 80, 0, 1, 0, 360, 1, 1, 500);
         Tools.setAnimation(image_t, -widthPixels / 9, -heightPixels / 3 + 80, 0, 1, 0, 360, 1, 1, 500);
         Tools.setAnimation(video_t, widthPixels / 9, -heightPixels / 3 + 80, 0, 1, 0, -360, 1, 1, 500);
         Tools.setAnimation(evaluated_t, widthPixels / 3, -heightPixels / 3 + 80, 0, 1, 0, -360, 1, 1, 500);
-        Tools.setAnimation(tools_t, -widthPixels / 3, -heightPixels / 6 + 80, 0, 1, 0, 360, 1, 1, 500);
+
+        Tools.setAnimation(scenic_t, -widthPixels / 3, -heightPixels / 6 + 80, 0, 1, 0, 360, 1, 1, 500);
+        Tools.setAnimation(live_t, -widthPixels / 9, -heightPixels / 6 + 80, 0, 1, 0, 360, 1, 1, 500);
+        Tools.setAnimation(tools_t, widthPixels / 9, -heightPixels / 6 + 80, 0, 1, 0, -360, 1, 1, 500);
 
         Tools.setAnimation(btnAdd, 0, 0, 1, 1, 0, -45, 1, 1, 500);
         btnToolsWeather.setVisibility(View.GONE);
         weather_t.setVisibility(View.GONE);
         btnToolsTicket.setVisibility(View.GONE);
         ticket_t.setVisibility(View.GONE);
-        addLayout.setVisibility(View.VISIBLE);
-        addLayout.setClickable(true);
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(addLayout, "alpha", 0, 1);
+        map_bg2_layout.setVisibility(View.VISIBLE);
+        map_bg2_layout.setClickable(true);
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(map_bg2_layout, "alpha", 0, 1);
         alpha.setDuration(500);
         alpha.start();
         addShow = true;
@@ -585,12 +681,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         Tools.setAnimation(btnDiaryImage, 0, 0, 1, 0, -360, 0, 1, 1, 500);
         Tools.setAnimation(btnDiaryVideo, 0, 0, 1, 0, 360, 0, 1, 1, 500);
         Tools.setAnimation(btnDiaryEvaluated, 0, 0, 1, 0, 360, 0, 1, 1, 500);
+
+        Tools.setAnimation(btnScenic, 0, 0, 1, 0, -360, 0, 1, 1, 500);
+        Tools.setAnimation(btnLive, 0, 0, 1, 0, -360, 0, 1, 1, 500);
         Tools.setAnimation(btnTools, 0, 0, 1, 0, 360, 0, 1, 1, 500);
 
         Tools.setAnimation(text_t, 0, 0, 1, 0, -360, 0, 1, 1, 500);
         Tools.setAnimation(image_t, 0, 0, 1, 0, -360, 0, 1, 1, 500);
         Tools.setAnimation(video_t, 0, 0, 1, 0, 360, 0, 1, 1, 500);
         Tools.setAnimation(evaluated_t, 0, 0, 1, 0, 360, 0, 1, 1, 500);
+
+        Tools.setAnimation(scenic_t, 0, 0, 1, 0, -360, 0, 1, 1, 500);
+        Tools.setAnimation(live_t, 0, 0, 1, 0, -360, 0, 1, 1, 500);
         Tools.setAnimation(tools_t, 0, 0, 1, 0, 360, 0, 1, 1, 500);
 
         Tools.setAnimation(btnAdd, 0, 0, 1, 1, -45, 0, 1, 1, 500);
@@ -598,8 +700,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         weather_t.setVisibility(View.GONE);
         btnToolsTicket.setVisibility(View.GONE);
         ticket_t.setVisibility(View.GONE);
-        addLayout.setClickable(false);
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(addLayout, "alpha", 1, 0);
+        map_bg2_layout.setClickable(false);
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(map_bg2_layout, "alpha", 1, 0);
         alpha.setDuration(500);
         alpha.start();
         addShow = false;
@@ -629,7 +731,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         forget.setOnClickListener(this);
         pass_visible.setOnClickListener(this);
 
-        View rootView = LayoutInflater.from(this).inflate(R.layout.activity_user_center, null);
+        View rootView = LayoutInflater.from(this).inflate(R.layout.activity_main, null);
         mPopupWindow.showAtLocation(rootView, Gravity.BOTTOM, 0, 0);
     }
 
@@ -700,6 +802,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                             editor.putString("user_age", String.valueOf(list.get(0).getAge()));
                             editor.putString("user_sex", String.valueOf(list.get(0).getSex()));
                             editor.putString("user_desc", list.get(0).getUser_desc());
+                            editor.putString("integral_count", list.get(0).getIntegral_count());
+                            editor.putString("traveller_circle_bg",list.get(0).getTraveller_circle_bg());
                             editor.apply();
 
                             //发送登录成功 广播
@@ -948,7 +1052,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             public void done(List<DiaryBean> list, BmobException e) {
                 if (list != null) {
                     for (int i = 0; i < list.size(); i++) {
-                        LatLng latLng = new LatLng(list.get(i).getUser_lat(), list.get(i).getUser_long());
+                        LatLng latLng = new LatLng(Double.parseDouble(list.get(i).getUser_lat()), Double.parseDouble(list.get(i).getUser_long()));
                         MapMarkerInfoBean mapMarkerInfoBean = new MapMarkerInfoBean();
                         mapMarkerInfoBean.setLatLng(latLng);
                         mapMarkerInfoBean.setUser_name(list.get(i).getUser_name());
@@ -1013,9 +1117,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         map.setMyLocationEnabled(true);
         requestDiaryList();
         if (!Tools.isNull(mPreferences.getString("token", ""))) {
-            user_icon.setImageURI(Uri.parse(mPreferences.getString("user_icon", "")));
-            left_user_icon.setImageURI(Uri.parse(mPreferences.getString("user_icon", "")));
-            left_user_name.setText(mPreferences.getString("user_nick", ""));
+            BmobQuery<UserInfoBean> query = new BmobQuery<>();
+            query.addWhereEqualTo("user_name",mPreferences.getString("user_name",""))
+                    .findObjects(new FindListener<UserInfoBean>() {
+                        @Override
+                        public void done(List<UserInfoBean> list, BmobException e) {
+                            if (e == null){
+                                String icon_url = list.get(0).getUser_icon();
+                                user_icon.setImageURI(Uri.parse(icon_url));
+                                left_user_icon.setImageURI(Uri.parse(icon_url));
+                                left_user_name.setText(list.get(0).getNick_name());
+                            }else {
+                                Toast.makeText(MainActivity.this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
             requestDiaryList();
         }else {
             user_icon.setImageResource(R.mipmap.ic_no_icon);

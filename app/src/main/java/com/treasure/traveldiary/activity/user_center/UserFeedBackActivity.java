@@ -22,8 +22,9 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
 public class UserFeedBackActivity extends BaseActivity implements View.OnClickListener, TextWatcher {
-private EditText edit_Content,edit_Contacts;
+    private EditText edit_Content, edit_Contacts;
     private TextView history_feedBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +65,7 @@ private EditText edit_Content,edit_Contacts;
                 sendFeedBack();
                 break;
             case R.id.mine_history_feedBack:
-startActivity(new Intent(UserFeedBackActivity.this,UserFeedBckHistoryActivity.class));
+                startActivity(new Intent(UserFeedBackActivity.this, UserFeedBckHistoryActivity.class));
                 break;
         }
     }
@@ -72,25 +73,26 @@ startActivity(new Intent(UserFeedBackActivity.this,UserFeedBckHistoryActivity.cl
     private void sendFeedBack() {
         FeedBackBean feedBackBean = new FeedBackBean();
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
-        if (!Tools.isNull(sharedPreferences.getString("token",""))){
-            feedBackBean.setUser_name(sharedPreferences.getString("user_name",""));
+        if (!Tools.isNull(sharedPreferences.getString("token", ""))) {
+            feedBackBean.setUser_name(sharedPreferences.getString("user_name", ""));
         }
         feedBackBean.setUser_content(edit_Content.getText().toString().trim());
-        feedBackBean.setUser_phone(edit_Contacts.getText().toString().trim()+"");
-        String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Long(System.currentTimeMillis()));
-        feedBackBean.setPublish_time(time.substring(5, 7) + "月" + time.substring(8, 10) + "日" + time.substring(11, 16));
+        feedBackBean.setUser_phone(edit_Contacts.getText().toString().trim() + "");
+        String nowTime = Tools.getNowTime();
+        feedBackBean.setPublish_time(nowTime);
         feedBackBean.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {
-                if (e == null){
+                if (e == null) {
                     Toast.makeText(UserFeedBackActivity.this, "我们已收到你的反馈，谢谢支持！", Toast.LENGTH_SHORT).show();
                     UserFeedBackActivity.this.finish();
-                }else {
-                    Toast.makeText(UserFeedBackActivity.this, "提交失败，原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(UserFeedBackActivity.this, "提交失败，原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
+
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -98,10 +100,10 @@ startActivity(new Intent(UserFeedBackActivity.this,UserFeedBckHistoryActivity.cl
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (!Tools.isNull(s.toString().trim())){
+        if (!Tools.isNull(s.toString().trim())) {
             btn_send.setClickable(true);
             btn_send.setTextColor(getResources().getColor(R.color.colorWhite));
-        }else {
+        } else {
             btn_send.setClickable(false);
             btn_send.setTextColor(getResources().getColor(R.color.colorGray2));
         }

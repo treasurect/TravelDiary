@@ -10,7 +10,6 @@ import android.net.Network;
 import com.baidu.mapapi.SDKInitializer;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.mob.MobSDK;
-import com.treasure.traveldiary.utils.LogUtil;
 import com.treasure.traveldiary.utils.StringContents;
 
 import java.util.List;

@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.bean.UserInfoBean;
+import com.treasure.traveldiary.utils.StringContents;
 import com.treasure.traveldiary.utils.Tools;
 
 import java.text.SimpleDateFormat;
@@ -39,10 +40,10 @@ public class UserSigningActivity extends BaseActivity implements View.OnClickLis
         title.setText("签到");
         mPreferences = getSharedPreferences("user",MODE_PRIVATE);
         text_integral.setVisibility(View.VISIBLE);
-        text_integral.setText("积分："+mPreferences.getInt("user_integral",0));
+        text_integral.setText("积分："+mPreferences.getString("user_integral",""));
 
         initFindId();
-        nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Long(System.currentTimeMillis()));
+        nowTime = Tools.getNowTime();
         initClick();
     }
 
@@ -86,7 +87,7 @@ public class UserSigningActivity extends BaseActivity implements View.OnClickLis
                 public void done(List<UserInfoBean> list, BmobException e) {
                     if (e == null){
                         if (list != null){
-                            int integral_count = list.get(0).getIntegral_count();
+                            String integral_count = list.get(0).getIntegral_count();
                             List<String> signing_date = list.get(0).getSigning_date();
                             String objectId = list.get(0).getObjectId();
                             boolean isRetry = false;
@@ -109,10 +110,10 @@ public class UserSigningActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private void updateUserInfo(String objectId,  int integral_count, List<String> signing_date) {
-        integral_count1 = integral_count + 10;
+    private void updateUserInfo(String objectId,  String integral_count, List<String> signing_date) {
+        integral_count1 = Integer.parseInt(integral_count) + 10;
         UserInfoBean userInfoBean = new UserInfoBean();
-        userInfoBean.setIntegral_count(integral_count1);
+        userInfoBean.setIntegral_count(String.valueOf(integral_count1));
         signing_date.add(nowTime);
         userInfoBean.setSigning_date(signing_date);
         userInfoBean.update(objectId, new UpdateListener() {
@@ -121,7 +122,7 @@ public class UserSigningActivity extends BaseActivity implements View.OnClickLis
                 if (e == null){
                     Toast.makeText(UserSigningActivity.this, "签到成功，积分+10", Toast.LENGTH_SHORT).show();
                     SharedPreferences.Editor editor = mPreferences.edit();
-                    editor.putInt("user_integral", integral_count1);
+                    editor.putString("user_integral", String.valueOf(integral_count1));
                     editor.apply();
                     text_integral.setText("积分："+integral_count1);
                 }else {

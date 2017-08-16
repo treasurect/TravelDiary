@@ -19,7 +19,7 @@ public class MapMarkerInfoBean implements Serializable {
     private String user_nick;
     private String user_name;
     private List<String> user_image;
-    private int diary_type;
+    private String diary_type;
     private String video_path;
     private String video_path_first;
 
@@ -87,11 +87,11 @@ public class MapMarkerInfoBean implements Serializable {
         this.user_image = user_image;
     }
 
-    public int getDiary_type() {
+    public String getDiary_type() {
         return diary_type;
     }
 
-    public void setDiary_type(int diary_type) {
+    public void setDiary_type(String diary_type) {
         this.diary_type = diary_type;
     }
 

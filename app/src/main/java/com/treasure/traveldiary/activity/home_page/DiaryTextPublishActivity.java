@@ -19,22 +19,26 @@ import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.bean.DiaryBean;
 import com.treasure.traveldiary.bean.LeaveMesBean;
+import com.treasure.traveldiary.bean.UserInfoBean;
 import com.treasure.traveldiary.utils.Tools;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 public class DiaryTextPublishActivity extends BaseActivity implements View.OnClickListener, TextWatcher, AdapterView.OnItemSelectedListener {
 
     private EditText diaryDesc;
     private SharedPreferences mPreferences;
     private String user_addr;
-    private float user_lat;
-    private float user_long;
+    private String user_lat;
+    private String user_long;
     private EditText diaryTitle;
     private TextView diaryLoc;
     private FrameLayout loading;
@@ -79,10 +83,10 @@ public class DiaryTextPublishActivity extends BaseActivity implements View.OnCli
             diaryLoc.setText(user_addr);
         }
         if (!Tools.isNull(intent.getStringExtra("user_lat"))) {
-            user_lat = Float.parseFloat(intent.getStringExtra("user_lat"));
+            user_lat = intent.getStringExtra("user_lat");
         }
         if (!Tools.isNull(intent.getStringExtra("user_long"))) {
-            user_long = Float.parseFloat(intent.getStringExtra("user_long"));
+            user_long = intent.getStringExtra("user_long");
         }
     }
 
@@ -153,6 +157,30 @@ public class DiaryTextPublishActivity extends BaseActivity implements View.OnCli
     }
 
     private void sendDiary() {
+        final String nowTime = Tools.getNowTime();
+        //保存时间轴
+        BmobQuery<UserInfoBean> query = new BmobQuery<>();
+        query.addWhereEqualTo("user_name",mPreferences.getString("user_name",""))
+                .findObjects(new FindListener<UserInfoBean>() {
+                    @Override
+                    public void done(List<UserInfoBean> list, BmobException e) {
+                        if (e == null){
+                            String objectId = list.get(0).getObjectId();
+                            List<String> timer_shaft = list.get(0).getTimer_shaft();
+                            UserInfoBean userInfoBean = new UserInfoBean();
+                            timer_shaft.add(nowTime);
+                            userInfoBean.setTimer_shaft(timer_shaft);
+                            userInfoBean.update(objectId, new UpdateListener() {
+                                @Override
+                                public void done(BmobException e) {
+
+                                }
+                            });
+                        }
+                    }
+                });
+
+
         loading.setVisibility(View.VISIBLE);
         String textDesc = diaryDesc.getText().toString().trim();
         String textTitle = diaryTitle.getText().toString().trim();
@@ -163,10 +191,9 @@ public class DiaryTextPublishActivity extends BaseActivity implements View.OnCli
         diaryBean.setUser_addr(user_addr);
         diaryBean.setUser_lat(user_lat);
         diaryBean.setUser_long(user_long);
-        diaryBean.setDiary_type(0);
+        diaryBean.setDiary_type("0");
         diaryBean.setState(text_state);
-        String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Long(System.currentTimeMillis()));
-        diaryBean.setPublish_time(time.substring(5, 7) + "月" + time.substring(8, 10) + "日" + time.substring(11, 16));
+        diaryBean.setPublish_time(nowTime);
         diaryBean.setUser_desc(textDesc);
         diaryBean.setUser_title(textTitle);
         //生成一个空的数据占位，以方便更新
@@ -175,6 +202,10 @@ public class DiaryTextPublishActivity extends BaseActivity implements View.OnCli
         List<LeaveMesBean> leaveMesBeen = new ArrayList<>();
         leaveMesBeen.add(leaveMesBean);
         diaryBean.setMesBeanList(leaveMesBeen);
+        //生成一个空的数据占位，以方便更新
+        List<String> list = new ArrayList<>();
+        list.add("0");
+        diaryBean.setLikeBean(list);
         diaryBean.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {

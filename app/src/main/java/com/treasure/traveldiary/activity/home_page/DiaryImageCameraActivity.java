@@ -8,6 +8,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
@@ -41,7 +42,7 @@ public class DiaryImageCameraActivity extends BaseActivity implements SurfaceHol
             mHolder = mSurfaceView.getHolder();
             mHolder.addCallback(this);
         } catch (Exception e) {
-            LogUtil.e("~~~~~~~~~~~~~~~~~~~~", e.getMessage());
+            Toast.makeText(this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -129,7 +130,7 @@ public class DiaryImageCameraActivity extends BaseActivity implements SurfaceHol
             mCamera.setPreviewDisplay(mHolder);
             mCamera.startPreview();
         } catch (Exception e) {
-            LogUtil.e("~~~~~~~~~~~~~~~~~", e.getMessage());
+            Toast.makeText(this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -143,7 +144,7 @@ public class DiaryImageCameraActivity extends BaseActivity implements SurfaceHol
                 mCamera.release();
                 mCamera = null;
             } catch (Exception e) {
-                LogUtil.e("~~~~~~~~~~~~~~~~~", e.getMessage());
+                Toast.makeText(this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
     }

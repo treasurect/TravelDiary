@@ -9,69 +9,113 @@
     android:orientation="vertical"
     tools:context=".activity.user_center.UserSettingsActivity">
 
-    <include layout="@layout/common_top_view"/>
+    <include layout="@layout/common_top_view" />
 
     <LinearLayout
-        android:id="@+id/user_settings_cache_clear"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center">
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_travel_logo"/>
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingLeft="10dp"
-            android:text="清除缓存"/>
-        <TextView
-            android:id="@+id/user_settings_cache_size"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:textColor="@color/colorOrange"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/user_settings_check_versions"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingLeft="10dp"
-            android:text="检查版本"/>
+            android:gravity="center"
+            android:text="旅行日记"
+            android:textColor="@color/colorOrange"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
         <TextView
             android:id="@+id/user_settings_versions_num"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:text="1.0.1"
-            android:textColor="@color/colorOrange"/>
-
+            android:gravity="center"
+            android:textColor="@color/colorOrange"
+            android:textSize="15sp"/>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/user_personal_settings_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/bottom_yellow_radius15"
-        android:paddingBottom="5dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="5dp"
-        android:text="退出账号"
-        android:textColor="@color/colorWhite"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/user_settings_check_versions"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:textSize="16sp"
+                android:text="版本更新" />
+
+            <TextView
+                android:id="@+id/user_settings_versions_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginRight="20dp"
+                android:textColor="@color/colorOrange" />
+
+        </LinearLayout>
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/colorOrange" />
+        <LinearLayout
+            android:id="@+id/user_settings_cache_clear"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:textSize="16sp"
+                android:text="清除缓存" />
+
+            <TextView
+                android:id="@+id/user_settings_cache_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:textColor="@color/colorOrange" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/user_personal_settings_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bottom_yellow_radius15"
+            android:paddingBottom="5dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="5dp"
+            android:text="退出账号"
+            android:textColor="@color/colorWhite" />
+    </LinearLayout>
 
 </LinearLayout>

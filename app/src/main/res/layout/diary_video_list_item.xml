@@ -51,6 +51,20 @@
                     android:gravity="center_vertical" />
             </LinearLayout>
             <ImageView
+                android:id="@+id/diary_list_like_img"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dp"
+                android:src="@mipmap/ic_like_unclick"/>
+            <TextView
+                android:id="@+id/diary_list_like_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorOrange"
+                android:layout_gravity="center"
+                android:layout_marginRight="20dp"/>
+            <ImageView
                 android:id="@+id/diary_list_state_img"
                 android:layout_width="20dp"
                 android:layout_height="20dp"

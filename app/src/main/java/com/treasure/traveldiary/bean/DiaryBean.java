@@ -14,17 +14,18 @@ public class DiaryBean extends BmobObject {
     private String user_name;
     private String user_nick;
     private String user_icon;
-    private float user_lat;
-    private float user_long;
+    private String user_lat;
+    private String user_long;
     private String user_addr;
     private String user_desc;
     private String user_title;
-    private int diary_type;
+    private String diary_type;
     private List<String> diary_image;
     private String diary_video;
     private String diary_video_first;
     private List<LeaveMesBean> mesBeanList;
     private String state;//公开or私密
+    private List<String> likeBean;
 
     public String getUser_name() {
         return user_name;
@@ -50,19 +51,19 @@ public class DiaryBean extends BmobObject {
         this.user_icon = user_icon;
     }
 
-    public float getUser_lat() {
+    public String getUser_lat() {
         return user_lat;
     }
 
-    public void setUser_lat(float user_lat) {
+    public void setUser_lat(String user_lat) {
         this.user_lat = user_lat;
     }
 
-    public float getUser_long() {
+    public String getUser_long() {
         return user_long;
     }
 
-    public void setUser_long(float user_long) {
+    public void setUser_long(String user_long) {
         this.user_long = user_long;
     }
 
@@ -82,11 +83,11 @@ public class DiaryBean extends BmobObject {
         this.user_desc = user_desc;
     }
 
-    public int getDiary_type() {
+    public String getDiary_type() {
         return diary_type;
     }
 
-    public void setDiary_type(int diary_type) {
+    public void setDiary_type(String diary_type) {
         this.diary_type = diary_type;
     }
 
@@ -144,5 +145,13 @@ public class DiaryBean extends BmobObject {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public List<String> getLikeBean() {
+        return likeBean;
+    }
+
+    public void setLikeBean(List<String> likeBean) {
+        this.likeBean = likeBean;
     }
 }

@@ -145,7 +145,7 @@
            android:layout_height="match_parent">
 
            <ImageView
-               android:id="@+id/add_diary_layout"
+               android:id="@+id/add_map_bg2"
                android:layout_width="match_parent"
                android:layout_height="match_parent"
                android:background="@color/colorFullGray2"
@@ -188,6 +188,26 @@
                android:layout_gravity="center_horizontal|bottom"
                android:layout_marginBottom="25dp"
                android:text="点评/吐槽"
+               android:textColor="@color/colorWhite"
+               android:textStyle="bold" />
+
+           <TextView
+               android:id="@+id/add_scenic_t"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_horizontal|bottom"
+               android:layout_marginBottom="25dp"
+               android:text="风景区"
+               android:textColor="@color/colorWhite"
+               android:textStyle="bold" />
+
+           <TextView
+               android:id="@+id/add_live_t"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_horizontal|bottom"
+               android:layout_marginBottom="25dp"
+               android:text="直播"
                android:textColor="@color/colorWhite"
                android:textStyle="bold" />
 
@@ -244,13 +264,33 @@
                app:rippleColor="@color/colorAccent" />
 
            <android.support.design.widget.FloatingActionButton
+               android:id="@+id/add_scenic"
+               android:layout_width="50dp"
+               android:layout_height="50dp"
+               android:layout_gravity="center_horizontal|bottom"
+               android:layout_marginBottom="25dp"
+               android:src="@mipmap/ic_scenic"
+               app:backgroundTint="@color/colorCambridgeBlue"
+               app:rippleColor="@color/colorAccent"/>
+
+           <android.support.design.widget.FloatingActionButton
+               android:id="@+id/add_live"
+               android:layout_width="50dp"
+               android:layout_height="50dp"
+               android:layout_gravity="center_horizontal|bottom"
+               android:layout_marginBottom="25dp"
+               android:src="@mipmap/ic_live"
+               app:backgroundTint="@color/colorYellow"
+               app:rippleColor="@color/colorAccent" />
+
+           <android.support.design.widget.FloatingActionButton
                android:id="@+id/add_tools"
                android:layout_width="50dp"
                android:layout_height="50dp"
                android:layout_gravity="center_horizontal|bottom"
                android:layout_marginBottom="25dp"
                android:src="@mipmap/ic_tools"
-               app:backgroundTint="@color/colorPurple"
+               app:backgroundTint="@color/colorRed"
                app:rippleColor="@color/colorAccent" />
 
            <android.support.design.widget.FloatingActionButton

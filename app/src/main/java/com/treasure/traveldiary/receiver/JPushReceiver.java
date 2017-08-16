@@ -4,12 +4,14 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.treasure.traveldiary.activity.user_center.UserMessageListActivity;
 import com.treasure.traveldiary.bean.PushBean;
 import com.treasure.traveldiary.utils.LogUtil;
+import com.treasure.traveldiary.utils.Tools;
 
 import java.text.SimpleDateFormat;
 
@@ -24,6 +26,7 @@ import cn.jpush.android.api.JPushInterface;
 public class JPushReceiver extends BroadcastReceiver{
     private static final String TAG = "JPushReceiver";
     private NotificationManager nm;
+    private SharedPreferences mPreferences;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -32,7 +35,7 @@ public class JPushReceiver extends BroadcastReceiver{
         }
 
         Bundle bundle = intent.getExtras();
-
+        mPreferences = context.getSharedPreferences("user",Context.MODE_PRIVATE);
 
         /**
          * t通知
@@ -53,8 +56,11 @@ public class JPushReceiver extends BroadcastReceiver{
         PushBean pushBean = new PushBean();
         pushBean.setTitle(title);
         pushBean.setMessage(message);
-        String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Long(System.currentTimeMillis()));
-        pushBean.setTime(time.substring(5, 7) + "月" + time.substring(8, 10) + "日" + time.substring(11, 16));
+        String nowTime = Tools.getNowTime();
+        pushBean.setTime(nowTime);
+        if (!Tools.isNull(mPreferences.getString("token",""))){
+            pushBean.setUser_name(mPreferences.getString("user_name",""));
+        }
         pushBean.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {

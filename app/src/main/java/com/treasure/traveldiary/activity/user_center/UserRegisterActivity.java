@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
-import com.treasure.traveldiary.utils.LogUtil;
 import com.treasure.traveldiary.utils.Tools;
 
 import java.util.regex.Matcher;
@@ -87,7 +86,6 @@ public class UserRegisterActivity extends BaseActivity implements View.OnClickLi
         SMSSDK.registerEventHandler(new EventHandler() {
             @Override
             public void afterEvent(int event, int result, Object data) {
-                LogUtil.d("~~~~~~~~~~~~~~~~~~~~~~~~~~~1111", data.toString());
                 if (result == SMSSDK.RESULT_COMPLETE) {
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                         Message message = new Message();

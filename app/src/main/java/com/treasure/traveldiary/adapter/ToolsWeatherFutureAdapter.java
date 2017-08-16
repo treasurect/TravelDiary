@@ -49,14 +49,16 @@ public class ToolsWeatherFutureAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
         View ret =null;
+        ViewHolder holder = null;
         if (view != null){
             ret = view;
+            holder = (ViewHolder) ret.getTag();
         }else {
             ret = mInflater.inflate(R.layout.tools_weather_future_item,viewGroup,false);
+            holder = new ViewHolder(ret);
+            ret.setTag(holder);
         }
-        ret.setTag(new ViewHolder(ret));
         ToolsWeatherFutureBean futureBean = list.get(position);
-        ViewHolder holder = (ViewHolder) ret.getTag();
         holder.future_date.setText(futureBean.getDate());
         holder.future_weather.setText(futureBean.getWeather());
         holder.future_range.setText(futureBean.getTemp_range());
