@@ -234,10 +234,20 @@
         <activity
             android:name=".activity.home_page.ToolsTicketActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.home_page.ToolsWeatherListActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.traveller_circle.TravellerCircleActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.home_page.ToolsWeatherListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.traveller_circle.TravellerCircleActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.diary_center.GamePuzzleActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home_page.SceneryActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.diary_center.GameH5Activity" />
+        <activity android:name=".activity.home_page.SceneryDetailActivity"></activity>
     </application>
 
 </manifest>

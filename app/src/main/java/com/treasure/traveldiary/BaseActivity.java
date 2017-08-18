@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -21,6 +22,7 @@ public class BaseActivity extends FragmentActivity {
     public TextView text_map_loc;
     public TextView text_integral;
     public SimpleDraweeView user_icon;
+    public Spinner list_city;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class BaseActivity extends FragmentActivity {
         text_map_loc = (TextView) findViewById(R.id.text_map_loc);
         text_integral = (TextView) findViewById(R.id.text_integral);
         user_icon = (SimpleDraweeView) findViewById(R.id.image_user_icon);
+        list_city = (Spinner) findViewById(R.id.list_city);
     }
 
 }

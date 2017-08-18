@@ -117,18 +117,18 @@
                 android:layout_height="35dp"
                 android:text="详情"
                 android:textSize="20sp"
-                android:textColor="#333333"
+                android:textColor="@color/colorWhite"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
-                android:background="#feb70d"/>
+                android:background="@color/colorOrange"/>
         </LinearLayout>
 
         <ImageView
             android:id="@+id/map_marker_close"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_gravity="right"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="10dp"
             android:src="@mipmap/ic_close"/>
     </FrameLayout>

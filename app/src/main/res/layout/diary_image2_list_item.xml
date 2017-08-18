@@ -2,135 +2,123 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="400dp">
 
     <LinearLayout
         android:id="@+id/diary_list_layout"
         android:layout_width="match_parent"
-        android:layout_height="430dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/bottom_yellow1_frame_gray_radius5"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-
-            <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/diary_list_user_icon"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                fresco:placeholderImage="@mipmap/ic_travel_logo"
-                fresco:roundAsCircle="true" />
+            android:layout_height="250dp">
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
 
-                <TextView
-                    android:id="@+id/diary_list_user_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/diary_list_image1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="bottom" />
+                    android:paddingRight="5dp"
+                    fresco:placeholderImage="@mipmap/pic_page_loading" />
 
-                <TextView
-                    android:id="@+id/diary_list_user_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/diary_list_image2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="center_vertical" />
+                    fresco:placeholderImage="@mipmap/pic_page_loading" />
             </LinearLayout>
-            <ImageView
-                android:id="@+id/diary_list_like_img"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center"
-                android:layout_marginRight="5dp"
-                android:src="@mipmap/ic_like_unclick"/>
-            <TextView
-                android:id="@+id/diary_list_like_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorOrange"
-                android:layout_gravity="center"
-                android:layout_marginRight="20dp"/>
+
             <ImageView
                 android:id="@+id/diary_list_state_img"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_gravity="center"/>
+                android:layout_gravity="right"
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="10dp" />
+
             <TextView
                 android:id="@+id/diary_list_state_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorOrange"
-                android:layout_gravity="center"/>
-        </LinearLayout>
+                android:layout_gravity="right"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/colorWhite" />
+
+            <ImageView
+                android:id="@+id/diary_list_like_img"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="right"
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="40dp"
+                android:src="@mipmap/ic_like_unclick" />
+
+            <TextView
+                android:id="@+id/diary_list_like_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="40dp"
+                android:textColor="@color/colorWhite" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/diary_list_user_title"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:paddingLeft="10dp"
+            android:background="@color/colorOrange"
+            android:gravity="bottom|center_horizontal"
+            android:textColor="@color/colorWhite"
             android:textSize="16sp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="@color/colorAccent" />
-
-        <LinearLayout
-            android:id="@+id/diary_list_image_layout"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:orientation="horizontal">
-
-            <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/diary_list_image1"
-                android:layout_width="0dp"
-                android:layout_height="280dp"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                fresco:placeholderImage="@mipmap/pic_page_loading" />
-
-            <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/diary_list_image2"
-                android:layout_width="0dp"
-                android:layout_height="280dp"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                fresco:placeholderImage="@mipmap/pic_page_loading" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/colorAccent" />
+            android:background="@color/colorWhite" />
 
         <TextView
             android:id="@+id/diary_list_user_desc"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:maxLines="2"
-            android:paddingLeft="10dp"
+            android:background="@color/colorOrange"
+            android:gravity="center_horizontal"
+            android:paddingTop="30dp"
+            android:textColor="@color/colorWhite"
             android:textSize="16sp" />
 
-
     </LinearLayout>
+
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/diary_list_user_icon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="220dp"
+        fresco:placeholderImage="@mipmap/ic_travel_logo"
+        fresco:roundAsCircle="true" />
+
+    <TextView
+        android:id="@+id/diary_list_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="55dp"
+        android:layout_marginTop="245dp"
+        android:textColor="@color/colorWhite" />
+
+
 </FrameLayout>

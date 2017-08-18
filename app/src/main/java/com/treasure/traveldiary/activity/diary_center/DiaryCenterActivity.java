@@ -14,7 +14,7 @@ import com.treasure.traveldiary.fragments.MineDiaryTextFragment;
 import com.treasure.traveldiary.fragments.MineDiaryTimerShaftFragment;
 import com.treasure.traveldiary.fragments.MineDiaryVideoFragment;
 import com.treasure.traveldiary.fragments.MineEvaluatedFragment;
-import com.treasure.traveldiary.fragments.SmallGameFragment;
+import com.treasure.traveldiary.fragments.MineSmallGameFragment;
 import com.treasure.traveldiary.utils.Tools;
 
 import java.util.ArrayList;
@@ -63,7 +63,7 @@ public class DiaryCenterActivity extends BaseActivity implements TabLayout.OnTab
         list.add(new MineDiaryTextFragment());
         list.add(new MineDiaryVideoFragment());
         list.add(new MineEvaluatedFragment());
-        list.add(new SmallGameFragment());
+        list.add(new MineSmallGameFragment());
         HomeFragmentPagerAdapter pagerAdapter = new HomeFragmentPagerAdapter(getSupportFragmentManager(), list);
         viewPager.setAdapter(pagerAdapter);
     }

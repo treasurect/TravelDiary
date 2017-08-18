@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@color/colorWhite"
-        android:dividerHeight="0dp"
+        android:dividerHeight="20dp"
         android:scrollbars="none" />
     <include layout="@layout/common_loading_view" />
 </FrameLayout>

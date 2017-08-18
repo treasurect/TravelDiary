@@ -2,13 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.treasure.traveldiary.fragments.SmallGameFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="小游戏界面待开发"
-        android:gravity="center"/>
-
+    tools:context="com.treasure.traveldiary.fragments.MineSmallGameFragment">
+<ListView
+    android:id="@+id/small_game_listView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none"/>
 </FrameLayout>

@@ -258,16 +258,16 @@ public class MineDiaryAllFragment extends BaseFragment implements TravellerDiary
                         @Override
                         public void done(List<DiaryBean> list, BmobException e) {
                             if (e == null) {
-                                if (list != null) {
+                                if (!isPageDestroy) {
                                     diaryList.addAll(list);
                                     adapter.notifyDataSetChanged();
                                     loading.setVisibility(View.GONE);
                                     listView.completeRefresh();
                                 }
                             } else {
-                                loading.setVisibility(View.GONE);
-                                listView.completeRefresh();
                                 if (!isPageDestroy){
+                                    loading.setVisibility(View.GONE);
+                                    listView.completeRefresh();
                                     Toast.makeText(getContext(), "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }

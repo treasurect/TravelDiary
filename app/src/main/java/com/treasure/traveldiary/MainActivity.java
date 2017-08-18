@@ -19,7 +19,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,12 +58,31 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.route.BikingRouteLine;
+import com.baidu.mapapi.search.route.BikingRoutePlanOption;
+import com.baidu.mapapi.search.route.BikingRouteResult;
+import com.baidu.mapapi.search.route.DrivingRouteLine;
+import com.baidu.mapapi.search.route.DrivingRoutePlanOption;
+import com.baidu.mapapi.search.route.DrivingRouteResult;
+import com.baidu.mapapi.search.route.IndoorRouteResult;
+import com.baidu.mapapi.search.route.MassTransitRouteResult;
+import com.baidu.mapapi.search.route.OnGetRoutePlanResultListener;
+import com.baidu.mapapi.search.route.PlanNode;
+import com.baidu.mapapi.search.route.RoutePlanSearch;
+import com.baidu.mapapi.search.route.TransitRouteLine;
+import com.baidu.mapapi.search.route.TransitRoutePlanOption;
+import com.baidu.mapapi.search.route.TransitRouteResult;
+import com.baidu.mapapi.search.route.WalkingRouteLine;
+import com.baidu.mapapi.search.route.WalkingRoutePlanOption;
+import com.baidu.mapapi.search.route.WalkingRouteResult;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.treasure.traveldiary.activity.home_page.DiaryImageCameraActivity;
 import com.treasure.traveldiary.activity.home_page.DiaryImagePublishActivity;
 import com.treasure.traveldiary.activity.home_page.EvaluatedPublishActivity;
 import com.treasure.traveldiary.activity.home_page.DiaryVideoCameraActivity;
 import com.treasure.traveldiary.activity.home_page.DiaryVideoPublishActivity;
+import com.treasure.traveldiary.activity.home_page.SceneryActivity;
 import com.treasure.traveldiary.activity.home_page.ToolsTicketActivity;
 import com.treasure.traveldiary.activity.home_page.ToolsWeatherActivity;
 import com.treasure.traveldiary.activity.diary_center.DiaryCenterActivity;
@@ -79,6 +100,10 @@ import com.treasure.traveldiary.bean.DiaryBean;
 import com.treasure.traveldiary.bean.MapMarkerInfoBean;
 import com.treasure.traveldiary.bean.UserInfoBean;
 import com.treasure.traveldiary.listener.MapOrientationListener;
+import com.treasure.traveldiary.map_overlay.BikingRouteOverlay;
+import com.treasure.traveldiary.map_overlay.DrivingRouteOverlay;
+import com.treasure.traveldiary.map_overlay.TransitRouteOverlay;
+import com.treasure.traveldiary.map_overlay.WalkingRouteOverlay;
 import com.treasure.traveldiary.receiver.CommonDataReceiver;
 import com.treasure.traveldiary.utils.StringContents;
 import com.treasure.traveldiary.utils.Tools;
@@ -91,7 +116,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, BDLocationListener, BaiduMap.OnMapLoadedCallback, BaiduMap.OnMarkerClickListener, BaiduMap.OnMapClickListener, RadioGroup.OnCheckedChangeListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, BDLocationListener, BaiduMap.OnMapLoadedCallback, BaiduMap.OnMarkerClickListener, BaiduMap.OnMapClickListener, RadioGroup.OnCheckedChangeListener, TextWatcher, OnGetRoutePlanResultListener {
 
     private LinearLayout mineDiaryLayout;
     private LinearLayout travellerCircleLayout;
@@ -182,9 +207,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private CommonDataReceiver commonDataReceiver;
     private SimpleDraweeView left_user_icon;
     private TextView left_user_name;
-    private LinearLayout night_layout,signing_layout,message_layout,feedback_layout,settings_layout;
+    private LinearLayout night_layout, signing_layout, message_layout, feedback_layout, settings_layout;
     private ImageView night_icon;
     private DrawerLayout drawer_layout;
+    private FloatingActionButton search;
+    private FrameLayout search_layout;
+    private EditText search_edit;
+    private TextView search_btn;
+    private RoutePlanSearch routePlanSearch;
+    private RadioGroup search_rg;
+    private int route = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,7 +238,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         initMap();
         initLocation();
         initClick();
-        receiveBoradCast();
+        receiveBroadCast();
     }
 
     private void initFindId() {
@@ -228,8 +261,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         image_t = (TextView) findViewById(R.id.add_diary_image_t);
         video_t = (TextView) findViewById(R.id.add_diary_video_t);
         evaluated_t = (TextView) findViewById(R.id.add_evaluated_t);
-        btnScenic = (FloatingActionButton) findViewById(R.id.add_scenic);
-        scenic_t = (TextView) findViewById(R.id.add_scenic_t);
+        btnScenic = (FloatingActionButton) findViewById(R.id.add_scenery);
+        scenic_t = (TextView) findViewById(R.id.add_scenery_t);
         btnLive = (FloatingActionButton) findViewById(R.id.add_live);
         live_t = (TextView) findViewById(R.id.add_live_t);
         btnTools = (FloatingActionButton) findViewById(R.id.add_tools);
@@ -238,6 +271,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         weather_t = (TextView) findViewById(R.id.add_tools_weather_t);
         btnToolsTicket = (FloatingActionButton) findViewById(R.id.add_tools_ticket);
         ticket_t = (TextView) findViewById(R.id.add_tools_ticket_t);
+        search = (FloatingActionButton) findViewById(R.id.map_search);
+        search_layout = (FrameLayout) findViewById(R.id.map_search_layout);
+        search_edit = (EditText) findViewById(R.id.map_search_edit);
+        search_btn = (TextView) findViewById(R.id.map_search_btn);
+        search_rg = (RadioGroup) findViewById(R.id.map_search_rg);
         //侧边栏
         left_user_icon = (SimpleDraweeView) findViewById(R.id.left_login_icon);
         left_user_name = (TextView) findViewById(R.id.left_login_username);
@@ -276,6 +314,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         map_type_normal.setTextColor(getResources().getColor(R.color.colorWhite));
         map_type_satellite.setTextColor(getResources().getColor(R.color.colorBlock));
         map_type_compass.setTextColor(getResources().getColor(R.color.colorBlock));
+        routePlanSearch = RoutePlanSearch.newInstance();
+        routePlanSearch.setOnGetRoutePlanResultListener(this);
     }
 
     private void initLocation() {
@@ -328,6 +368,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         btnToolsTicket.setOnClickListener(this);
         ticket_t.setOnClickListener(this);
         user_icon.setOnClickListener(this);
+        search.setOnClickListener(this);
+        search_btn.setOnClickListener(this);
+        search_edit.addTextChangedListener(this);
+        search_rg.setOnCheckedChangeListener(this);
 
         left_user_icon.setOnClickListener(this);
         left_user_name.setOnClickListener(this);
@@ -363,7 +407,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     } else {
                         hindFloatActionButton();
                     }
-                    if (isToolsShow){
+                    if (isToolsShow) {
                         isToolsShow = false;
                         Tools.setAnimation(btnTools, 0, 0, 1, 0, 0, -720, 1, 1, 1000);
                         btnToolsWeather.setVisibility(View.GONE);
@@ -374,7 +418,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         Tools.setAnimation(weather_t, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
                         Tools.setAnimation(btnToolsTicket, 0, 0, 1, 0, 0, -720, 1, 1, 2500);
                         Tools.setAnimation(ticket_t, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
-                        Tools.setAnimation(map_bg2_layout,0,0,1,0,0,0,1,1,2000);
+                        Tools.setAnimation(map_bg2_layout, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
                         map_bg2_layout.setClickable(false);
                     }
                 }
@@ -417,9 +461,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }
                 hindFloatActionButton();
                 break;
-            case R.id.add_scenic:
-            case R.id.add_scenic_t:
-                Toast.makeText(this, "该功能暂未开放！", Toast.LENGTH_SHORT).show();
+            case R.id.add_scenery:
+            case R.id.add_scenery_t:
+                Intent intent8 = new Intent(MainActivity.this, SceneryActivity.class);
+                intent8.putExtra("user_province", user_province);
+                if (Build.VERSION.SDK_INT >= 21) {
+                    startActivity(intent8, ActivityOptions.makeSceneTransitionAnimation(this, btnScenic, "scenery").toBundle());
+                } else {
+                    startActivity(intent8);
+                }
                 hindFloatActionButton();
                 break;
             case R.id.add_live:
@@ -441,7 +491,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     Tools.setAnimation(weather_t, 0, 0, 0, 1, 0, 0, 1, 1, 2000);
                     Tools.setAnimation(btnToolsTicket, 0, 0, 0, 1, 0, -720, 1, 1, 2500);
                     Tools.setAnimation(ticket_t, 0, 0, 0, 1, 0, 0, 1, 1, 2000);
-                    Tools.setAnimation(map_bg2_layout,0,0,0,1,0,0,1,1,2000);
+                    Tools.setAnimation(map_bg2_layout, 0, 0, 0, 1, 0, 0, 1, 1, 2000);
                     map_bg2_layout.setClickable(true);
                     isToolsShow = true;
                 } else {
@@ -455,7 +505,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     Tools.setAnimation(weather_t, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
                     Tools.setAnimation(btnToolsTicket, 0, 0, 1, 0, 0, -720, 1, 1, 2500);
                     Tools.setAnimation(ticket_t, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
-                    Tools.setAnimation(map_bg2_layout,0,0,1,0,0,0,1,1,2000);
+                    Tools.setAnimation(map_bg2_layout, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
                     map_bg2_layout.setClickable(false);
                 }
 
@@ -470,7 +520,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 } else {
                     startActivity(intent00);
                 }
-                if (isToolsShow){
+                if (isToolsShow) {
                     isToolsShow = false;
                     Tools.setAnimation(btnTools, 0, 0, 1, 0, 0, -720, 1, 1, 1000);
                     btnToolsWeather.setVisibility(View.GONE);
@@ -481,7 +531,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     Tools.setAnimation(weather_t, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
                     Tools.setAnimation(btnToolsTicket, 0, 0, 1, 0, 0, -720, 1, 1, 2500);
                     Tools.setAnimation(ticket_t, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
-                    Tools.setAnimation(map_bg2_layout,0,0,1,0,0,0,1,1,2000);
+                    Tools.setAnimation(map_bg2_layout, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
                     map_bg2_layout.setClickable(false);
                 }
                 break;
@@ -494,7 +544,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 } else {
                     startActivity(intent01);
                 }
-                if (isToolsShow){
+                if (isToolsShow) {
                     isToolsShow = false;
                     Tools.setAnimation(btnTools, 0, 0, 1, 0, 0, -720, 1, 1, 1000);
                     btnToolsWeather.setVisibility(View.GONE);
@@ -505,7 +555,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     Tools.setAnimation(weather_t, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
                     Tools.setAnimation(btnToolsTicket, 0, 0, 1, 0, 0, -720, 1, 1, 2500);
                     Tools.setAnimation(ticket_t, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
-                    Tools.setAnimation(map_bg2_layout,0,0,1,0,0,0,1,1,2000);
+                    Tools.setAnimation(map_bg2_layout, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
                     map_bg2_layout.setClickable(false);
                 }
                 break;
@@ -514,7 +564,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 if (addShow) {
                     hindFloatActionButton();
                 }
-                if (isToolsShow){
+                if (isToolsShow) {
                     isToolsShow = false;
                     Tools.setAnimation(btnTools, 0, 0, 1, 0, 0, -720, 1, 1, 1000);
                     btnToolsWeather.setVisibility(View.GONE);
@@ -525,7 +575,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     Tools.setAnimation(weather_t, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
                     Tools.setAnimation(btnToolsTicket, 0, 0, 1, 0, 0, -720, 1, 1, 2500);
                     Tools.setAnimation(ticket_t, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
-                    Tools.setAnimation(map_bg2_layout,0,0,1,0,0,0,1,1,2000);
+                    Tools.setAnimation(map_bg2_layout, 0, 0, 1, 0, 0, 0, 1, 1, 2000);
                     map_bg2_layout.setClickable(false);
                 }
                 break;
@@ -551,11 +601,43 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     drawer_layout.openDrawer(GravityCompat.START);
                 }
                 break;
+            case R.id.map_search:
+                Tools.setAnimation(search, -widthPixels / 2, 0, 1, 1, 0, -720, 1, 0, 1000);
+                search_layout.setVisibility(View.VISIBLE);
+                Tools.setAnimation(search_layout, 0, 0, 0, 1, 0, 0, 0, 1, 1000);
+                break;
+            case R.id.map_search_btn:
+                if (search_btn.getText().toString().equals("| 关闭")) {
+                    Tools.setAnimation(search, 0, 0, 1, 1, 0, 720, 0, 1, 1000);
+                    Tools.setAnimation(search_layout, 0, 0, 1, 0, 0, 0, 1, 0, 1000);
+                } else {
+                    PlanNode stNode = PlanNode.withLocation(new LatLng(user_latitude,user_longitude));
+                    PlanNode enNode = PlanNode.withCityNameAndPlaceName(user_city, search_edit.getText().toString().trim());
+                    if (route == 0){
+                        routePlanSearch.transitSearch(new TransitRoutePlanOption()
+                                .from(stNode)
+                                .city(user_city)
+                                .to(enNode));
+                    }else if (route == 1){
+                        routePlanSearch.drivingSearch(new DrivingRoutePlanOption()
+                        .from(stNode)
+                        .to(enNode));
+                    }else if (route == 2){
+                        routePlanSearch.walkingSearch(new WalkingRoutePlanOption()
+                        .from(stNode)
+                        .to(enNode));
+                    }else if (route == 3){
+                        routePlanSearch.bikingSearch(new BikingRoutePlanOption()
+                        .from(stNode)
+                        .to(enNode));
+                    }
+                }
+                break;
             case R.id.mine_popup_quit:
-                quitpopupWindow();
+                quitPopupWindow();
                 break;
             case R.id.mine_popup_loginin:
-                Loginin();
+                LoginIn();
                 break;
             case R.id.mine_popup_register:
                 mPopupWindow.dismiss();
@@ -596,7 +678,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     //Login
                     showPopupWindow();
                 } else {
-                    startActivity(new Intent(MainActivity.this,UserSigningActivity.class));
+                    startActivity(new Intent(MainActivity.this, UserSigningActivity.class));
                 }
                 break;
             case R.id.left_message_layout:
@@ -622,6 +704,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        if (Tools.isNull(search_edit.getText().toString().trim())) {
+            search_btn.setText("| 关闭");
+            search_rg.setVisibility(View.GONE);
+        } else {
+            search_btn.setText("| 搜索");
+            search_rg.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
+    }
+
+    @Override
     public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
         RadioButton radioButton = (RadioButton) findViewById(radioGroup.getCheckedRadioButtonId());
         if (radioButton.getText().equals("普通")) {
@@ -641,6 +744,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             map_type_satellite.setTextColor(getResources().getColor(R.color.colorBlock));
             map_type_compass.setTextColor(getResources().getColor(R.color.colorWhite));
             mode = MyLocationConfiguration.LocationMode.COMPASS;
+        }else if (radioButton.getText().equals("公交")){
+            route = 0;
+        }else if (radioButton.getText().equals("驾车")){
+            route = 1;
+        }else if (radioButton.getText().equals("步行")){
+            route = 2;
+        }else if (radioButton.getText().equals("骑行")){
+            route = 3;
         }
     }
 
@@ -735,7 +846,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mPopupWindow.showAtLocation(rootView, Gravity.BOTTOM, 0, 0);
     }
 
-    private void quitpopupWindow() {
+    private void quitPopupWindow() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("您确认放弃登录吗？");
         builder.setPositiveButton("放弃", new DialogInterface.OnClickListener() {
@@ -771,7 +882,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     /**
      * 登录操作
      */
-    private void Loginin() {
+    private void LoginIn() {
         if (Tools.isNull(editPhone.getText().toString().trim())) {
             Toast.makeText(MainActivity.this, "手机号不能为空", Toast.LENGTH_SHORT).show();
             return;
@@ -803,7 +914,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                             editor.putString("user_sex", String.valueOf(list.get(0).getSex()));
                             editor.putString("user_desc", list.get(0).getUser_desc());
                             editor.putString("integral_count", list.get(0).getIntegral_count());
-                            editor.putString("traveller_circle_bg",list.get(0).getTraveller_circle_bg());
+                            editor.putString("traveller_circle_bg", list.get(0).getTraveller_circle_bg());
                             editor.apply();
 
                             //发送登录成功 广播
@@ -824,7 +935,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         });
     }
 
-    private void receiveBoradCast() {
+    private void receiveBroadCast() {
         filter = new IntentFilter();
         filter.addAction(StringContents.ACTION_COMMENTDATA);
         commonDataReceiver = new CommonDataReceiver();
@@ -840,6 +951,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         });
         registerReceiver(commonDataReceiver, filter);
     }
+
     /**
      * 夜间模式的切换
      */
@@ -862,6 +974,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             application.setNight(false);
         }
     }
+
     @Override
     public void onReceiveLocation(BDLocation bdLocation) {
 // 定位接口可能返回错误码,要根据结果错误码,来判断是否是正确的地址;
@@ -1043,6 +1156,130 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         return false;
     }
 
+    @Override
+    public void onGetWalkingRouteResult(WalkingRouteResult walkingRouteResult) {
+        if (walkingRouteResult == null || walkingRouteResult.error != SearchResult.ERRORNO.NO_ERROR) {
+            Toast.makeText(this, "未查找到结果", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (walkingRouteResult.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
+            Toast.makeText(this, "起终点或途经点地址有岐义", Toast.LENGTH_SHORT).show();
+            //起终点或途经点地址有岐义，通过以下接口获取建议查询信息
+            //result.getSuggestAddrInfo()
+            return;
+        }
+        if (walkingRouteResult.error == SearchResult.ERRORNO.NO_ERROR) {
+            Tools.setAnimation(search, 0, 0, 1, 1, 0, 720, 0, 1, 1000);
+            Tools.setAnimation(search_layout, 0, 0, 1, 0, 0, 0, 1, 0, 1000);
+            search_edit.setText("");
+            map.clear();
+            WalkingRouteLine routeLine = walkingRouteResult.getRouteLines().get(0);
+            //创建公交路线规划线路覆盖物
+            WalkingRouteOverlay overlay = new WalkingRouteOverlay(map);
+            //设置公交路线规划数据
+            overlay.setData(routeLine);
+            //将公交路线规划覆盖物添加到地图中
+            overlay.addToMap();
+            overlay.zoomToSpan();
+        }
+    }
+
+    @Override
+    public void onGetTransitRouteResult(TransitRouteResult transitRouteResult) {
+        if (transitRouteResult == null || transitRouteResult.error != SearchResult.ERRORNO.NO_ERROR) {
+            Toast.makeText(this, "未查找到结果", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (transitRouteResult.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
+            Toast.makeText(this, "起终点或途经点地址有岐义", Toast.LENGTH_SHORT).show();
+            //起终点或途经点地址有岐义，通过以下接口获取建议查询信息
+            //result.getSuggestAddrInfo()
+            return;
+        }
+        if (transitRouteResult.error == SearchResult.ERRORNO.NO_ERROR) {
+            Tools.setAnimation(search, 0, 0, 1, 1, 0, 720, 0, 1, 1000);
+            Tools.setAnimation(search_layout, 0, 0, 1, 0, 0, 0, 1, 0, 1000);
+            search_edit.setText("");
+            map.clear();
+            TransitRouteLine routeLine = transitRouteResult.getRouteLines().get(0);
+            //创建公交路线规划线路覆盖物
+            TransitRouteOverlay overlay = new TransitRouteOverlay(map);
+            //设置公交路线规划数据
+            overlay.setData(routeLine);
+            //将公交路线规划覆盖物添加到地图中
+            overlay.addToMap();
+            overlay.zoomToSpan();
+        }
+    }
+
+    @Override
+    public void onGetMassTransitRouteResult(MassTransitRouteResult massTransitRouteResult) {
+
+    }
+
+    @Override
+    public void onGetDrivingRouteResult(DrivingRouteResult drivingRouteResult) {
+
+        if (drivingRouteResult == null || drivingRouteResult.error != SearchResult.ERRORNO.NO_ERROR) {
+            Toast.makeText(this, "未查找到结果", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (drivingRouteResult.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
+            Toast.makeText(this, "起终点或途经点地址有岐义", Toast.LENGTH_SHORT).show();
+            //起终点或途经点地址有岐义，通过以下接口获取建议查询信息
+            //result.getSuggestAddrInfo()
+            return;
+        }
+        if (drivingRouteResult.error == SearchResult.ERRORNO.NO_ERROR) {
+            Tools.setAnimation(search, 0, 0, 1, 1, 0, 720, 0, 1, 1000);
+            Tools.setAnimation(search_layout, 0, 0, 1, 0, 0, 0, 1, 0, 1000);
+            search_edit.setText("");
+            map.clear();
+            DrivingRouteLine routeLine = drivingRouteResult.getRouteLines().get(0);
+            //创建公交路线规划线路覆盖物
+            DrivingRouteOverlay overlay = new DrivingRouteOverlay(map);
+            //设置公交路线规划数据
+            overlay.setData(routeLine);
+            //将公交路线规划覆盖物添加到地图中
+            overlay.addToMap();
+            overlay.zoomToSpan();
+        }
+    }
+
+    @Override
+    public void onGetIndoorRouteResult(IndoorRouteResult indoorRouteResult) {
+
+    }
+
+    @Override
+    public void onGetBikingRouteResult(BikingRouteResult bikingRouteResult) {
+
+        if (bikingRouteResult == null || bikingRouteResult.error != SearchResult.ERRORNO.NO_ERROR) {
+            Toast.makeText(this, "未查找到结果", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (bikingRouteResult.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
+            Toast.makeText(this, "起终点或途经点地址有岐义", Toast.LENGTH_SHORT).show();
+            //起终点或途经点地址有岐义，通过以下接口获取建议查询信息
+            //result.getSuggestAddrInfo()
+            return;
+        }
+        if (bikingRouteResult.error == SearchResult.ERRORNO.NO_ERROR) {
+            Tools.setAnimation(search, 0, 0, 1, 1, 0, 720, 0, 1, 1000);
+            Tools.setAnimation(search_layout, 0, 0, 1, 0, 0, 0, 1, 0, 1000);
+            search_edit.setText("");
+            map.clear();
+            BikingRouteLine routeLine = bikingRouteResult.getRouteLines().get(0);
+            //创建公交路线规划线路覆盖物
+            BikingRouteOverlay overlay = new BikingRouteOverlay(map);
+            //设置公交路线规划数据
+            overlay.setData(routeLine);
+            //将公交路线规划覆盖物添加到地图中
+            overlay.addToMap();
+            overlay.zoomToSpan();
+        }
+    }
+
     private void requestDiaryList() {
 
         BmobQuery<DiaryBean> query = new BmobQuery<>();
@@ -1098,9 +1335,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void onBackPressed() {
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)){
+        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START);
-        }else {
+        } else if (addShow) {
+            hindFloatActionButton();
+        } else {
             super.onBackPressed();
         }
     }
@@ -1118,22 +1357,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         requestDiaryList();
         if (!Tools.isNull(mPreferences.getString("token", ""))) {
             BmobQuery<UserInfoBean> query = new BmobQuery<>();
-            query.addWhereEqualTo("user_name",mPreferences.getString("user_name",""))
+            query.addWhereEqualTo("user_name", mPreferences.getString("user_name", ""))
                     .findObjects(new FindListener<UserInfoBean>() {
                         @Override
                         public void done(List<UserInfoBean> list, BmobException e) {
-                            if (e == null){
+                            if (e == null) {
                                 String icon_url = list.get(0).getUser_icon();
                                 user_icon.setImageURI(Uri.parse(icon_url));
                                 left_user_icon.setImageURI(Uri.parse(icon_url));
                                 left_user_name.setText(list.get(0).getNick_name());
-                            }else {
-                                Toast.makeText(MainActivity.this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(MainActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
             requestDiaryList();
-        }else {
+        } else {
             user_icon.setImageResource(R.mipmap.ic_no_icon);
             left_user_icon.setImageResource(R.mipmap.ic_no_icon);
             left_user_name.setText("登陆让生活更精彩");

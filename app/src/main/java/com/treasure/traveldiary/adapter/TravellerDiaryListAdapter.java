@@ -109,9 +109,6 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
         if (!Tools.isNull(listBean.getUser_nick())) {
             holder.user_name.setText(listBean.getUser_nick());
         }
-        if (!Tools.isNull(listBean.getPublish_time())) {
-            holder.user_time.setText(listBean.getPublish_time());
-        }
         if (!Tools.isNull(listBean.getUser_desc())) {
             holder.user_desc.setText(listBean.getUser_desc());
         }
@@ -181,7 +178,7 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
         private SimpleDraweeView video_image;
         private SimpleDraweeView image1, image2, image3;
         private SimpleDraweeView user_icon;
-        private TextView user_name, user_time, user_desc, user_title;
+        private TextView user_name, user_desc, user_title;
         private LinearLayout text_layout;
         private TextView state_text;
         private ImageView state_img;
@@ -189,7 +186,6 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
         public ViewHolder(View view) {
             user_icon = (SimpleDraweeView) view.findViewById(R.id.diary_list_user_icon);
             user_name = ((TextView) view.findViewById(R.id.diary_list_user_name));
-            user_time = ((TextView) view.findViewById(R.id.diary_list_user_time));
             user_desc = ((TextView) view.findViewById(R.id.diary_list_user_desc));
             user_title = ((TextView) view.findViewById(R.id.diary_list_user_title));
             text_layout = (LinearLayout) view.findViewById(R.id.diary_list_layout);
