@@ -8,165 +8,184 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <ScrollView
-        android:id="@+id/scenery_detail_leaveMes_layout"
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/scenery_detail_leaveMes_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <include layout="@layout/common_top_view" />
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/bottom_yellow1_frame_gray_radius5"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <com.facebook.drawee.view.SimpleDraweeView
-                    android:id="@+id/scenery_detail_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    fresco:placeholderImage="@mipmap/pic_page_loading" />
+                <include layout="@layout/common_top_view" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bottom_yellow1_frame_gray_radius5"
+                    android:orientation="vertical">
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/scenery_detail_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        fresco:placeholderImage="@mipmap/pic_page_loading" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:text="景点等级："
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/scenery_detail_level"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/colorOrange"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:text="开放时间："
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/scenery_detail_open_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:text="景区地址："
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/scenery_detail_addr"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:text="推荐路线："
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/scenery_detail_way"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical" />
+                    </LinearLayout>
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
-                        android:text="景点等级："
+                        android:gravity="center_vertical"
+                        android:text="简介："
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/scenery_detail_level"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/scenery_detail_desc"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:gravity="center_vertical" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/colorAccent" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="留言"
                         android:textColor="@color/colorOrange"
                         android:textSize="16sp"
                         android:textStyle="bold" />
+
+                    <com.treasure.traveldiary.widget.CustomScrollListView
+                        android:id="@+id/scenery_detail_leaveMes_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:text="开放时间："
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/scenery_detail_open_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:text="景区地址："
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/scenery_detail_addr"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:text="推荐路线："
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/scenery_detail_way"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:gravity="center_vertical"
-                    android:text="简介："
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/scenery_detail_desc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:gravity="center_vertical" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/colorAccent" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="留言"
-                    android:textColor="@color/colorOrange"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <com.treasure.traveldiary.widget.CustomScrollListView
-                    android:id="@+id/scenery_detail_leaveMes_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
             </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
+
+        <include layout="@layout/common_loading_view" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/scenery_detail_leaveMes_refresh"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="30dp"
+            android:src="@mipmap/ic_refresh"
+            app:backgroundTint="@color/colorOrange"
+            app:pressedTranslationZ="20dp"
+            app:rippleColor="@color/colorAccent" />
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/scenery_detail_show_leaveMes"

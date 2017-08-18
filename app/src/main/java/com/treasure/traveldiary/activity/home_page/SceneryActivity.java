@@ -138,6 +138,12 @@ public class SceneryActivity extends BaseActivity implements View.OnClickListene
     }
 
     @Override
+    protected void onResume() {
+        getSceneryList();
+        super.onResume();
+    }
+
+    @Override
     protected void onDestroy() {
         isPageDestroy = true;
         super.onDestroy();

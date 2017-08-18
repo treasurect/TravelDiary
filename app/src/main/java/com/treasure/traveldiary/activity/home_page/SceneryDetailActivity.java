@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -24,10 +25,12 @@ import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.adapter.DiaryLeavemesListAdapter;
 import com.treasure.traveldiary.bean.LeaveMesBean;
 import com.treasure.traveldiary.bean.SceneryBean;
+import com.treasure.traveldiary.utils.LogUtil;
 import com.treasure.traveldiary.utils.Tools;
 import com.treasure.traveldiary.widget.CustomScrollListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -54,6 +57,8 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
     private String scenery_name;
     private boolean isPageDestroy;
     private SharedPreferences mPreferences;
+    private FrameLayout loading;
+    private FloatingActionButton refresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +68,7 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
         Tools.setTranslucentStatus(this);
         btn_back.setVisibility(View.VISIBLE);
         title.setText("详情");
-        mPreferences = getSharedPreferences("user",MODE_PRIVATE);
+        mPreferences = getSharedPreferences("user", MODE_PRIVATE);
 
         initFindId();
         initListView();
@@ -82,6 +87,8 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
         scenery_addr = (TextView) findViewById(R.id.scenery_detail_addr);
         scenery_way = (TextView) findViewById(R.id.scenery_detail_way);
         scenery_desc = (TextView) findViewById(R.id.scenery_detail_desc);
+        loading = (FrameLayout) findViewById(R.id.loading_layout);
+        refresh = (FloatingActionButton) findViewById(R.id.scenery_detail_leaveMes_refresh);
     }
 
     private void getIntentReceiver() {
@@ -111,6 +118,7 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
                 scenery_way.setText(sceneryBean.getScenery_way());
             }
             if (sceneryBean.getScenery_comments() != null) {
+                Collections.reverse(sceneryBean.getScenery_comments());
                 mesBeanList.addAll(sceneryBean.getScenery_comments());
                 adapter.notifyDataSetChanged();
             }
@@ -131,6 +139,7 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
     private void initClick() {
         btn_back.setOnClickListener(this);
         show_leave_mes.setOnClickListener(this);
+        refresh.setOnClickListener(this);
     }
 
     @Override
@@ -149,6 +158,11 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
                 }
                 mPopupWindow.dismiss();
                 show_leave_mes.setVisibility(View.VISIBLE);
+                break;
+            case R.id.scenery_detail_leaveMes_refresh:
+                Tools.setAnimation(refresh, 0, 0, 1, 1, 0, -760, 1, 1, 2000);
+                getLeaveMesList();
+                Toast.makeText(this, "刷新成功", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -194,16 +208,16 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
 
     private void getLeaveMes() {
         BmobQuery<SceneryBean> query = new BmobQuery<>();
-        query.addWhereEqualTo("scenery_name",scenery_name)
+        query.addWhereEqualTo("scenery_name", scenery_name)
                 .findObjects(new FindListener<SceneryBean>() {
                     @Override
                     public void done(List<SceneryBean> list, BmobException e) {
-                        if (e== null){
+                        if (e == null) {
                             String objectId = list.get(0).getObjectId();
                             saveLeaveMes(objectId);
-                        }else {
-                            if (!isPageDestroy){
-                                Toast.makeText(SceneryDetailActivity.this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (!isPageDestroy) {
+                                Toast.makeText(SceneryDetailActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -213,26 +227,55 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
     private void saveLeaveMes(String objectId) {
         SceneryBean sceneryBean = new SceneryBean();
         LeaveMesBean leaveMesBean = new LeaveMesBean();
-        leaveMesBean.setLeave_name(mPreferences.getString("user_name",""));
-        leaveMesBean.setLeave_nick(mPreferences.getString("user_nick",""));
-        leaveMesBean.setLeave_icon(mPreferences.getString("user_icon",""));
+        leaveMesBean.setLeave_name(mPreferences.getString("user_name", ""));
+        leaveMesBean.setLeave_nick(mPreferences.getString("user_nick", ""));
+        leaveMesBean.setLeave_icon(mPreferences.getString("user_icon", ""));
         String nowTime = Tools.getNowTime();
         leaveMesBean.setLeave_time(nowTime);
         leaveMesBean.setLeave_content(editLeaveMes.getText().toString().trim());
+        Collections.reverse(mesBeanList);
         mesBeanList.add(leaveMesBean);
+        sceneryBean.setScenery_comments(mesBeanList);
         sceneryBean.update(objectId, new UpdateListener() {
             @Override
             public void done(BmobException e) {
-                if (e==null){
+                if (e == null) {
+                    Collections.reverse(mesBeanList);
                     adapter.notifyDataSetChanged();
                     Toast.makeText(SceneryDetailActivity.this, "评论成功，你够意思！", Toast.LENGTH_SHORT).show();
-                }else {
-                    if (!isPageDestroy){
-                        Toast.makeText(SceneryDetailActivity.this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+                    if (!isPageDestroy) {
+                        Toast.makeText(SceneryDetailActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
         });
+    }
+
+    private void getLeaveMesList() {
+        loading.setVisibility(View.VISIBLE);
+        BmobQuery<SceneryBean> query = new BmobQuery<>();
+        query.addWhereEqualTo("scenery_name", scenery_name)
+                .findObjects(new FindListener<SceneryBean>() {
+                    @Override
+                    public void done(List<SceneryBean> list, BmobException e) {
+                        if (e == null) {
+                            if (!isPageDestroy) {
+                                List<LeaveMesBean> scenery_comments = list.get(0).getScenery_comments();
+                                mesBeanList.clear();
+                                Collections.reverse(scenery_comments);
+                                mesBeanList.addAll(scenery_comments);
+                                adapter.notifyDataSetChanged();
+                                loading.setVisibility(View.GONE);
+                            }
+                        } else {
+                            if (!isPageDestroy) {
+                                Toast.makeText(SceneryDetailActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                loading.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                });
     }
 
     @Override
