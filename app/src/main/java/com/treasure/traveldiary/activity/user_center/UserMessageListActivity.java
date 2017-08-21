@@ -88,7 +88,7 @@ public class UserMessageListActivity extends BaseActivity implements View.OnClic
                                 nodata_layout.setVisibility(View.VISIBLE);
                             }
                         } else {
-                            Toast.makeText(UserMessageListActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UserMessageListActivity.this, "获取消息列表失败", Toast.LENGTH_SHORT).show();
                         }
                         loading.setVisibility(View.GONE);
                     }

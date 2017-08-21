@@ -215,7 +215,7 @@ public class DiaryTextPublishActivity extends BaseActivity implements View.OnCli
                     DiaryTextPublishActivity.this.finish();
                 } else {
                     loading.setVisibility(View.GONE);
-                    Toast.makeText(DiaryTextPublishActivity.this, "很遗憾，发表失败\n原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DiaryTextPublishActivity.this, "很遗憾，发表失败", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -126,3 +126,6 @@
 -dontwarn javax.annotation.**
 -dontwarn com.android.volley.toolbox.**
 -dontwarn com.facebook.infer.**
+
+#  QQ WeChat SinaWeibo
+-keep class com.sina.weibo.sdk.** { *; }

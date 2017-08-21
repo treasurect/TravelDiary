@@ -10,6 +10,8 @@ import android.net.Network;
 import com.baidu.mapapi.SDKInitializer;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.mob.MobSDK;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.treasure.traveldiary.utils.StringContents;
 
 import java.util.List;
@@ -24,6 +26,7 @@ import cn.jpush.android.api.JPushInterface;
 public class TravelApplication extends Application {
     private boolean isNight;
     private List<String> diary_image;
+    public static IWXAPI iwxapi;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -38,6 +41,9 @@ public class TravelApplication extends Application {
         //JPUSH
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
+// 微信
+        iwxapi = WXAPIFactory.createWXAPI(this,StringContents.WeChat_APP_ID,false);
+        iwxapi.registerApp(StringContents.WeChat_APP_ID);
 
         setNight(false);
     }

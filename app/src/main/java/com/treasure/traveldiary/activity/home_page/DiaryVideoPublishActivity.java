@@ -291,7 +291,7 @@ public class DiaryVideoPublishActivity extends BaseActivity implements View.OnCl
                     loading.setVisibility(View.GONE);
                     DiaryVideoPublishActivity.this.finish();
                 } else {
-                    Toast.makeText(DiaryVideoPublishActivity.this, "很遗憾，短视频发布失败\n原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DiaryVideoPublishActivity.this, "很遗憾，短视频发布失败", Toast.LENGTH_SHORT).show();
                     loading.setVisibility(View.GONE);
                 }
             }

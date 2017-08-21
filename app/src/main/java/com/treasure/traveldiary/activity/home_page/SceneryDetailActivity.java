@@ -59,6 +59,7 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
     private SharedPreferences mPreferences;
     private FrameLayout loading;
     private FloatingActionButton refresh;
+    private List<LeaveMesBean> list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +119,9 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
                 scenery_way.setText(sceneryBean.getScenery_way());
             }
             if (sceneryBean.getScenery_comments() != null) {
+                list.addAll(sceneryBean.getScenery_comments());
+
+                sceneryBean.getScenery_comments().remove(0);
                 Collections.reverse(sceneryBean.getScenery_comments());
                 mesBeanList.addAll(sceneryBean.getScenery_comments());
                 adapter.notifyDataSetChanged();
@@ -140,6 +144,7 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
         btn_back.setOnClickListener(this);
         show_leave_mes.setOnClickListener(this);
         refresh.setOnClickListener(this);
+        loading.setOnClickListener(this);
     }
 
     @Override
@@ -217,7 +222,7 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
                             saveLeaveMes(objectId);
                         } else {
                             if (!isPageDestroy) {
-                                Toast.makeText(SceneryDetailActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SceneryDetailActivity.this, "获取日记列表失败", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -226,16 +231,19 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
 
     private void saveLeaveMes(String objectId) {
         SceneryBean sceneryBean = new SceneryBean();
-        LeaveMesBean leaveMesBean = new LeaveMesBean();
+        final LeaveMesBean leaveMesBean = new LeaveMesBean();
         leaveMesBean.setLeave_name(mPreferences.getString("user_name", ""));
         leaveMesBean.setLeave_nick(mPreferences.getString("user_nick", ""));
         leaveMesBean.setLeave_icon(mPreferences.getString("user_icon", ""));
         String nowTime = Tools.getNowTime();
         leaveMesBean.setLeave_time(nowTime);
         leaveMesBean.setLeave_content(editLeaveMes.getText().toString().trim());
+        list.add(leaveMesBean);
+        sceneryBean.setScenery_comments(list);
+
         Collections.reverse(mesBeanList);
         mesBeanList.add(leaveMesBean);
-        sceneryBean.setScenery_comments(mesBeanList);
+
         sceneryBean.update(objectId, new UpdateListener() {
             @Override
             public void done(BmobException e) {
@@ -245,7 +253,7 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
                     Toast.makeText(SceneryDetailActivity.this, "评论成功，你够意思！", Toast.LENGTH_SHORT).show();
                 } else {
                     if (!isPageDestroy) {
-                        Toast.makeText(SceneryDetailActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SceneryDetailActivity.this, "很遗憾，评论失败", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -263,6 +271,7 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
                             if (!isPageDestroy) {
                                 List<LeaveMesBean> scenery_comments = list.get(0).getScenery_comments();
                                 mesBeanList.clear();
+                                scenery_comments.remove(0);
                                 Collections.reverse(scenery_comments);
                                 mesBeanList.addAll(scenery_comments);
                                 adapter.notifyDataSetChanged();
@@ -270,7 +279,7 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
                             }
                         } else {
                             if (!isPageDestroy) {
-                                Toast.makeText(SceneryDetailActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SceneryDetailActivity.this, "获取评论列表失败", Toast.LENGTH_SHORT).show();
                                 loading.setVisibility(View.GONE);
                             }
                         }

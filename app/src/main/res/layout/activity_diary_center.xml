@@ -8,7 +8,7 @@
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     tools:context="com.treasure.traveldiary.activity.diary_center.DiaryCenterActivity">
-<include layout="@layout/common_top_view"/>
+<include layout="@layout/common_title_bar_view"/>
     <android.support.design.widget.TabLayout
         android:id="@+id/diary_center_tabLayout"
         android:layout_width="match_parent"

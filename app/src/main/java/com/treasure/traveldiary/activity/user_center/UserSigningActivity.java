@@ -103,7 +103,7 @@ public class UserSigningActivity extends BaseActivity implements View.OnClickLis
                             }
                         }
                     }else {
-                        Toast.makeText(UserSigningActivity.this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UserSigningActivity.this, "签到失败", Toast.LENGTH_SHORT).show();
                     }
                 }
             });

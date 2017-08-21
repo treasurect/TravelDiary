@@ -93,7 +93,7 @@ public class MineDiaryTimerShaftFragment extends BaseFragment {
                             if (!isPageDestroy){
                                 loading.setVisibility(View.GONE);
                                 nodata_text.setVisibility(View.GONE);
-                                Toast.makeText(getContext(), "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "获取时间轴列表失败", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }

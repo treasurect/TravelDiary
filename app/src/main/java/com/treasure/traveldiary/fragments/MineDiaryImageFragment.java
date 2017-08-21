@@ -143,7 +143,7 @@ public class MineDiaryImageFragment extends BaseFragment implements TravellerDia
                                                 }
                                                 loading.setVisibility(View.GONE);
                                                 nodata_text.setVisibility(View.GONE);
-                                                Toast.makeText(getContext(), "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(), "获取日记列表失败", Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     }
@@ -212,7 +212,7 @@ public class MineDiaryImageFragment extends BaseFragment implements TravellerDia
                         }
                     } else {
                         if (!isPageDestroy) {
-                            Toast.makeText(getActivity(), "点赞失败\n原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "点赞失败", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -252,7 +252,7 @@ public class MineDiaryImageFragment extends BaseFragment implements TravellerDia
                                 loading.setVisibility(View.GONE);
                                 listView.completeRefresh();
                                 if (!isPageDestroy) {
-                                    Toast.makeText(getContext(), "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "加载列表失败", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }

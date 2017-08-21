@@ -107,7 +107,7 @@ public class UserEvaluatedListActivity extends BaseActivity implements View.OnCl
                             }
                         } else {
                             loading.setVisibility(View.GONE);
-                            Toast.makeText(UserEvaluatedListActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UserEvaluatedListActivity.this, "获取点评列表失败", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -145,7 +145,7 @@ public class UserEvaluatedListActivity extends BaseActivity implements View.OnCl
                             } else {
                                 loading.setVisibility(View.GONE);
                                 listView.completeRefresh();
-                                Toast.makeText(UserEvaluatedListActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UserEvaluatedListActivity.this, "加载更多列表失败", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

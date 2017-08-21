@@ -43,7 +43,6 @@ public class ToolsTicketAirFragment extends BaseFragment implements View.OnClick
     private List<ToolsTicketAirBean.ResultBean> list;
     private ToolsTicketAirAdapter adapter;
     private ToolsTicketAirBean airBean;
-    private String error;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -66,7 +65,7 @@ public class ToolsTicketAirFragment extends BaseFragment implements View.OnClick
                     station_end.setText(start1);
                     break;
                 case 400:
-                    Toast.makeText(getContext(), "原因：" + error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "获取飞机票信息失败", Toast.LENGTH_SHORT).show();
                     result_progress.setVisibility(View.GONE);
                     break;
             }
@@ -153,7 +152,7 @@ public class ToolsTicketAirFragment extends BaseFragment implements View.OnClick
         HttpHelper.doGetCall(url, getContext(), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                error = e.getMessage();
+                handler.sendMessage(handler.obtainMessage(400));
             }
 
             @Override

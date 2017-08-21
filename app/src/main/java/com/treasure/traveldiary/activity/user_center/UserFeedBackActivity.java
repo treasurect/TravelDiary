@@ -87,7 +87,7 @@ public class UserFeedBackActivity extends BaseActivity implements View.OnClickLi
                     Toast.makeText(UserFeedBackActivity.this, "我们已收到你的反馈，谢谢支持！", Toast.LENGTH_SHORT).show();
                     UserFeedBackActivity.this.finish();
                 } else {
-                    Toast.makeText(UserFeedBackActivity.this, "提交失败，原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserFeedBackActivity.this, "很遗憾，提交失败", Toast.LENGTH_SHORT).show();
                 }
             }
         });

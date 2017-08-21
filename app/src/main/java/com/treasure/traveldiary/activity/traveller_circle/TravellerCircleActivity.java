@@ -114,7 +114,7 @@ public class TravellerCircleActivity extends BaseActivity implements View.OnClic
                             }
                         } else {
                             if (!isPageDestroy) {
-                                Toast.makeText(TravellerCircleActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(TravellerCircleActivity.this, "更新背景失败", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -203,7 +203,7 @@ public class TravellerCircleActivity extends BaseActivity implements View.OnClic
                         } else {
                             if (!isPageDestroy) {
                                 loading.setVisibility(View.GONE);
-                                Toast.makeText(TravellerCircleActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(TravellerCircleActivity.this, "获取日记列表失败", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -265,7 +265,7 @@ public class TravellerCircleActivity extends BaseActivity implements View.OnClic
                         }
                     } else {
                         if (!isPageDestroy) {
-                            Toast.makeText(TravellerCircleActivity.this, "点赞失败\n原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TravellerCircleActivity.this, "点赞失败", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -298,7 +298,7 @@ public class TravellerCircleActivity extends BaseActivity implements View.OnClic
                                     toGetObjectId();
                                 } else {
                                     if (!isPageDestroy) {
-                                        Toast.makeText(TravellerCircleActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TravellerCircleActivity.this, "背景更新失败", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             }
@@ -322,7 +322,7 @@ public class TravellerCircleActivity extends BaseActivity implements View.OnClic
                             }
                         } else {
                             if (!isPageDestroy) {
-                                Toast.makeText(TravellerCircleActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(TravellerCircleActivity.this, "背景更新失败", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -341,7 +341,7 @@ public class TravellerCircleActivity extends BaseActivity implements View.OnClic
                     }
                 } else {
                     if (!isPageDestroy) {
-                        Toast.makeText(TravellerCircleActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TravellerCircleActivity.this, "背景更新失败", Toast.LENGTH_SHORT).show();
                     }
                 }
             }

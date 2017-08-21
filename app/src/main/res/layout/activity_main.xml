@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/common_top_view" />
+        <include layout="@layout/common_title_bar_view" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -199,9 +199,9 @@
                 android:layout_gravity="center_horizontal|bottom"
                 android:layout_marginBottom="25dp"
                 android:text="风景区"
-                android:transitionName="scenery"
                 android:textColor="@color/colorWhite"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:transitionName="scenery" />
 
             <TextView
                 android:id="@+id/add_live_t"
@@ -220,9 +220,9 @@
                 android:layout_gravity="center_horizontal|bottom"
                 android:layout_marginBottom="25dp"
                 android:text="出行工具"
-                android:transitionName="scenery"
                 android:textColor="@color/colorWhite"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:transitionName="scenery" />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/add_diary_text"
@@ -410,29 +410,29 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="公交"
-                        android:checked="true"/>
+                        android:checked="true"
+                        android:text="公交" />
 
                     <RadioButton
                         android:id="@+id/map_search_rb_diving"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="驾车"/>
+                        android:text="驾车" />
 
                     <RadioButton
                         android:id="@+id/map_search_rb_walking"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="步行"/>
+                        android:text="步行" />
 
                     <RadioButton
                         android:id="@+id/map_search_rb_biking"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="骑行"/>
+                        android:text="骑行" />
                 </RadioGroup>
             </FrameLayout>
 
@@ -651,6 +651,122 @@
                     android:layout_gravity="right|center_vertical"
                     android:layout_marginRight="10dp"
                     android:src="@mipmap/ic_right" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:layout_weight="1"
+                android:background="@color/colorWhite" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/colorWhite"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:text="第三方绑定"
+                android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:src="@mipmap/ic_qq_logo" />
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorWhite"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:text="QQ"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/left_binding_qq"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/colorWhite"
+                    android:gravity="center_vertical|right"
+                    android:paddingRight="15dp"
+                    android:textColor="@color/colorOrange"
+                    android:textStyle="bold" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:src="@mipmap/ic_wechat_logo" />
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorWhite"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:text="微信"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/left_binding_wechat"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/colorWhite"
+                    android:gravity="center_vertical|right"
+                    android:paddingRight="15dp"
+                    android:textColor="@color/colorOrange"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:src="@mipmap/icon_sina_logo" />
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorWhite"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:text="微博"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/left_binding_sina"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/colorWhite"
+                    android:gravity="center_vertical|right"
+                    android:paddingRight="15dp"
+                    android:textColor="@color/colorOrange"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <View

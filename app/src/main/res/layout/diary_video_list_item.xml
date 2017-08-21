@@ -8,7 +8,9 @@
         android:id="@+id/diary_list_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -16,9 +18,7 @@
 
             <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_marginLeft="5dp"
-                android:paddingRight="5dp">
+            android:layout_height="250dp">
             <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/diary_list_video"
                 android:layout_width="match_parent"

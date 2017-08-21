@@ -10,7 +10,7 @@
     android:orientation="vertical"
     tools:context=".activity.diary_center.GamePuzzleActivity">
 
-    <include layout="@layout/common_top_view"/>
+    <include layout="@layout/common_title_bar_view"/>
     <ViewStub
         android:id="@+id/puzzle_game_pre"
         android:layout_width="match_parent"

@@ -15,4 +15,8 @@
         <item name="android:windowEnterAnimation">@anim/in_alpha</item>
         <item name="android:windowExitAnimation">@anim/out_alpha</item>
     </style>
+    <style name="sharePopupWindow" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/in_right</item>
+        <item name="android:windowExitAnimation">@anim/out_right</item>
+    </style>
 </resources>

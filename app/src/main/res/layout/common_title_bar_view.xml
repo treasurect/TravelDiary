@@ -12,7 +12,6 @@
         android:id="@+id/btn_back"
         android:layout_width="45dp"
         android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         android:src="@mipmap/ic_return"
@@ -22,7 +21,6 @@
         android:id="@+id/image_user_icon"
         android:layout_width="45dp"
         android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
         android:padding="5dp"
         android:layout_marginLeft="5dp"
         fresco:placeholderImage="@mipmap/ic_travel_logo"
@@ -118,5 +116,14 @@
         android:textColor="@color/colorWhite"
         android:textSize="15sp"
         android:textStyle="bold"
+        android:visibility="gone"/>
+    <ImageView
+        android:id="@+id/btn_share"
+        android:layout_width="45dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:src="@mipmap/ic_share"
         android:visibility="gone"/>
 </RelativeLayout>

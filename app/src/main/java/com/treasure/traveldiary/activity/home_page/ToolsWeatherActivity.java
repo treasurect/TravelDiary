@@ -70,7 +70,7 @@ public class ToolsWeatherActivity extends BaseActivity implements View.OnClickLi
                     loading.setVisibility(View.GONE);
                     break;
                 case 400:
-                    Toast.makeText(ToolsWeatherActivity.this, "原因：" + error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ToolsWeatherActivity.this, "获取天气详情失败", Toast.LENGTH_SHORT).show();
                     loading.setVisibility(View.GONE);
                     break;
             }
@@ -80,7 +80,6 @@ public class ToolsWeatherActivity extends BaseActivity implements View.OnClickLi
     private NestedScrollView scrollView;
     private String province;
     private String city;
-    private String error;
     private FrameLayout loading;
     private FloatingActionButton refresh;
 
@@ -150,7 +149,6 @@ public class ToolsWeatherActivity extends BaseActivity implements View.OnClickLi
         HttpHelper.doGetCall(url, this, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                error = e.getMessage();
                 mHandler.sendMessage(mHandler.obtainMessage(400));
             }
 

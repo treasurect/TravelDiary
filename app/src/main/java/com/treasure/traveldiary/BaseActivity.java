@@ -15,7 +15,6 @@ public class BaseActivity extends FragmentActivity {
     public ImageView btn_back;
     public TextView title;
     public TextView btn_send;
-
     public static ACache aCache;
     public TextView btn_cancel;
     public LinearLayout mapLocLayout;
@@ -23,6 +22,7 @@ public class BaseActivity extends FragmentActivity {
     public TextView text_integral;
     public SimpleDraweeView user_icon;
     public Spinner list_city;
+    public ImageView btn_share;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +43,7 @@ public class BaseActivity extends FragmentActivity {
         text_integral = (TextView) findViewById(R.id.text_integral);
         user_icon = (SimpleDraweeView) findViewById(R.id.image_user_icon);
         list_city = (Spinner) findViewById(R.id.list_city);
+        btn_share = (ImageView) findViewById(R.id.btn_share);
     }
 
 }

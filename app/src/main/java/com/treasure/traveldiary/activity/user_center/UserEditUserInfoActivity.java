@@ -116,7 +116,7 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
                             mFileUrl = list.get(0).getUser_icon();
                             editIcon.setImageURI(Uri.parse(mFileUrl));
                         } else {
-                            Toast.makeText(UserEditUserInfoActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UserEditUserInfoActivity.this, "获取用户信息失败", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -254,7 +254,7 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
                     sendBroadcast(intent);
                     UserEditUserInfoActivity.this.finish();
                 } else {
-                    Toast.makeText(UserEditUserInfoActivity.this, "更新失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserEditUserInfoActivity.this, "更新失败", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -277,7 +277,7 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
                         toRegister();
                     }
                 } else {
-                    Toast.makeText(UserEditUserInfoActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserEditUserInfoActivity.this, "查询失败", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -308,6 +308,9 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
         infoBean.setSigning_date(list);
         infoBean.setTimer_shaft(list);
         infoBean.setTraveller_circle_bg("http://bmob-cdn-13238.b0.upaiyun.com/2017/08/16/2104cdfa5c5c40f59310479a4244429f.png");
+        infoBean.setBinding_qq("未绑定");
+        infoBean.setBinding_wechat("未绑定");
+        infoBean.setBinding_sina("未绑定");
         infoBean.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {
@@ -334,7 +337,7 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
                     sendBroadcast(intent);
                     UserEditUserInfoActivity.this.finish();
                 } else {
-                    Toast.makeText(UserEditUserInfoActivity.this, "很遗憾，注册失败\n原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserEditUserInfoActivity.this, "很遗憾，注册失败", Toast.LENGTH_SHORT).show();
                 }
             }
         });

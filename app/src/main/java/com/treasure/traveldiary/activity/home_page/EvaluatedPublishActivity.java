@@ -289,7 +289,7 @@ public class EvaluatedPublishActivity extends BaseActivity implements View.OnCli
                     Toast.makeText(EvaluatedPublishActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
                     EvaluatedPublishActivity.this.finish();
                 } else {
-                    Toast.makeText(EvaluatedPublishActivity.this, "失败原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EvaluatedPublishActivity.this, "发布失败", Toast.LENGTH_SHORT).show();
                 }
             }
         });

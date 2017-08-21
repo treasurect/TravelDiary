@@ -134,7 +134,7 @@ public class MineEvaluatedFragment extends BaseFragment implements CustomRefresh
                                             if (!isPageDestroy) {
                                                 loading.setVisibility(View.GONE);
                                                 nodata_text.setVisibility(View.GONE);
-                                                Toast.makeText(getContext(), "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(), "获取点评列表失败", Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     }
@@ -175,7 +175,7 @@ public class MineEvaluatedFragment extends BaseFragment implements CustomRefresh
                                 loading.setVisibility(View.GONE);
                                 listView.completeRefresh();
                                 if (!isPageDestroy) {
-                                    Toast.makeText(getContext(), "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "加载更多点评列表失败", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }

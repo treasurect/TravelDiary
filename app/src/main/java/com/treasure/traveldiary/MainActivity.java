@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -77,6 +79,21 @@ import com.baidu.mapapi.search.route.WalkingRouteLine;
 import com.baidu.mapapi.search.route.WalkingRoutePlanOption;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.sina.weibo.sdk.api.TextObject;
+import com.sina.weibo.sdk.api.WeiboMultiMessage;
+import com.sina.weibo.sdk.api.share.IWeiboShareAPI;
+import com.sina.weibo.sdk.api.share.SendMultiMessageToWeiboRequest;
+import com.sina.weibo.sdk.api.share.WeiboShareSDK;
+import com.tencent.connect.UserInfo;
+import com.tencent.connect.common.Constants;
+import com.tencent.connect.share.QQShare;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.Tencent;
+import com.tencent.tauth.UiError;
 import com.treasure.traveldiary.activity.home_page.DiaryImageCameraActivity;
 import com.treasure.traveldiary.activity.home_page.DiaryImagePublishActivity;
 import com.treasure.traveldiary.activity.home_page.EvaluatedPublishActivity;
@@ -105,8 +122,12 @@ import com.treasure.traveldiary.map_overlay.DrivingRouteOverlay;
 import com.treasure.traveldiary.map_overlay.TransitRouteOverlay;
 import com.treasure.traveldiary.map_overlay.WalkingRouteOverlay;
 import com.treasure.traveldiary.receiver.CommonDataReceiver;
+import com.treasure.traveldiary.utils.LogUtil;
 import com.treasure.traveldiary.utils.StringContents;
 import com.treasure.traveldiary.utils.Tools;
+import com.treasure.traveldiary.wxapi.WXEntryActivity;
+
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -115,6 +136,7 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, BDLocationListener, BaiduMap.OnMapLoadedCallback, BaiduMap.OnMarkerClickListener, BaiduMap.OnMapClickListener, RadioGroup.OnCheckedChangeListener, TextWatcher, OnGetRoutePlanResultListener {
 
@@ -164,6 +186,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     break;
                 case 401:
                     loading.setVisibility(View.GONE);
+                    break;
+                case 600:
+                    Bundle data1 = msg.getData();
+                    mTencent.shareToQQ(MainActivity.this, data1, qqShareListener);
                     break;
             }
         }
@@ -217,6 +243,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private RoutePlanSearch routePlanSearch;
     private RadioGroup search_rg;
     private int route = 0;
+    private PopupWindow shareWindow;
+    private Tencent mTencent;
+    private IUiListener qqShareListener;
+    private TextView binding_qq;
+    private TextView binding_wechat;
+    private TextView binding_sina;
+    private UserInfo userInfo;
+    private IWeiboShareAPI mWeiboShareAPI;
 
 
     @Override
@@ -227,10 +261,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         initTitle();
         mapLocLayout.setVisibility(View.VISIBLE);
         user_icon.setVisibility(View.VISIBLE);
-
+        btn_share.setVisibility(View.VISIBLE);
         widthPixels = getResources().getDisplayMetrics().widthPixels;
         heightPixels = getResources().getDisplayMetrics().heightPixels;
         application = (TravelApplication) getApplication();
+        mTencent = Tencent.createInstance(StringContents.QQ_APP_ID, this.getApplicationContext());
+        mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(this, StringContents.Sina_APP_KEY);
 
         initFindId();
         mPreferences = getSharedPreferences("user", MODE_PRIVATE);
@@ -286,6 +322,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         feedback_layout = (LinearLayout) findViewById(R.id.left_feedback_layout);
         settings_layout = (LinearLayout) findViewById(R.id.left_settings_layout);
         drawer_layout = (DrawerLayout) findViewById(R.id.home_drawer_layout);
+        binding_qq = (TextView) findViewById(R.id.left_binding_qq);
+        binding_wechat = (TextView) findViewById(R.id.left_binding_wechat);
+        binding_sina = (TextView) findViewById(R.id.left_binding_sina);
     }
 
     private void useLocationOrientationListener() {
@@ -372,6 +411,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         search_btn.setOnClickListener(this);
         search_edit.addTextChangedListener(this);
         search_rg.setOnCheckedChangeListener(this);
+        btn_share.setOnClickListener(this);
 
         left_user_icon.setOnClickListener(this);
         left_user_name.setOnClickListener(this);
@@ -380,11 +420,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         message_layout.setOnClickListener(this);
         feedback_layout.setOnClickListener(this);
         settings_layout.setOnClickListener(this);
+        binding_qq.setOnClickListener(this);
+        binding_wechat.setOnClickListener(this);
+        binding_sina.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.btn_share:
+                showShareWindow();
+                break;
             case R.id.mine_diary_layout:
                 if (Tools.isNull(mPreferences.getString("token", ""))) {
                     showPopupWindow();
@@ -611,25 +657,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     Tools.setAnimation(search, 0, 0, 1, 1, 0, 720, 0, 1, 1000);
                     Tools.setAnimation(search_layout, 0, 0, 1, 0, 0, 0, 1, 0, 1000);
                 } else {
-                    PlanNode stNode = PlanNode.withLocation(new LatLng(user_latitude,user_longitude));
+                    PlanNode stNode = PlanNode.withLocation(new LatLng(user_latitude, user_longitude));
                     PlanNode enNode = PlanNode.withCityNameAndPlaceName(user_city, search_edit.getText().toString().trim());
-                    if (route == 0){
+                    if (route == 0) {
                         routePlanSearch.transitSearch(new TransitRoutePlanOption()
                                 .from(stNode)
                                 .city(user_city)
                                 .to(enNode));
-                    }else if (route == 1){
+                    } else if (route == 1) {
                         routePlanSearch.drivingSearch(new DrivingRoutePlanOption()
-                        .from(stNode)
-                        .to(enNode));
-                    }else if (route == 2){
+                                .from(stNode)
+                                .to(enNode));
+                    } else if (route == 2) {
                         routePlanSearch.walkingSearch(new WalkingRoutePlanOption()
-                        .from(stNode)
-                        .to(enNode));
-                    }else if (route == 3){
+                                .from(stNode)
+                                .to(enNode));
+                    } else if (route == 3) {
                         routePlanSearch.bikingSearch(new BikingRoutePlanOption()
-                        .from(stNode)
-                        .to(enNode));
+                                .from(stNode)
+                                .to(enNode));
                     }
                 }
                 break;
@@ -700,6 +746,30 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.left_settings_layout:
                 startActivity(new Intent(MainActivity.this, UserSettingsActivity.class));
                 break;
+            case R.id.left_binding_qq:
+                bindingQQ();
+                break;
+            case R.id.left_binding_wechat:
+                bindingWeChat();
+                break;
+            case R.id.left_binding_sina:
+                bindingSina();
+                break;
+            case R.id.main_share_block:
+                shareWindow.dismiss();
+                break;
+            case R.id.main_share_qq:
+                shareQQ();
+                break;
+            case R.id.main_share_wechat:
+                shareWeChat();
+                break;
+            case R.id.main_share_wechat_circle:
+                shareWeChatCircle();
+                break;
+            case R.id.main_share_sina:
+                shareSina();
+                break;
         }
     }
 
@@ -744,13 +814,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             map_type_satellite.setTextColor(getResources().getColor(R.color.colorBlock));
             map_type_compass.setTextColor(getResources().getColor(R.color.colorWhite));
             mode = MyLocationConfiguration.LocationMode.COMPASS;
-        }else if (radioButton.getText().equals("公交")){
+        } else if (radioButton.getText().equals("公交")) {
             route = 0;
-        }else if (radioButton.getText().equals("驾车")){
+        } else if (radioButton.getText().equals("驾车")) {
             route = 1;
-        }else if (radioButton.getText().equals("步行")){
+        } else if (radioButton.getText().equals("步行")) {
             route = 2;
-        }else if (radioButton.getText().equals("骑行")){
+        } else if (radioButton.getText().equals("骑行")) {
             route = 3;
         }
     }
@@ -929,7 +999,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         }
                     }
                 } else {
-                    Toast.makeText(MainActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "查询用户失败", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -973,6 +1043,235 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             window.setAttributes(layoutParams);
             application.setNight(false);
         }
+    }
+
+    /**
+     * 显示 分享的View
+     */
+    private void showShareWindow() {
+        View convertView = LayoutInflater.from(this).inflate(R.layout.main_share_view, null);
+        shareWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        shareWindow.setAnimationStyle(R.style.sharePopupWindow);
+        shareWindow.setOutsideTouchable(true);
+        shareWindow.setBackgroundDrawable(new ColorDrawable(0x66000000));
+
+        TextView share_block = (TextView) convertView.findViewById(R.id.main_share_block);
+        ImageView share_qq = (ImageView) convertView.findViewById(R.id.main_share_qq);
+        ImageView share_wechat = (ImageView) convertView.findViewById(R.id.main_share_wechat);
+        ImageView share_wechat_circle = (ImageView) convertView.findViewById(R.id.main_share_wechat_circle);
+        ImageView share_sina = (ImageView) convertView.findViewById(R.id.main_share_sina);
+        share_block.setOnClickListener(this);
+        share_qq.setOnClickListener(this);
+        share_wechat.setOnClickListener(this);
+        share_wechat_circle.setOnClickListener(this);
+        share_sina.setOnClickListener(this);
+        View rootView = LayoutInflater.from(this).inflate(R.layout.activity_main, null);
+        shareWindow.showAtLocation(rootView, Gravity.RIGHT, 0, 0);
+    }
+
+    /**
+     * QQ 微信 微博 的  分享和绑定账号
+     */
+    private void shareQQ() {
+        //初始化回调
+        qqShareListener = new IUiListener() {
+            @Override
+            public void onComplete(Object o) {
+                Toast.makeText(MainActivity.this, "恭喜你，分享成功", Toast.LENGTH_SHORT).show();
+                if (shareWindow != null && shareWindow.isShowing()) {
+                    shareWindow.dismiss();
+                }
+            }
+
+            @Override
+            public void onError(UiError uiError) {
+                Toast.makeText(MainActivity.this, "很遗憾，分享失败", Toast.LENGTH_SHORT).show();
+                if (shareWindow != null && shareWindow.isShowing()) {
+                    shareWindow.dismiss();
+                }
+            }
+
+            @Override
+            public void onCancel() {
+                Toast.makeText(MainActivity.this, "分享已取消", Toast.LENGTH_SHORT).show();
+                if (shareWindow != null && shareWindow.isShowing()) {
+                    shareWindow.dismiss();
+                }
+            }
+        };
+
+        Bundle bundle = new Bundle();
+        bundle.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
+        bundle.putString(QQShare.SHARE_TO_QQ_TITLE, "旅行日记android");// 标题
+        bundle.putString(QQShare.SHARE_TO_QQ_SUMMARY, "这是第四版的赶制现场");// 摘要
+        bundle.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "http://sj.qq.com/myapp/detail.htm?apkName=com.treasure.traveldiary");// 内容地址
+        bundle.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://bmob-cdn-13238.b0.upaiyun.com/2017/08/21/38bdff2c103e49aa838b44bce96e6485.png");// 网络图片地址　　params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "应用名称");// 应用名称
+        bundle.putString(QQShare.SHARE_TO_QQ_EXT_INT, "体验");
+        Message message = handler.obtainMessage(600);
+        message.setData(bundle);
+        handler.sendMessage(message);
+    }
+
+    private void bindingQQ() {
+        //需要先登录，获取到openID和token   用token进行用户信息获取
+        if (!mTencent.isSessionValid()) {
+            //开始qq授权登录
+            mTencent.login(this, "all", new IUiListener() {
+                @Override
+                public void onComplete(Object arg0) {
+                    try {
+                        JSONObject jo = (JSONObject) arg0;
+                        int ret = jo.getInt("ret");
+                        if (ret == 0) {
+                            String openID = jo.getString("openid");
+                            String accessToken = jo.getString("access_token");
+                            String expires = jo.getString("expires_in");
+                            mTencent.setOpenId(openID);
+                            mTencent.setAccessToken(accessToken, expires);
+                            //set token之后
+                            userInfo = new UserInfo(MainActivity.this, mTencent.getQQToken());
+                            userInfo.getUserInfo(new IUiListener() {
+                                @Override
+                                public void onComplete(Object o) {
+                                    JSONObject jo = (JSONObject) o;
+                                    LogUtil.d("~~~~~~~~~~~~~~~~~~~~" + jo.toString());
+                                    try {
+                                        String nickName = jo.getString("nickname");
+                                        String gender = jo.getString("gender");
+                                        binding_qq.setText(nickName);
+                                        toUpdateUserInfo(nickName);
+                                    } catch (Exception e) {
+
+                                    }
+                                }
+
+                                @Override
+                                public void onError(UiError uiError) {
+                                    Toast.makeText(MainActivity.this, "获取信息失败", Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onCancel() {
+
+                                }
+                            });
+                        }
+
+                    } catch (Exception e) {
+                        // TODO: handle exception
+                    }
+                }
+
+                @Override
+                public void onError(UiError uiError) {
+
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+            });
+        }
+    }
+
+    private void toUpdateUserInfo(final String nickName) {
+        BmobQuery<UserInfoBean> query = new BmobQuery<>();
+        query.addWhereEqualTo("user_name", mPreferences.getString("user_name", ""))
+                .findObjects(new FindListener<UserInfoBean>() {
+                    @Override
+                    public void done(List<UserInfoBean> list, BmobException e) {
+                        if (e == null) {
+                            String objectId = list.get(0).getObjectId();
+                            UserInfoBean userInfoBean = new UserInfoBean();
+                            userInfoBean.setBinding_qq(nickName);
+                            userInfoBean.update(objectId, new UpdateListener() {
+                                @Override
+                                public void done(BmobException e) {
+                                    if (e == null) {
+                                        Toast.makeText(MainActivity.this, "信息更新成功", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(MainActivity.this, "信息更新失败", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        } else {
+                            Toast.makeText(MainActivity.this, "信息更新失败", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    private void shareWeChat() {
+        IWXAPI iwxapi = TravelApplication.iwxapi;
+        if (!iwxapi.isWXAppInstalled()) {
+            Toast.makeText(MainActivity.this, "您还未安装微信客户端",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        WXWebpageObject webpage = new WXWebpageObject();
+        webpage.webpageUrl = "http://sj.qq.com/myapp/detail.htm?apkName=com.treasure.traveldiary";
+        WXMediaMessage msg = new WXMediaMessage(webpage);
+
+        msg.title = "旅游日记第四版就快要出炉了";
+        msg.description = "在这app启动23天之际，在第四个版本赶制之际，加入了微信分享";
+        Bitmap thumb = BitmapFactory.decodeResource(getResources(),
+                R.mipmap.ic_travel_logo);
+        msg.setThumbImage(thumb);
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = String.valueOf(System.currentTimeMillis());
+        req.message = msg;
+        req.scene = SendMessageToWX.Req.WXSceneSession;
+        iwxapi.sendReq(req);
+        Intent intent = new Intent(MainActivity.this, WXEntryActivity.class);
+        startActivityForResult(intent,301);
+    }
+
+    private void shareWeChatCircle() {
+        IWXAPI iwxapi = TravelApplication.iwxapi;
+        if (!iwxapi.isWXAppInstalled()) {
+            Toast.makeText(MainActivity.this, "您还未安装微信客户端",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        WXWebpageObject webpage = new WXWebpageObject();
+        webpage.webpageUrl = "http://sj.qq.com/myapp/detail.htm?apkName=com.treasure.traveldiary";
+        WXMediaMessage msg = new WXMediaMessage(webpage);
+
+        msg.title = "旅游日记第四版就快要出炉了";
+        msg.description = "在这app启动23天之际，在第四个版本赶制之际，加入了微信分享";
+        Bitmap thumb = BitmapFactory.decodeResource(getResources(),
+                R.mipmap.ic_travel_logo);
+        msg.setThumbImage(thumb);
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = String.valueOf(System.currentTimeMillis());
+        req.message = msg;
+        req.scene = SendMessageToWX.Req.WXSceneTimeline;
+        iwxapi.sendReq(req);
+    }
+
+    private void bindingWeChat() {
+        Toast.makeText(this, "此功能暂未开放", Toast.LENGTH_SHORT).show();
+    }
+
+    private void shareSina() {
+        mWeiboShareAPI.registerApp();   // 将应用注册到微博客户端
+        TextObject textObject = new TextObject();
+        textObject.text = "用手机记录你遇到的美。\n" +
+                "旅游 途中会遇到很多美好的瞬间，倘若未记录下来到日后回忆会是一种很大的遗憾，为了不留下遗憾，记得用APP记录下你的美。\n\n"+
+        "复制链接进入：http://sj.qq.com/myapp/detail.htm?apkName=com.treasure.traveldiary";
+        WeiboMultiMessage weiboMessage = new WeiboMultiMessage();//初始化微博的分享消息
+        weiboMessage. textObject = textObject;
+        SendMultiMessageToWeiboRequest request = new SendMultiMessageToWeiboRequest();
+        request.transaction = String.valueOf(System.currentTimeMillis());
+        request.multiMessage = weiboMessage;
+        mWeiboShareAPI.sendRequest(request);//发送请求消息到微博，唤起微博分享界面
+    }
+
+    private void bindingSina() {
+
     }
 
     @Override
@@ -1331,6 +1630,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             intent2.putExtra("user_long", String.valueOf(user_longitude));
             startActivity(intent2);
         }
+        Tencent.onActivityResultData(requestCode, resultCode, data, qqShareListener);
+        if (requestCode == Constants.REQUEST_API) {
+            if (resultCode == Constants.REQUEST_QQ_SHARE || resultCode == Constants.REQUEST_QZONE_SHARE || resultCode == Constants.REQUEST_OLD_SHARE) {
+                Tencent.handleResultData(data, qqShareListener);
+            }
+        }
     }
 
     @Override
@@ -1366,8 +1671,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                 user_icon.setImageURI(Uri.parse(icon_url));
                                 left_user_icon.setImageURI(Uri.parse(icon_url));
                                 left_user_name.setText(list.get(0).getNick_name());
+                                binding_qq.setText(list.get(0).getBinding_qq());
+                                binding_wechat.setText(list.get(0).getBinding_wechat());
+                                binding_sina.setText(list.get(0).getBinding_sina());
                             } else {
-                                Toast.makeText(MainActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "获取用户信息失败", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

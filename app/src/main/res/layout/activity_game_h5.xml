@@ -8,7 +8,7 @@
     android:fitsSystemWindows="true"
     tools:context="com.treasure.traveldiary.activity.diary_center.GameH5Activity">
 
-    <include layout="@layout/common_top_view" />
+    <include layout="@layout/common_title_bar_view" />
 
     <WebView
         android:id="@+id/game_h5_webView"

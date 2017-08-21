@@ -323,7 +323,7 @@ public class DiaryImagePublishActivity extends BaseActivity implements View.OnCl
                     loading.setVisibility(View.GONE);
                     DiaryImagePublishActivity.this.finish();
                 } else {
-                    Toast.makeText(DiaryImagePublishActivity.this, "很遗憾，发表失败\n原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DiaryImagePublishActivity.this, "很遗憾，发表失败", Toast.LENGTH_SHORT).show();
                     loading.setVisibility(View.GONE);
                 }
             }

@@ -81,6 +81,7 @@ public class SceneryActivity extends BaseActivity implements View.OnClickListene
         list_city.setOnItemSelectedListener(this);
         refresh.setOnClickListener(this);
         sceneryListAdapter.setSceneryTextClick(this);
+        loading.setOnClickListener(this);
     }
 
     @Override
@@ -118,7 +119,7 @@ public class SceneryActivity extends BaseActivity implements View.OnClickListene
                             loading.setVisibility(View.GONE);
                         }else {
                             if (!isPageDestroy){
-                                Toast.makeText(SceneryActivity.this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SceneryActivity.this, "获取景区列表失败", Toast.LENGTH_SHORT).show();
                                 loading.setVisibility(View.GONE);
                             }
                         }

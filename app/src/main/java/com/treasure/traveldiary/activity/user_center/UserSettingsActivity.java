@@ -176,7 +176,7 @@ public class UserSettingsActivity extends BaseActivity implements View.OnClickLi
                                 version_state.setText("有新版本更新");
                             }
                         } else {
-                            Toast.makeText(UserSettingsActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UserSettingsActivity.this, "获取版本信息失败", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

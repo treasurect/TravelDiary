@@ -107,7 +107,7 @@ public class UserDiaryActivity extends BaseActivity implements View.OnClickListe
                                     }
                                 } else {
                                     loading.setVisibility(View.GONE);
-                                    Toast.makeText(UserDiaryActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(UserDiaryActivity.this, "获取日记列表失败", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -174,7 +174,7 @@ public class UserDiaryActivity extends BaseActivity implements View.OnClickListe
                     if (e == null) {
                         Toast.makeText(UserDiaryActivity.this, "点赞成功", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(UserDiaryActivity.this, "点赞失败\n原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UserDiaryActivity.this, "点赞失败", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -217,7 +217,7 @@ public class UserDiaryActivity extends BaseActivity implements View.OnClickListe
                             } else {
                                 loading.setVisibility(View.GONE);
                                 listView.completeRefresh();
-                                Toast.makeText(UserDiaryActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UserDiaryActivity.this, "加载更多日记列表失败", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

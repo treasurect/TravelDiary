@@ -85,7 +85,7 @@ public class UserFeedBckHistoryActivity extends BaseActivity implements View.OnC
                         nodata.setVisibility(View.VISIBLE);
                     }
                 }else {
-                    Toast.makeText(UserFeedBckHistoryActivity.this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserFeedBckHistoryActivity.this, "获取反馈列表失败", Toast.LENGTH_SHORT).show();
                     loading.setVisibility(View.GONE);
                 }
             }

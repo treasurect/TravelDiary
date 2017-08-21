@@ -217,7 +217,7 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
                     }
                     loading.setVisibility(View.GONE);
                 } else {
-                    Toast.makeText(DiaryDetailActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DiaryDetailActivity.this, "获取日记详情失败", Toast.LENGTH_SHORT).show();
                     loading.setVisibility(View.GONE);
                 }
             }
@@ -238,7 +238,7 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
                             mesBeanList.addAll(leaveMesList2);
                             adapter.notifyDataSetChanged();
                         }else {
-                            Toast.makeText(DiaryDetailActivity.this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DiaryDetailActivity.this, "很遗憾，获取评论列表失败", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -389,7 +389,7 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
                     String user_long = list.get(0).getUser_long();
                     saveLeaveMes(objectId, leaveMesList3,diary_type,user_lat,user_long);
                 } else {
-                    Toast.makeText(DiaryDetailActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DiaryDetailActivity.this, "很遗憾，评论发布失败", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -421,7 +421,7 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
                     Toast.makeText(DiaryDetailActivity.this, "评论成功，你够意思", Toast.LENGTH_SHORT).show();
                     getLeaveMesList(objectId);
                 } else {
-                    Toast.makeText(DiaryDetailActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DiaryDetailActivity.this, "很遗憾，评论发布失败", Toast.LENGTH_SHORT).show();
                 }
             }
         });

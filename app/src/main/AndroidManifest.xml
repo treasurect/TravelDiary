@@ -51,6 +51,87 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.user_center.UserDiaryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user_center.UserRegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user_center.UserForgetPassActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user_center.UserEditUserInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user_center.UserSettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home_page.DiaryTextPublishActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home_page.DiaryImagePublishActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home_page.EvaluatedPublishActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.diary_center.DiaryDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home_page.DiaryImageCameraActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user_center.UserEvaluatedListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user_center.UserMessageListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home_page.DiaryVideoCameraActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home_page.DiaryVideoPublishActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.diary_center.DiaryCenterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user_center.UserFeedBackActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user_center.UserFeedBckHistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user_center.UserSigningActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.diary_center.EvaluatedDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home_page.ToolsWeatherActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home_page.ToolsTicketActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home_page.ToolsWeatherListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.traveller_circle.TravellerCircleActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.diary_center.GamePuzzleActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home_page.SceneryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.diary_center.GameH5Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home_page.SceneryDetailActivity"
+            android:screenOrientation="portrait" />
 
         <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
         <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   百度Map     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
@@ -64,20 +145,20 @@
             android:process=":remote" />
         <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
         <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   Bmob后端云     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-        <activity
-            android:name=".CreateActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".DeleteActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".UpdateActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".FindActivity"
-            android:screenOrientation="portrait" />
+        <!-- <activity -->
+        <!-- android:name=".CreateActivity" -->
+        <!-- android:screenOrientation="portrait" /> -->
+        <!-- <activity -->
+        <!-- android:name=".DeleteActivity" -->
+        <!-- android:screenOrientation="portrait" /> -->
+        <!-- <activity -->
+        <!-- android:name=".UpdateActivity" -->
+        <!-- android:screenOrientation="portrait" /> -->
+        <!-- <activity -->
+        <!-- android:name=".FindActivity" -->
+        <!-- android:screenOrientation="portrait" /> -->
         <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   极光推送     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   极光推送     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -171,83 +252,39 @@
             android:name="JPUSH_APPKEY"
             android:value="5d59b8892e5c42a4c3f154d8" /> <!-- </>值来自开发者平台取得的AppKey -->
 
+
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   QQ     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
         <activity
-            android:name=".activity.user_center.UserDiaryActivity"
-            android:screenOrientation="portrait" />
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent1106264779" />
+            </intent-filter>
+        </activity>
         <activity
-            android:name=".activity.user_center.UserRegisterActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.user_center.UserForgetPassActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.user_center.UserEditUserInfoActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.user_center.UserSettingsActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.home_page.DiaryTextPublishActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.home_page.DiaryImagePublishActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.home_page.EvaluatedPublishActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.diary_center.DiaryDetailActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.home_page.DiaryImageCameraActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.user_center.UserEvaluatedListActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.user_center.UserMessageListActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.home_page.DiaryVideoCameraActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.home_page.DiaryVideoPublishActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.diary_center.DiaryCenterActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.user_center.UserFeedBackActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.user_center.UserFeedBckHistoryActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.user_center.UserSigningActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.diary_center.EvaluatedDetailActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.home_page.ToolsWeatherActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.home_page.ToolsTicketActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.home_page.ToolsWeatherListActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.traveller_circle.TravellerCircleActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.diary_center.GamePuzzleActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.home_page.SceneryActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".activity.diary_center.GameH5Activity" />
-        <activity android:name=".activity.home_page.SceneryDetailActivity"></activity>
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- <activity -->
+        <!-- android:name="com.bear.qqlogin.MainActivity" -->
+        <!-- android:label="@string/app_name" > -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
+
+        <activity android:name=".wxapi.WXEntryActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

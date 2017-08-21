@@ -188,7 +188,7 @@ public class EvaluatedDetailActivity extends BaseActivity implements View.OnClic
                     }
                     loading.setVisibility(View.GONE);
                 }else {
-                    Toast.makeText(EvaluatedDetailActivity.this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EvaluatedDetailActivity.this, "获取点评详情失败", Toast.LENGTH_SHORT).show();
                     loading.setVisibility(View.GONE);
                 }
             }
@@ -209,7 +209,7 @@ public class EvaluatedDetailActivity extends BaseActivity implements View.OnClic
                             mesBeanList.addAll(leaveMesList2);
                             adapter.notifyDataSetChanged();
                         }else {
-                            Toast.makeText(EvaluatedDetailActivity.this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EvaluatedDetailActivity.this, "获取评论列表失败", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -302,7 +302,7 @@ public class EvaluatedDetailActivity extends BaseActivity implements View.OnClic
                     String star_num = list.get(0).getStar_num();
                     saveLeaveMes(objectId, leaveMesList3,star_num);
                 } else {
-                    Toast.makeText(EvaluatedDetailActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EvaluatedDetailActivity.this, "很遗憾，评论失败", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -332,7 +332,7 @@ public class EvaluatedDetailActivity extends BaseActivity implements View.OnClic
                     Toast.makeText(EvaluatedDetailActivity.this, "评论成功，你够意思", Toast.LENGTH_SHORT).show();
                     getLeaveMesList(objectId);
                 } else {
-                    Toast.makeText(EvaluatedDetailActivity.this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EvaluatedDetailActivity.this, "很遗憾，评论失败", Toast.LENGTH_SHORT).show();
                 }
             }
         });

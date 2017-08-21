@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <include layout="@layout/common_top_view" />
+        <include layout="@layout/common_title_bar_view" />
         <EditText
             android:id="@+id/diary_text_title"
             android:layout_width="match_parent"

@@ -7,7 +7,7 @@
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
-    <include layout="@layout/common_top_view"/>
+    <include layout="@layout/common_title_bar_view"/>
     <android.support.design.widget.TabLayout
         android:id="@+id/tools_ticket_tabLayout"
         android:layout_width="match_parent"

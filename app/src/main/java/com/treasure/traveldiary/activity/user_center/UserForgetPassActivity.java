@@ -204,7 +204,7 @@ public class UserForgetPassActivity extends BaseActivity implements View.OnClick
                         toUpdate(gameScore.getObjectId());
                     }
                 }else {
-                    Toast.makeText(UserForgetPassActivity.this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserForgetPassActivity.this, "更新账户失败", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -220,7 +220,7 @@ public class UserForgetPassActivity extends BaseActivity implements View.OnClick
                     Toast.makeText(UserForgetPassActivity.this, "重置成功", Toast.LENGTH_SHORT).show();
                     UserForgetPassActivity.this.finish();
                 }else {
-                    Toast.makeText(UserForgetPassActivity.this, "重置失败"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserForgetPassActivity.this, "重置失败", Toast.LENGTH_SHORT).show();
                 }
             }
         });

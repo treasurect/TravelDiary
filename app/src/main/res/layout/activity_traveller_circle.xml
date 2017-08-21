@@ -99,8 +99,6 @@
             android:id="@+id/traveller_circle_scrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <FrameLayout
@@ -119,7 +117,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="720dp"
                     android:divider="@color/colorWhite"
-                    android:dividerHeight="1dp"
+                    android:dividerHeight="20dp"
                     android:fadingEdge="none" />
             </FrameLayout>
         </android.support.v4.widget.NestedScrollView>

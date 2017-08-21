@@ -22,6 +22,9 @@ public class UserInfoBean extends BmobObject {
     private String traveller_circle_bg;
     private String version_name;
     private List<String> timer_shaft;
+    private String binding_qq;
+    private String binding_wechat;
+    private String binding_sina;
 
     public String getUser_name() {
         return user_name;
@@ -125,5 +128,29 @@ public class UserInfoBean extends BmobObject {
 
     public void setTimer_shaft(List<String> timer_shaft) {
         this.timer_shaft = timer_shaft;
+    }
+
+    public String getBinding_qq() {
+        return binding_qq;
+    }
+
+    public void setBinding_qq(String binding_qq) {
+        this.binding_qq = binding_qq;
+    }
+
+    public String getBinding_wechat() {
+        return binding_wechat;
+    }
+
+    public void setBinding_wechat(String binding_wechat) {
+        this.binding_wechat = binding_wechat;
+    }
+
+    public String getBinding_sina() {
+        return binding_sina;
+    }
+
+    public void setBinding_sina(String binding_sina) {
+        this.binding_sina = binding_sina;
     }
 }

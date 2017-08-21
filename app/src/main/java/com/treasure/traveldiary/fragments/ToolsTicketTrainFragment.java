@@ -47,7 +47,6 @@ public class ToolsTicketTrainFragment extends BaseFragment implements View.OnCli
     private List<ToolsTicketTrainBean.ResultBean> list;
     private ToolsTicketTrainAdapter adapter;
     private ToolsTicketTrainBean trainBean;
-    private String error;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -70,7 +69,7 @@ public class ToolsTicketTrainFragment extends BaseFragment implements View.OnCli
                     station_end.setText(start1);
                     break;
                 case 400:
-                    Toast.makeText(getContext(), "原因：" + error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "获取火车票信息失败", Toast.LENGTH_SHORT).show();
                     result_progress.setVisibility(View.GONE);
                     break;
             }
@@ -157,7 +156,6 @@ public class ToolsTicketTrainFragment extends BaseFragment implements View.OnCli
         HttpHelper.doGetCall(url, getContext(), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                error = e.getMessage();
                 handler.sendMessage(handler.obtainMessage(400));
             }
 

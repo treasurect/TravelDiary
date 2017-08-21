@@ -67,7 +67,7 @@ public class DiaryVideoCameraActivity extends BaseActivity implements SurfaceHol
             mHolder.addCallback(this);
             mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         } catch (Exception e) {
-            Toast.makeText(this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "开启相机失败", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -242,7 +242,7 @@ public class DiaryVideoCameraActivity extends BaseActivity implements SurfaceHol
             mCamera.setPreviewDisplay(mHolder);
             mCamera.startPreview();
         } catch (Exception e) {
-            Toast.makeText(this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "开启相机失败", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -256,7 +256,7 @@ public class DiaryVideoCameraActivity extends BaseActivity implements SurfaceHol
                 mCamera.release();
                 mCamera = null;
             } catch (Exception e) {
-                Toast.makeText(this, "原因："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "关闭相机失败" ,Toast.LENGTH_SHORT).show();
             }
         }
     }

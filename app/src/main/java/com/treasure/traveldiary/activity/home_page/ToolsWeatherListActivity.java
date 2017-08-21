@@ -63,7 +63,7 @@ public class ToolsWeatherListActivity extends BaseActivity implements AdapterVie
                     loading.setVisibility(View.GONE);
                     break;
                 case 400:
-                    Toast.makeText(ToolsWeatherListActivity.this, "原因：" + error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ToolsWeatherListActivity.this, "获取城市列表失败", Toast.LENGTH_SHORT).show();
                     loading.setVisibility(View.GONE);
                     break;
             }
@@ -73,7 +73,6 @@ public class ToolsWeatherListActivity extends BaseActivity implements AdapterVie
     private ToolsWeatherCityListBean cityListBean;
     private String province;
     private int item_num = 0;
-    private String error;
     private FrameLayout loading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +130,6 @@ public class ToolsWeatherListActivity extends BaseActivity implements AdapterVie
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                error = e.getMessage();
                 mHandler.sendMessage(mHandler.obtainMessage(400));
             }
 
