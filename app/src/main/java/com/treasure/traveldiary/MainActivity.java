@@ -79,11 +79,13 @@ import com.baidu.mapapi.search.route.WalkingRouteLine;
 import com.baidu.mapapi.search.route.WalkingRoutePlanOption;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.sina.weibo.sdk.api.TextObject;
-import com.sina.weibo.sdk.api.WeiboMultiMessage;
 import com.sina.weibo.sdk.api.share.IWeiboShareAPI;
-import com.sina.weibo.sdk.api.share.SendMultiMessageToWeiboRequest;
 import com.sina.weibo.sdk.api.share.WeiboShareSDK;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.sina.weibo.sdk.auth.WeiboAuth;
+import com.sina.weibo.sdk.auth.WeiboAuthListener;
+import com.sina.weibo.sdk.auth.sso.SsoHandler;
+import com.sina.weibo.sdk.exception.WeiboException;
 import com.tencent.connect.UserInfo;
 import com.tencent.connect.common.Constants;
 import com.tencent.connect.share.QQShare;
@@ -106,7 +108,6 @@ import com.treasure.traveldiary.activity.home_page.ToolsWeatherActivity;
 import com.treasure.traveldiary.activity.diary_center.DiaryCenterActivity;
 import com.treasure.traveldiary.activity.diary_center.DiaryDetailActivity;
 import com.treasure.traveldiary.activity.home_page.DiaryTextPublishActivity;
-import com.treasure.traveldiary.activity.find_center.TravellerCircleActivity;
 import com.treasure.traveldiary.activity.user_center.UserEditUserInfoActivity;
 import com.treasure.traveldiary.activity.user_center.UserFeedBackActivity;
 import com.treasure.traveldiary.activity.user_center.UserForgetPassActivity;
@@ -127,10 +128,13 @@ import com.treasure.traveldiary.utils.LogUtil;
 import com.treasure.traveldiary.utils.StringContents;
 import com.treasure.traveldiary.utils.Tools;
 import com.treasure.traveldiary.wxapi.SinaShareActivity;
-import com.treasure.traveldiary.wxapi.WXEntryActivity;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -193,6 +197,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     Bundle data1 = msg.getData();
                     mTencent.shareToQQ(MainActivity.this, data1, qqShareListener);
                     break;
+                case 601:
+                    String nick_name = (String) msg.getData().get("nick_name");
+                    binding_qq.setText(nick_name);
+                    break;
+                case 603:
+                    String nick_name2 = (String) msg.getData().get("nick_name");
+                    binding_sina.setText(nick_name2);
+                    break;
             }
         }
     };
@@ -252,7 +264,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private TextView binding_wechat;
     private TextView binding_sina;
     private UserInfo userInfo;
-    private IWeiboShareAPI mWeiboShareAPI;
+    private WeiboAuth weiboAuth;
+    private SsoHandler ssoHandler;
+    private Oauth2AccessToken mAccessToken;
 
 
     @Override
@@ -268,7 +282,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         heightPixels = getResources().getDisplayMetrics().heightPixels;
         application = (TravelApplication) getApplication();
         mTencent = Tencent.createInstance(StringContents.QQ_APP_ID, this.getApplicationContext());
-        mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(this, StringContents.Sina_APP_KEY);
 
         initFindId();
         mPreferences = getSharedPreferences("user", MODE_PRIVATE);
@@ -1109,7 +1122,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void bindingQQ() {
-        //需要先登录，获取到openID和token   用token进行用户信息获取
+        //需要先登录授权，获取到openID和token   用token进行用户信息获取
         if (!mTencent.isSessionValid()) {
             //开始qq授权登录
             mTencent.login(this, "all", new IUiListener() {
@@ -1130,12 +1143,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                 @Override
                                 public void onComplete(Object o) {
                                     JSONObject jo = (JSONObject) o;
-                                    LogUtil.d("~~~~~~~~~~~~~~~~~~~~" + jo.toString());
                                     try {
-                                        String nickName = jo.getString("nickname");
+                                        final String nickName = jo.getString("nickname");
                                         String gender = jo.getString("gender");
-                                        binding_qq.setText(nickName);
-                                        toUpdateUserInfo(nickName);
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                try {
+                                                    Thread.sleep(1000);
+                                                    Message message = handler.obtainMessage(601);
+                                                    Bundle bundle1 = new Bundle();
+                                                    bundle1.putString("nick_name",nickName);
+                                                    message.setData(bundle1);
+                                                    handler.sendMessage(message);
+                                                } catch (InterruptedException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }).start();
+                                        toUpdateUserInfo(nickName,0);
                                     } catch (Exception e) {
 
                                     }
@@ -1148,7 +1174,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                                 @Override
                                 public void onCancel() {
-
                                 }
                             });
                         }
@@ -1165,37 +1190,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                 @Override
                 public void onCancel() {
-
+                    Toast.makeText(MainActivity.this, "取消了QQ授权", Toast.LENGTH_SHORT).show();
                 }
             });
         }
-    }
-
-    private void toUpdateUserInfo(final String nickName) {
-        BmobQuery<UserInfoBean> query = new BmobQuery<>();
-        query.addWhereEqualTo("user_name", mPreferences.getString("user_name", ""))
-                .findObjects(new FindListener<UserInfoBean>() {
-                    @Override
-                    public void done(List<UserInfoBean> list, BmobException e) {
-                        if (e == null) {
-                            String objectId = list.get(0).getObjectId();
-                            UserInfoBean userInfoBean = new UserInfoBean();
-                            userInfoBean.setBinding_qq(nickName);
-                            userInfoBean.update(objectId, new UpdateListener() {
-                                @Override
-                                public void done(BmobException e) {
-                                    if (e == null) {
-                                        Toast.makeText(MainActivity.this, "信息更新成功", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(MainActivity.this, "信息更新失败", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                        } else {
-                            Toast.makeText(MainActivity.this, "信息更新失败", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
     }
 
     private void shareWeChat() {
@@ -1257,7 +1255,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         Toast.makeText(this, "此功能暂未开放", Toast.LENGTH_SHORT).show();
     }
 
-    private void shareSina()  {
+    private void shareSina() {
         //进入新页面进行发送微博 和微博状态监听
         startActivity(new Intent(MainActivity.this, SinaShareActivity.class));
         if (shareWindow != null && shareWindow.isShowing()) {
@@ -1266,7 +1264,116 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void bindingSina() {
+        weiboAuth = new WeiboAuth(this, StringContents.Sina_APP_KEY, StringContents.Sina_REDIRECT_URL, StringContents.Sina_SCOPE);
+        ssoHandler = new SsoHandler(MainActivity.this, weiboAuth);
+        ssoHandler.authorize(new WeiboAuthListener() {
 
+            @Override
+            public void onComplete(Bundle bundle) {
+                //从 Bundle 中解析 Token
+                mAccessToken = Oauth2AccessToken.parseAccessToken(bundle);
+                if (mAccessToken != null && mAccessToken.isSessionValid()) {
+
+                    final String nickname = bundle.getString("com.sina.weibo.intent.extra.NICK_NAME");
+                    String access_token = bundle.getString("access_token");
+                    String uid = bundle.getString("uid");
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(1000);
+                                Message message = handler.obtainMessage(603);
+                                Bundle bundle1 = new Bundle();
+                                bundle1.putString("nick_name",nickname);
+                                message.setData(bundle1);
+                                handler.sendMessage(message);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+                    toUpdateUserInfo(nickname,2);
+                    //GET请求获取用户的信息
+//                    try {
+//                        URL url = new URL("https://api.weibo.com/2/users/show.json?access_token=" + access_token + "&uid=" + uid);
+//                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//                        conn.setConnectTimeout(5000);
+//                        conn.setRequestMethod("GET");
+//                        conn.setDoInput(true);
+//                        int code = conn.getResponseCode();
+//                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                        byte[] buffer = new byte[1024];
+//                        int length = 0;
+//                        if (code == 200) {
+//                            InputStream is = conn.getInputStream();
+//                            while ((length = is.read(buffer)) != -1) {
+//                                baos.write(buffer, 0, length);
+//                            }
+//                        }
+//                        String jsonString = new String(baos.toByteArray());
+//                        JSONObject jsonObject = new JSONObject(jsonString);
+//                        String icon = jsonObject.getString("profile_image_url");
+//
+//                    } catch (Exception e) {
+//                        LogUtil.d("chengcj1" + e.getMessage());
+//                    }
+                } else {
+                    // 以下几种情况，您会收到 Code：
+                    // 1. 当您未在平台上注册的应用程序的包名与签名时；
+                    // 2. 当您注册的应用程序包名与签名不正确时；
+                    // 3. 当您在平台上注册的包名和签名与您当前测试的应用的包名和签名不匹配时。
+                    String code = bundle.getString("code");
+                    String message = getString(getResources().getIdentifier("authorize_fail", "string", getPackageName()));
+                    if (!Tools.isNull(code)) {
+                        message = message + "\n Obtained the code: " + code;
+                    }
+                    LogUtil.e("~~~~~~~~~~~~~~~~~~~~message::" + message);
+                }
+            }
+
+            @Override
+            public void onWeiboException(WeiboException e) {
+                LogUtil.e("~~~~~~~~~~~~~~~~~~WeiboException" + e.getMessage());
+            }
+
+            @Override
+            public void onCancel() {
+                Toast.makeText(MainActivity.this, "取消了微博授权", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void toUpdateUserInfo(final String nickName, final int type) {
+        BmobQuery<UserInfoBean> query = new BmobQuery<>();
+        query.addWhereEqualTo("user_name", mPreferences.getString("user_name", ""))
+                .findObjects(new FindListener<UserInfoBean>() {
+                    @Override
+                    public void done(List<UserInfoBean> list, BmobException e) {
+                        if (e == null) {
+                            String objectId = list.get(0).getObjectId();
+                            UserInfoBean userInfoBean = new UserInfoBean();
+                            if (type == 0) {
+                                userInfoBean.setBinding_qq(nickName);
+                            } else if (type == 1) {
+                                userInfoBean.setBinding_wechat(nickName);
+                            } else {
+                                userInfoBean.setBinding_sina(nickName);
+                            }
+                            userInfoBean.update(objectId, new UpdateListener() {
+                                @Override
+                                public void done(BmobException e) {
+                                    if (e == null) {
+                                        Toast.makeText(MainActivity.this, "信息更新成功", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(MainActivity.this, "信息更新失败", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        } else {
+                            Toast.makeText(MainActivity.this, "信息更新失败", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     @Override
@@ -1630,6 +1737,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             if (resultCode == Constants.REQUEST_QQ_SHARE || resultCode == Constants.REQUEST_QZONE_SHARE || resultCode == Constants.REQUEST_OLD_SHARE) {
                 Tencent.handleResultData(data, qqShareListener);
             }
+        }
+        if (ssoHandler != null) {
+            ssoHandler.authorizeCallBack(requestCode, resultCode, data);
         }
     }
 
