@@ -1,4 +1,4 @@
-package com.treasure.traveldiary.activity.home_page;
+package com.treasure.traveldiary.activity.main_center;
 
 import android.content.Intent;
 import android.hardware.Camera;
@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
-import com.treasure.traveldiary.utils.LogUtil;
 
 import java.util.List;
 

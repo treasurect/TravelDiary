@@ -7,7 +7,7 @@
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="com.treasure.traveldiary.activity.home_page.EvaluatedPublishActivity">
+    tools:context="com.treasure.traveldiary.activity.main_center.EvaluatedPublishActivity">
 
     <include layout="@layout/common_title_bar_view" />
 

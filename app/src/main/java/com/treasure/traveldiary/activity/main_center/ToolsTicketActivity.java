@@ -1,4 +1,4 @@
-package com.treasure.traveldiary.activity.home_page;
+package com.treasure.traveldiary.activity.main_center;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -9,11 +9,6 @@ import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.adapter.HomeFragmentPagerAdapter;
 import com.treasure.traveldiary.fragments.BaseFragment;
-import com.treasure.traveldiary.fragments.MineDiaryAllFragment;
-import com.treasure.traveldiary.fragments.MineDiaryImageFragment;
-import com.treasure.traveldiary.fragments.MineDiaryTextFragment;
-import com.treasure.traveldiary.fragments.MineDiaryVideoFragment;
-import com.treasure.traveldiary.fragments.MineEvaluatedFragment;
 import com.treasure.traveldiary.fragments.ToolsTicketAirFragment;
 import com.treasure.traveldiary.fragments.ToolsTicketTrainFragment;
 import com.treasure.traveldiary.utils.Tools;

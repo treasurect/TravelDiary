@@ -8,7 +8,7 @@
     android:background="@color/colorWhite"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
-    tools:context=".activity.home_page.ToolsWeatherActivity">
+    tools:context=".activity.main_center.ToolsWeatherActivity">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"

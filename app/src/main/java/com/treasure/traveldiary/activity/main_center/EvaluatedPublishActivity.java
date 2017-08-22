@@ -1,4 +1,4 @@
-package com.treasure.traveldiary.activity.home_page;
+package com.treasure.traveldiary.activity.main_center;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,7 +32,6 @@ import com.treasure.traveldiary.bean.EvaluatedBean;
 import com.treasure.traveldiary.bean.LeaveMesBean;
 import com.treasure.traveldiary.utils.Tools;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 

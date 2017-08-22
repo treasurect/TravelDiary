@@ -1,4 +1,4 @@
-package com.treasure.traveldiary.activity.home_page;
+package com.treasure.traveldiary.activity.main_center;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +15,6 @@ import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.adapter.SceneryListAdapter;
 import com.treasure.traveldiary.bean.SceneryBean;
-import com.treasure.traveldiary.utils.LogUtil;
 import com.treasure.traveldiary.utils.Tools;
 
 import java.util.ArrayList;

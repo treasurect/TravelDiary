@@ -1,4 +1,4 @@
-package com.treasure.traveldiary.activity.home_page;
+package com.treasure.traveldiary.activity.main_center;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,7 +25,6 @@ import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.adapter.DiaryLeavemesListAdapter;
 import com.treasure.traveldiary.bean.LeaveMesBean;
 import com.treasure.traveldiary.bean.SceneryBean;
-import com.treasure.traveldiary.utils.LogUtil;
 import com.treasure.traveldiary.utils.Tools;
 import com.treasure.traveldiary.widget.CustomScrollListView;
 

@@ -7,7 +7,7 @@
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".activity.home_page.ToolsWeatherListActivity">
+    tools:context=".activity.main_center.ToolsWeatherListActivity">
 
     <include layout="@layout/common_title_bar_view" />
 

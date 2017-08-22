@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.treasure.traveldiary.activity.home_page.DiaryVideoCameraActivity">
+    tools:context="com.treasure.traveldiary.activity.main_center.DiaryVideoCameraActivity">
 
     <SurfaceView
         android:id="@+id/diary_video_camera_surfaceView"

@@ -67,19 +67,19 @@
             android:name=".activity.user_center.UserSettingsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.home_page.DiaryTextPublishActivity"
+            android:name=".activity.main_center.DiaryTextPublishActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.home_page.DiaryImagePublishActivity"
+            android:name=".activity.main_center.DiaryImagePublishActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.home_page.EvaluatedPublishActivity"
+            android:name=".activity.main_center.EvaluatedPublishActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.diary_center.DiaryDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.home_page.DiaryImageCameraActivity"
+            android:name=".activity.main_center.DiaryImageCameraActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.user_center.UserEvaluatedListActivity"
@@ -88,10 +88,10 @@
             android:name=".activity.user_center.UserMessageListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.home_page.DiaryVideoCameraActivity"
+            android:name=".activity.main_center.DiaryVideoCameraActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.home_page.DiaryVideoPublishActivity"
+            android:name=".activity.main_center.DiaryVideoPublishActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.diary_center.DiaryCenterActivity"
@@ -109,13 +109,13 @@
             android:name=".activity.diary_center.EvaluatedDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.home_page.ToolsWeatherActivity"
+            android:name=".activity.main_center.ToolsWeatherActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.home_page.ToolsTicketActivity"
+            android:name=".activity.main_center.ToolsTicketActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.home_page.ToolsWeatherListActivity"
+            android:name=".activity.main_center.ToolsWeatherListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.find_center.TravellerCircleActivity"
@@ -124,13 +124,13 @@
             android:name=".activity.diary_center.GamePuzzleActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.home_page.SceneryActivity"
+            android:name=".activity.main_center.SceneryActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.diary_center.GameH5Activity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.home_page.SceneryDetailActivity"
+            android:name=".activity.main_center.SceneryDetailActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.find_center.FindCenterActivity"
@@ -298,16 +298,6 @@
             android:name="com.tencent.connect.common.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <!-- <activity -->
-        <!-- android:name="com.bear.qqlogin.MainActivity" -->
-        <!-- android:label="@string/app_name" > -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-        <!-- </intent-filter> -->
-        <!-- </activity> -->
     </application>
 
 </manifest>

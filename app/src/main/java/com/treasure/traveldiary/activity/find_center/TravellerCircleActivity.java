@@ -23,7 +23,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.activity.diary_center.DiaryDetailActivity;
-import com.treasure.traveldiary.activity.home_page.DiaryImageCameraActivity;
+import com.treasure.traveldiary.activity.main_center.DiaryImageCameraActivity;
 import com.treasure.traveldiary.adapter.TravellerDiaryListAdapter;
 import com.treasure.traveldiary.bean.DiaryBean;
 import com.treasure.traveldiary.bean.UserInfoBean;

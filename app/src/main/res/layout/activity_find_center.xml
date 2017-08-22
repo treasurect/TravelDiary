@@ -61,7 +61,7 @@
 
             android:gravity="center_vertical"
             android:paddingLeft="5dp"
-            android:text="旅游精选"
+            android:text="驴友精选"
             android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>
