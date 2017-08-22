@@ -94,6 +94,7 @@ import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
+import com.treasure.traveldiary.activity.find_center.FindCenterActivity;
 import com.treasure.traveldiary.activity.home_page.DiaryImageCameraActivity;
 import com.treasure.traveldiary.activity.home_page.DiaryImagePublishActivity;
 import com.treasure.traveldiary.activity.home_page.EvaluatedPublishActivity;
@@ -105,7 +106,7 @@ import com.treasure.traveldiary.activity.home_page.ToolsWeatherActivity;
 import com.treasure.traveldiary.activity.diary_center.DiaryCenterActivity;
 import com.treasure.traveldiary.activity.diary_center.DiaryDetailActivity;
 import com.treasure.traveldiary.activity.home_page.DiaryTextPublishActivity;
-import com.treasure.traveldiary.activity.traveller_circle.TravellerCircleActivity;
+import com.treasure.traveldiary.activity.find_center.TravellerCircleActivity;
 import com.treasure.traveldiary.activity.user_center.UserEditUserInfoActivity;
 import com.treasure.traveldiary.activity.user_center.UserFeedBackActivity;
 import com.treasure.traveldiary.activity.user_center.UserForgetPassActivity;
@@ -125,6 +126,7 @@ import com.treasure.traveldiary.receiver.CommonDataReceiver;
 import com.treasure.traveldiary.utils.LogUtil;
 import com.treasure.traveldiary.utils.StringContents;
 import com.treasure.traveldiary.utils.Tools;
+import com.treasure.traveldiary.wxapi.SinaShareActivity;
 import com.treasure.traveldiary.wxapi.WXEntryActivity;
 
 import org.json.JSONObject;
@@ -141,7 +143,7 @@ import cn.bmob.v3.listener.UpdateListener;
 public class MainActivity extends BaseActivity implements View.OnClickListener, BDLocationListener, BaiduMap.OnMapLoadedCallback, BaiduMap.OnMarkerClickListener, BaiduMap.OnMapClickListener, RadioGroup.OnCheckedChangeListener, TextWatcher, OnGetRoutePlanResultListener {
 
     private LinearLayout mineDiaryLayout;
-    private LinearLayout travellerCircleLayout;
+    private LinearLayout findCenterLayout;
     private MapView mapView;
     private BaiduMap map;
     private double user_latitude = 39.915168, user_longitude = 116.403875;
@@ -279,7 +281,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private void initFindId() {
         mineDiaryLayout = (LinearLayout) findViewById(R.id.mine_diary_layout);
-        travellerCircleLayout = (LinearLayout) findViewById(R.id.traveller_circle_layout);
+        findCenterLayout = (LinearLayout) findViewById(R.id.find_center_layout);
         mapView = (MapView) findViewById(R.id.home_mapView);
         loading = (FrameLayout) findViewById(R.id.loading_layout);
         btnAdd = (FloatingActionButton) findViewById(R.id.main_add_image);
@@ -381,7 +383,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private void initClick() {
         mineDiaryLayout.setOnClickListener(this);
         btnAdd.setOnClickListener(this);
-        travellerCircleLayout.setOnClickListener(this);
+        findCenterLayout.setOnClickListener(this);
         loading.setOnClickListener(this);
         btnDiaryText.setOnClickListener(this);
         btnDiaryImage.setOnClickListener(this);
@@ -628,13 +630,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.user_map_location:
                 showUserLocation();
                 break;
-            case R.id.traveller_circle_layout:
+            case R.id.find_center_layout:
                 if (Tools.isNull(mPreferences.getString("token", ""))) {
                     showPopupWindow();
                 } else {
-                    Intent intent = new Intent(MainActivity.this, TravellerCircleActivity.class);
+                    Intent intent = new Intent(MainActivity.this, FindCenterActivity.class);
                     if (Build.VERSION.SDK_INT >= 21) {
-                        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this, travellerCircleLayout, "travellercircle").toBundle());
+                        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this, findCenterLayout, "findcenter").toBundle());
                     } else {
                         startActivity(intent);
                     }
@@ -1073,30 +1075,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
      * QQ 微信 微博 的  分享和绑定账号
      */
     private void shareQQ() {
+        if (shareWindow != null && shareWindow.isShowing()) {
+            shareWindow.dismiss();
+        }
         //初始化回调
         qqShareListener = new IUiListener() {
             @Override
             public void onComplete(Object o) {
-                Toast.makeText(MainActivity.this, "恭喜你，分享成功", Toast.LENGTH_SHORT).show();
-                if (shareWindow != null && shareWindow.isShowing()) {
-                    shareWindow.dismiss();
-                }
+                Toast.makeText(MainActivity.this, "恭喜你，QQ分享成功", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(UiError uiError) {
-                Toast.makeText(MainActivity.this, "很遗憾，分享失败", Toast.LENGTH_SHORT).show();
-                if (shareWindow != null && shareWindow.isShowing()) {
-                    shareWindow.dismiss();
-                }
+                Toast.makeText(MainActivity.this, "很遗憾，QQ分享失败", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancel() {
-                Toast.makeText(MainActivity.this, "分享已取消", Toast.LENGTH_SHORT).show();
-                if (shareWindow != null && shareWindow.isShowing()) {
-                    shareWindow.dismiss();
-                }
+                Toast.makeText(MainActivity.this, "QQ分享已取消", Toast.LENGTH_SHORT).show();
             }
         };
 
@@ -1203,6 +1199,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void shareWeChat() {
+        //启动分享页面，分享的结果微信会通过组件启动WXEntryActivity 进行监听
+        if (shareWindow != null && shareWindow.isShowing()) {
+            shareWindow.dismiss();
+        }
         IWXAPI iwxapi = TravelApplication.iwxapi;
         if (!iwxapi.isWXAppInstalled()) {
             Toast.makeText(MainActivity.this, "您还未安装微信客户端",
@@ -1224,11 +1224,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         req.message = msg;
         req.scene = SendMessageToWX.Req.WXSceneSession;
         iwxapi.sendReq(req);
-        Intent intent = new Intent(MainActivity.this, WXEntryActivity.class);
-        startActivityForResult(intent,301);
     }
 
     private void shareWeChatCircle() {
+        if (shareWindow != null && shareWindow.isShowing()) {
+            shareWindow.dismiss();
+        }
         IWXAPI iwxapi = TravelApplication.iwxapi;
         if (!iwxapi.isWXAppInstalled()) {
             Toast.makeText(MainActivity.this, "您还未安装微信客户端",
@@ -1256,18 +1257,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         Toast.makeText(this, "此功能暂未开放", Toast.LENGTH_SHORT).show();
     }
 
-    private void shareSina() {
-        mWeiboShareAPI.registerApp();   // 将应用注册到微博客户端
-        TextObject textObject = new TextObject();
-        textObject.text = "用手机记录你遇到的美。\n" +
-                "旅游 途中会遇到很多美好的瞬间，倘若未记录下来到日后回忆会是一种很大的遗憾，为了不留下遗憾，记得用APP记录下你的美。\n\n"+
-        "复制链接进入：http://sj.qq.com/myapp/detail.htm?apkName=com.treasure.traveldiary";
-        WeiboMultiMessage weiboMessage = new WeiboMultiMessage();//初始化微博的分享消息
-        weiboMessage. textObject = textObject;
-        SendMultiMessageToWeiboRequest request = new SendMultiMessageToWeiboRequest();
-        request.transaction = String.valueOf(System.currentTimeMillis());
-        request.multiMessage = weiboMessage;
-        mWeiboShareAPI.sendRequest(request);//发送请求消息到微博，唤起微博分享界面
+    private void shareSina()  {
+        //进入新页面进行发送微博 和微博状态监听
+        startActivity(new Intent(MainActivity.this, SinaShareActivity.class));
+        if (shareWindow != null && shareWindow.isShowing()) {
+            shareWindow.dismiss();
+        }
     }
 
     private void bindingSina() {

@@ -27,6 +27,7 @@ public class TravelApplication extends Application {
     private boolean isNight;
     private List<String> diary_image;
     public static IWXAPI iwxapi;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -41,8 +42,8 @@ public class TravelApplication extends Application {
         //JPUSH
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
-// 微信
-        iwxapi = WXAPIFactory.createWXAPI(this,StringContents.WeChat_APP_ID,false);
+        // 微信
+        iwxapi = WXAPIFactory.createWXAPI(this, StringContents.WeChat_APP_ID, false);
         iwxapi.registerApp(StringContents.WeChat_APP_ID);
 
         setNight(false);

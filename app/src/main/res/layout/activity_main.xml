@@ -60,13 +60,13 @@
                     android:layout_weight="1" />
 
                 <LinearLayout
-                    android:id="@+id/traveller_circle_layout"
+                    android:id="@+id/find_center_layout"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:transitionName="travellercircle">
+                    android:transitionName="findcenter">
 
                     <ImageView
                         android:id="@+id/traveller_center_image"
@@ -74,7 +74,7 @@
                         android:layout_height="23dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="5dp"
-                        android:src="@mipmap/ic_traveller_center" />
+                        android:src="@mipmap/ic_find" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

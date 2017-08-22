@@ -40,53 +40,21 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler 
     @Override
     public void onResp(BaseResp baseResp) {
         switch (baseResp.getType()) {
-            case ConstantsAPI.COMMAND_SENDAUTH:
-                switch (baseResp.errCode) {
-                    //发送成功(用户同意)
-                    case BaseResp.ErrCode.ERR_OK:
-                        String code = ((SendAuth.Resp) baseResp).code;
-                        LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~用户换取access_token的code:" + code);
-                        LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~自己的的state：" + ((SendAuth.Resp) baseResp).state);
-                        HttpHelper.doGetCall("https://api.weixin.qq.com/sns/oauth2/access_token?appid="
-                                + StringContents.WeChat_APP_ID
-                                + "&secret=" + ""
-                                + "&code=" + code
-                                + "&grant_type=authorization_code", this, new Callback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-                                LogUtil.d("~~~~~~~~~~~~~~~~IOException~~~" + e.getMessage());
-                            }
-
-                            @Override
-                            public void onResponse(Call call, Response response) throws IOException {
-                                LogUtil.d("~~~~~~~~~~~~~~~~response~~~" + response.body().string());
-                            }
-                        });
-                        break;
-                    //发送取消(用户取消)
-                    case BaseResp.ErrCode.ERR_AUTH_DENIED:
-                        this.finish();
-                        break;
-                    //发送取消(用户拒绝授权)
-                    case BaseResp.ErrCode.ERR_USER_CANCEL:
-                        Toast.makeText(this, "登录失败，请稍后再试", Toast.LENGTH_SHORT).show();
-                        this.finish();
-                        break;
-                }
-                break;
             case ConstantsAPI.COMMAND_SENDMESSAGE_TO_WX:
                 switch (baseResp.errCode) {
                     //发送成功(用户同意)
                     case BaseResp.ErrCode.ERR_OK:
-                        Toast.makeText(this, "分享成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "恭喜你，微信分享成功", Toast.LENGTH_SHORT).show();
                         this.finish();
                         break;
                     //发送取消(用户取消)
                     case BaseResp.ErrCode.ERR_AUTH_DENIED:
+                        Toast.makeText(this, "微信分享取消", Toast.LENGTH_SHORT).show();
                         this.finish();
                         break;
                     //发送取消(用户拒绝授权，用户取消)
                     case BaseResp.ErrCode.ERR_USER_CANCEL:
+                        Toast.makeText(this, "微信分享取消", Toast.LENGTH_SHORT).show();
                         this.finish();
                         break;
                 }

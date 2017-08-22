@@ -9,12 +9,17 @@
         android:layout_height="match_parent"
         android:layout_weight="1"/>
     <LinearLayout
-        android:layout_width="80dp"
+        android:layout_width="60dp"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_marginTop="45dp"
         android:layout_marginBottom="50dp"
         android:background="@color/colorWhite">
+        <View
+            android:layout_width="40dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center" />
         <ImageView
             android:id="@+id/main_share_qq"
             android:layout_width="40dp"
@@ -43,5 +48,10 @@
             android:layout_weight="1"
             android:layout_gravity="center"
             android:src="@mipmap/icon_sina_logo" />
+        <View
+            android:layout_width="40dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center" />
     </LinearLayout>
 </LinearLayout>
