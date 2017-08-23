@@ -6,13 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.treasure.traveldiary.R;
-import com.treasure.traveldiary.bean.DiaryBean;
-import com.treasure.traveldiary.bean.LeaveMesBean;
+import com.treasure.traveldiary.bean.SUserBean;
 import com.treasure.traveldiary.utils.Tools;
 
 import java.util.List;
@@ -23,10 +21,10 @@ import java.util.List;
 
 public class DiaryLeavemesListAdapter extends BaseAdapter {
     private Context context;
-    private List<LeaveMesBean> list;
+    private List<SUserBean> list;
     private LayoutInflater inflater;
 
-    public DiaryLeavemesListAdapter(Context context, List<LeaveMesBean> list) {
+    public DiaryLeavemesListAdapter(Context context, List<SUserBean> list) {
         this.context = context;
         this.list = list;
         inflater = LayoutInflater.from(context);
@@ -55,7 +53,7 @@ public class DiaryLeavemesListAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup viewGroup) {
         View ret = null;
         ViewHolder holder = null;
-        LeaveMesBean listBean = list.get(position);
+        SUserBean listBean = list.get(position);
         if (view != null) {
             ret = view;
             holder = (ViewHolder) ret.getTag();

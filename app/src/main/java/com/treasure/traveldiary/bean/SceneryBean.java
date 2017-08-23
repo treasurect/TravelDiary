@@ -17,7 +17,7 @@ public class SceneryBean extends BmobObject{
     private String scenery_open_time;
     private String scenery_addr;
     private String scenery_way;
-    private List<LeaveMesBean> scenery_comments;
+    private List<SUserBean> scenery_comments;
 
     public String getScenery_name() {
         return scenery_name;
@@ -75,11 +75,11 @@ public class SceneryBean extends BmobObject{
         this.scenery_addr = scenery_addr;
     }
 
-    public List<LeaveMesBean> getScenery_comments() {
+    public List<SUserBean> getScenery_comments() {
         return scenery_comments;
     }
 
-    public void setScenery_comments(List<LeaveMesBean> scenery_comments) {
+    public void setScenery_comments(List<SUserBean> scenery_comments) {
         this.scenery_comments = scenery_comments;
     }
 

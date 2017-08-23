@@ -6,7 +6,7 @@ import cn.bmob.v3.BmobObject;
  * Created by treasure on 2017/8/9.
  */
 
-public class LeaveMesBean extends BmobObject {
+public class SUserBean extends BmobObject {
     private String leave_name;
     private String leave_nick;
     private String leave_icon;

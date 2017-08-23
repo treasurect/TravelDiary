@@ -24,7 +24,7 @@ import com.treasure.traveldiary.utils.StringContents;
 public class SinaShareActivity extends BaseActivity implements IWeiboHandler.Response {
 
     private IWeiboShareAPI weiboAPI;
-    private String title = "用手机记录你遇到的美\n";//标题
+    private String title = "旅游diary（第四版）  已经出炉了\n";//标题
     private String description = "旅游 途中会遇到很多美好的瞬间，倘若未记录下来到日后回忆会是一种很大的遗憾，为了不留下遗憾，记得用APP记录下你的美。";//描述
     private String url = "http://sj.qq.com/myapp/detail.htm?apkName=com.treasure.traveldiary";//分享链接
 

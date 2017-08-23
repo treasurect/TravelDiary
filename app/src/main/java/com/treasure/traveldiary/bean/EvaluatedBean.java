@@ -16,7 +16,7 @@ public class EvaluatedBean extends BmobObject{
     private String user_addr;
     private String star_num;
     private String user_evaluated;
-    private List<LeaveMesBean> mesBeanList;
+    private List<SUserBean> mesBeanList;
 
     public String getUser_name() {
         return user_name;
@@ -74,11 +74,11 @@ public class EvaluatedBean extends BmobObject{
         this.user_icon = user_icon;
     }
 
-    public List<LeaveMesBean> getMesBeanList() {
+    public List<SUserBean> getMesBeanList() {
         return mesBeanList;
     }
 
-    public void setMesBeanList(List<LeaveMesBean> mesBeanList) {
+    public void setMesBeanList(List<SUserBean> mesBeanList) {
         this.mesBeanList = mesBeanList;
     }
 }

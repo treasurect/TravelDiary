@@ -23,7 +23,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.adapter.DiaryLeavemesListAdapter;
-import com.treasure.traveldiary.bean.LeaveMesBean;
+import com.treasure.traveldiary.bean.SUserBean;
 import com.treasure.traveldiary.bean.SceneryBean;
 import com.treasure.traveldiary.utils.Tools;
 import com.treasure.traveldiary.widget.CustomScrollListView;
@@ -47,7 +47,7 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
     private TextView scenery_addr;
     private TextView scenery_way;
     private TextView scenery_desc;
-    private List<LeaveMesBean> mesBeanList;
+    private List<SUserBean> mesBeanList;
     private DiaryLeavemesListAdapter adapter;
     private SimpleDraweeView scenery_image;
     private PopupWindow mPopupWindow;
@@ -58,7 +58,7 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
     private SharedPreferences mPreferences;
     private FrameLayout loading;
     private FloatingActionButton refresh;
-    private List<LeaveMesBean> list = new ArrayList<>();
+    private List<SUserBean> list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,18 +230,18 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
 
     private void saveLeaveMes(String objectId) {
         SceneryBean sceneryBean = new SceneryBean();
-        final LeaveMesBean leaveMesBean = new LeaveMesBean();
-        leaveMesBean.setLeave_name(mPreferences.getString("user_name", ""));
-        leaveMesBean.setLeave_nick(mPreferences.getString("user_nick", ""));
-        leaveMesBean.setLeave_icon(mPreferences.getString("user_icon", ""));
+        final SUserBean SUserBean = new SUserBean();
+        SUserBean.setLeave_name(mPreferences.getString("user_name", ""));
+        SUserBean.setLeave_nick(mPreferences.getString("user_nick", ""));
+        SUserBean.setLeave_icon(mPreferences.getString("user_icon", ""));
         String nowTime = Tools.getNowTime();
-        leaveMesBean.setLeave_time(nowTime);
-        leaveMesBean.setLeave_content(editLeaveMes.getText().toString().trim());
-        list.add(leaveMesBean);
+        SUserBean.setLeave_time(nowTime);
+        SUserBean.setLeave_content(editLeaveMes.getText().toString().trim());
+        list.add(SUserBean);
         sceneryBean.setScenery_comments(list);
 
         Collections.reverse(mesBeanList);
-        mesBeanList.add(leaveMesBean);
+        mesBeanList.add(SUserBean);
 
         sceneryBean.update(objectId, new UpdateListener() {
             @Override
@@ -268,7 +268,7 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
                     public void done(List<SceneryBean> list, BmobException e) {
                         if (e == null) {
                             if (!isPageDestroy) {
-                                List<LeaveMesBean> scenery_comments = list.get(0).getScenery_comments();
+                                List<SUserBean> scenery_comments = list.get(0).getScenery_comments();
                                 mesBeanList.clear();
                                 scenery_comments.remove(0);
                                 Collections.reverse(scenery_comments);

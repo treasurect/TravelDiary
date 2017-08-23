@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="300dp"
+    android:layout_height="400dp"
+    android:layout_gravity="center"
+    android:background="@drawable/bottom_yellow_radius10">
+
+    <LinearLayout
+        android:id="@+id/traveller_show_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/traveller_show_icon"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1.5"
+            android:padding="40dp"
+            fresco:placeholderImage="@mipmap/ic_travel_logo"
+            fresco:roundAsCircle="true" />
+<View
+    android:layout_width="match_parent"
+    android:layout_height="0.5dp"
+    android:background="@color/colorOrange"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/traveller_show_name"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/traveller_show_nick"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/traveller_show_age"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/traveller_show_desc"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:gravity="center_horizontal"
+                android:textColor="@color/colorWhite" />
+        </LinearLayout>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/traveller_show_attention"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:text="+ 关注"
+        android:background="@color/color_13"
+        android:textColor="@color/colorWhite"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"/>
+</FrameLayout>

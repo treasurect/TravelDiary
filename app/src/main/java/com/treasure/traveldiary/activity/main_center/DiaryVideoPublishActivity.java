@@ -24,7 +24,7 @@ import android.widget.Toast;
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.bean.DiaryBean;
-import com.treasure.traveldiary.bean.LeaveMesBean;
+import com.treasure.traveldiary.bean.SUserBean;
 import com.treasure.traveldiary.bean.UserInfoBean;
 import com.treasure.traveldiary.utils.Tools;
 
@@ -273,10 +273,10 @@ public class DiaryVideoPublishActivity extends BaseActivity implements View.OnCl
         diaryBean.setDiary_video(fileUrl);
         diaryBean.setDiary_video_first(imageUrl);
         //生成一个空的数据占位，以方便更新
-        LeaveMesBean leaveMesBean = new LeaveMesBean();
-        leaveMesBean.setLeave_name(mPreferences.getString("user_name", ""));
-        List<LeaveMesBean> leaveMesBeen = new ArrayList<>();
-        leaveMesBeen.add(leaveMesBean);
+        SUserBean SUserBean = new SUserBean();
+        SUserBean.setLeave_name(mPreferences.getString("user_name", ""));
+        List<SUserBean> leaveMesBeen = new ArrayList<>();
+        leaveMesBeen.add(SUserBean);
         diaryBean.setMesBeanList(leaveMesBeen);
         //生成一个空的数据占位，以方便更新
         List<String> list = new ArrayList<>();

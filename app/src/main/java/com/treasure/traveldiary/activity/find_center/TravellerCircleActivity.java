@@ -78,7 +78,7 @@ public class TravellerCircleActivity extends BaseActivity implements View.OnClic
         Tools.setTranslucentStatus(this);
         mPreferences = getSharedPreferences("user", MODE_PRIVATE);
 
-        initFindid();
+        initFindId();
         initView();
         initListView();
         initScrollView();
@@ -86,7 +86,7 @@ public class TravellerCircleActivity extends BaseActivity implements View.OnClic
         getTravellerCircleList();
     }
 
-    private void initFindid() {
+    private void initFindId() {
         btnReturn = (ImageView) findViewById(R.id.traveller_circle_return);
         btnSettings = (ImageView) findViewById(R.id.traveller_circle_settings);
         text_title = (TextView) findViewById(R.id.traveller_circle_title);

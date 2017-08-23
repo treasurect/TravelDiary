@@ -31,7 +31,7 @@ import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.TravelApplication;
 import com.treasure.traveldiary.adapter.DiaryLeavemesListAdapter;
 import com.treasure.traveldiary.bean.DiaryBean;
-import com.treasure.traveldiary.bean.LeaveMesBean;
+import com.treasure.traveldiary.bean.SUserBean;
 import com.treasure.traveldiary.utils.Tools;
 import com.treasure.traveldiary.widget.CustomScrollListView;
 
@@ -68,7 +68,7 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
     private SharedPreferences mPreferences;
     private String diary_publisher, diary_time;
     private String objectId;
-    private List<LeaveMesBean> mesBeanList;
+    private List<SUserBean> mesBeanList;
     private DiaryLeavemesListAdapter adapter;
     private FrameLayout loading;
     private ScrollView scrollView;
@@ -206,7 +206,7 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
                             }
                         }
                         if (diaryBean.getMesBeanList() != null) {
-                            List<LeaveMesBean> leaveMesList1 = diaryBean.getMesBeanList();
+                            List<SUserBean> leaveMesList1 = diaryBean.getMesBeanList();
                             //显示留言  从外部进入
                             mesBeanList.clear();
                             leaveMesList1.remove(0);
@@ -230,7 +230,7 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public void done(List<DiaryBean> list, BmobException e) {
                         if (e == null){
-                            List<LeaveMesBean> leaveMesList2 = list.get(0).getMesBeanList();
+                            List<SUserBean> leaveMesList2 = list.get(0).getMesBeanList();
                             //显示留言   刷新
                             mesBeanList.clear();
                             leaveMesList2.remove(0);
@@ -383,7 +383,7 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
             public void done(List<DiaryBean> list, BmobException e) {
                 if (e == null) {
                      objectId = list.get(0).getObjectId();
-                    List<LeaveMesBean> leaveMesList3 = list.get(0).getMesBeanList();
+                    List<SUserBean> leaveMesList3 = list.get(0).getMesBeanList();
                     String diary_type = list.get(0).getDiary_type();
                     String user_lat = list.get(0).getUser_lat();
                     String user_long = list.get(0).getUser_long();
@@ -396,8 +396,8 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
 
     }
 
-    private void saveLeaveMes(final String objectId, List<LeaveMesBean> leaveMesList4, String diary_type, String user_lat, String user_long)  {
-        LeaveMesBean bean = new LeaveMesBean();
+    private void saveLeaveMes(final String objectId, List<SUserBean> leaveMesList4, String diary_type, String user_lat, String user_long)  {
+        SUserBean bean = new SUserBean();
         bean.setLeave_content(editLeaveMes.getText().toString().trim());
         bean.setLeave_icon(mPreferences.getString("user_icon", ""));
         bean.setLeave_nick(mPreferences.getString("user_nick", ""));
@@ -405,7 +405,7 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
         String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Long(System.currentTimeMillis()));
         bean.setLeave_time(time.substring(5, 7) + "月" + time.substring(8, 10) + "日" + time.substring(11, 16));
 
-        List<LeaveMesBean> leaveMesBeen = new ArrayList<>();
+        List<SUserBean> leaveMesBeen = new ArrayList<>();
         leaveMesBeen.addAll(leaveMesList4);
         leaveMesBeen.add(bean);
         //上传服务器

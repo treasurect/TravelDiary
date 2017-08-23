@@ -25,6 +25,8 @@ public class UserInfoBean extends BmobObject {
     private String binding_qq;
     private String binding_wechat;
     private String binding_sina;
+    private List<SUserBean> fans;
+    private List<SUserBean> attention;
 
     public String getUser_name() {
         return user_name;
@@ -152,5 +154,21 @@ public class UserInfoBean extends BmobObject {
 
     public void setBinding_sina(String binding_sina) {
         this.binding_sina = binding_sina;
+    }
+
+    public List<SUserBean> getFans() {
+        return fans;
+    }
+
+    public void setFans(List<SUserBean> fans) {
+        this.fans = fans;
+    }
+
+    public List<SUserBean> getAttention() {
+        return attention;
+    }
+
+    public void setAttention(List<SUserBean> attention) {
+        this.attention = attention;
     }
 }

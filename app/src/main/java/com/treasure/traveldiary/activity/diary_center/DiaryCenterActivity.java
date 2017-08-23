@@ -3,6 +3,7 @@ package com.treasure.traveldiary.activity.diary_center;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.view.View;
 
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
@@ -20,7 +21,7 @@ import com.treasure.traveldiary.utils.Tools;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DiaryCenterActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {
+public class DiaryCenterActivity extends BaseActivity implements TabLayout.OnTabSelectedListener, View.OnClickListener {
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
@@ -30,12 +31,14 @@ public class DiaryCenterActivity extends BaseActivity implements TabLayout.OnTab
         setContentView(R.layout.activity_diary_center);
         initTitle();
         Tools.setTranslucentStatus(this);
+        btn_back.setVisibility(View.VISIBLE);
         title.setText("我的日记");
 
         initFindId();
         tabLayout.addOnTabSelectedListener(this);
         initTabLayout();
         initViewPager();
+        initClick();
         //联动
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         viewPager.setCurrentItem(2, false);
@@ -44,7 +47,6 @@ public class DiaryCenterActivity extends BaseActivity implements TabLayout.OnTab
         tabLayout = (TabLayout) findViewById(R.id.diary_center_tabLayout);
         viewPager = (ViewPager) findViewById(R.id.diary_center_viewPager);
     }
-
     private void initTabLayout() {
         tabLayout.addTab(tabLayout.newTab().setText("小游戏"));
         tabLayout.addTab(tabLayout.newTab().setText("时间轴"));
@@ -81,5 +83,16 @@ public class DiaryCenterActivity extends BaseActivity implements TabLayout.OnTab
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+    private void initClick(){
+        btn_back.setOnClickListener(this);
+    }
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_back:
+                DiaryCenterActivity.this.finish();
+                break;
+        }
     }
 }

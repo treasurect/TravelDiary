@@ -20,6 +20,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.activity.main_center.DiaryImageCameraActivity;
+import com.treasure.traveldiary.bean.SUserBean;
 import com.treasure.traveldiary.bean.UserInfoBean;
 import com.treasure.traveldiary.utils.StringContents;
 import com.treasure.traveldiary.utils.Tools;
@@ -304,9 +305,18 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
         infoBean.setIntegral_count("0");
         List<String> list = new ArrayList<>();
         list.add(nowTime);
+        //签到字段添加一个占位
         infoBean.setSigning_date(list);
         infoBean.setTimer_shaft(list);
         infoBean.setTraveller_circle_bg("http://bmob-cdn-13238.b0.upaiyun.com/2017/08/16/2104cdfa5c5c40f59310479a4244429f.png");
+        //粉丝字段添加一个占位
+        List<SUserBean> sUserBeen = new ArrayList<>();
+        SUserBean SUserBean = new SUserBean();
+        SUserBean.setLeave_name(editPhone.getText().toString().trim());
+        sUserBeen.add(SUserBean);
+        infoBean.setFans(sUserBeen);
+        //关注字段添加一个占位
+        infoBean.setAttention(sUserBeen);
         infoBean.setBinding_qq("未绑定");
         infoBean.setBinding_wechat("未绑定");
         infoBean.setBinding_sina("未绑定");

@@ -113,6 +113,7 @@ import com.treasure.traveldiary.activity.user_center.UserMessageListActivity;
 import com.treasure.traveldiary.activity.user_center.UserRegisterActivity;
 import com.treasure.traveldiary.activity.user_center.UserSettingsActivity;
 import com.treasure.traveldiary.activity.user_center.UserSigningActivity;
+import com.treasure.traveldiary.activity.user_center.UserSocialActivity;
 import com.treasure.traveldiary.bean.DiaryBean;
 import com.treasure.traveldiary.bean.MapMarkerInfoBean;
 import com.treasure.traveldiary.bean.UserInfoBean;
@@ -241,7 +242,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private CommonDataReceiver commonDataReceiver;
     private SimpleDraweeView left_user_icon;
     private TextView left_user_name;
-    private LinearLayout night_layout, signing_layout, message_layout, feedback_layout, settings_layout;
+    private LinearLayout night_layout, signing_layout, social_layout,message_layout, feedback_layout, settings_layout;
     private ImageView night_icon;
     private DrawerLayout drawer_layout;
     private FloatingActionButton search;
@@ -327,6 +328,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         night_icon = (ImageView) findViewById(R.id.left_night_icon);
         night_layout = (LinearLayout) findViewById(R.id.left_night_layout);
         signing_layout = (LinearLayout) findViewById(R.id.left_signing_layout);
+        social_layout = (LinearLayout) findViewById(R.id.left_social_contact_layout);
         message_layout = (LinearLayout) findViewById(R.id.left_message_layout);
         feedback_layout = (LinearLayout) findViewById(R.id.left_feedback_layout);
         settings_layout = (LinearLayout) findViewById(R.id.left_settings_layout);
@@ -426,6 +428,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         left_user_name.setOnClickListener(this);
         night_layout.setOnClickListener(this);
         signing_layout.setOnClickListener(this);
+        social_layout.setOnClickListener(this);
         message_layout.setOnClickListener(this);
         feedback_layout.setOnClickListener(this);
         settings_layout.setOnClickListener(this);
@@ -736,6 +739,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     startActivity(new Intent(MainActivity.this, UserSigningActivity.class));
                 }
                 break;
+            case R.id.left_social_contact_layout:
+                if (Tools.isNull(mPreferences.getString("token", ""))) {
+                    showPopupWindow();
+                } else {
+                    Intent intent = new Intent(MainActivity.this, UserSocialActivity.class);
+                    startActivity(intent);
+                }
+                break;
             case R.id.left_message_layout:
                 if (Tools.isNull(mPreferences.getString("token", ""))) {
                     showPopupWindow();
@@ -753,6 +764,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }
                 break;
             case R.id.left_settings_layout:
+                if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
+                    drawer_layout.closeDrawer(GravityCompat.START);
+                }
                 startActivity(new Intent(MainActivity.this, UserSettingsActivity.class));
                 break;
             case R.id.left_binding_qq:
@@ -1105,8 +1119,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         Bundle bundle = new Bundle();
         bundle.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
-        bundle.putString(QQShare.SHARE_TO_QQ_TITLE, "旅行日记android");// 标题
-        bundle.putString(QQShare.SHARE_TO_QQ_SUMMARY, "这是第四版的赶制现场");// 摘要
+        bundle.putString(QQShare.SHARE_TO_QQ_TITLE, "旅游diary（第四版）  已经出炉了");// 标题
+        bundle.putString(QQShare.SHARE_TO_QQ_SUMMARY, "旅游 途中会遇到很多美好的瞬间，倘若未记录下来到日后回忆会是一种很大的遗憾，为了不留下遗憾，记得用APP记录下你的美。");// 摘要
         bundle.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "http://sj.qq.com/myapp/detail.htm?apkName=com.treasure.traveldiary");// 内容地址
         bundle.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://bmob-cdn-13238.b0.upaiyun.com/2017/08/21/38bdff2c103e49aa838b44bce96e6485.png");// 网络图片地址　　params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "应用名称");// 应用名称
         bundle.putString(QQShare.SHARE_TO_QQ_EXT_INT, "体验");
@@ -1206,8 +1220,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         webpage.webpageUrl = "http://sj.qq.com/myapp/detail.htm?apkName=com.treasure.traveldiary";
         WXMediaMessage msg = new WXMediaMessage(webpage);
 
-        msg.title = "旅游日记第四版就快要出炉了";
-        msg.description = "在这app启动23天之际，在第四个版本赶制之际，加入了微信分享";
+        msg.title = "旅游diary（第四版）  已经出炉了";
+        msg.description = "旅游 途中会遇到很多美好的瞬间，倘若未记录下来到日后回忆会是一种很大的遗憾，为了不留下遗憾，记得用APP记录下你的美。";
         Bitmap thumb = BitmapFactory.decodeResource(getResources(),
                 R.mipmap.ic_travel_logo);
         msg.setThumbImage(thumb);
@@ -1233,8 +1247,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         webpage.webpageUrl = "http://sj.qq.com/myapp/detail.htm?apkName=com.treasure.traveldiary";
         WXMediaMessage msg = new WXMediaMessage(webpage);
 
-        msg.title = "旅游日记第四版就快要出炉了";
-        msg.description = "在这app启动23天之际，在第四个版本赶制之际，加入了微信分享";
+        msg.title = "旅游diary（第四版）  已经出炉了";
+        msg.description = "旅游 途中会遇到很多美好的瞬间，倘若未记录下来到日后回忆会是一种很大的遗憾，为了不留下遗憾，记得用APP记录下你的美。";
         Bitmap thumb = BitmapFactory.decodeResource(getResources(),
                 R.mipmap.ic_travel_logo);
         msg.setThumbImage(thumb);

@@ -29,7 +29,7 @@ import com.baidu.mapapi.search.poi.PoiSortType;
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.bean.EvaluatedBean;
-import com.treasure.traveldiary.bean.LeaveMesBean;
+import com.treasure.traveldiary.bean.SUserBean;
 import com.treasure.traveldiary.utils.Tools;
 
 import java.util.ArrayList;
@@ -276,10 +276,10 @@ public class EvaluatedPublishActivity extends BaseActivity implements View.OnCli
         bean.setStar_num(starNum);
         bean.setUser_evaluated(star_edit.getText().toString().trim());
         //生成一个空的数据占位，以方便更新
-        LeaveMesBean leaveMesBean = new LeaveMesBean();
-        leaveMesBean.setLeave_name(mPreferences.getString("user_name", ""));
-        List<LeaveMesBean> leaveMesBeen = new ArrayList<>();
-        leaveMesBeen.add(leaveMesBean);
+        SUserBean SUserBean = new SUserBean();
+        SUserBean.setLeave_name(mPreferences.getString("user_name", ""));
+        List<SUserBean> leaveMesBeen = new ArrayList<>();
+        leaveMesBeen.add(SUserBean);
         bean.setMesBeanList(leaveMesBeen);
         bean.save(new SaveListener<String>() {
             @Override

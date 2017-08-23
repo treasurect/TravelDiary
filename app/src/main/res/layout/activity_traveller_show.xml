@@ -7,15 +7,18 @@
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="com.treasure.traveldiary.activity.find_center.TravellerChoicenessActivity">
+    tools:context="com.treasure.traveldiary.activity.find_center.TravellerShowActivity">
 
     <include layout="@layout/common_title_bar_view" />
 
-    <com.loopeer.cardstack.CardStackView
-        android:id="@+id/traveller_choiceness_cardStackView"
+    <StackView
+        android:id="@+id/traveller_show_stackView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorWhite"
-        android:clipToPadding="false"
-        android:padding="20dp"/>
+        android:layout_gravity="center"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="110dp"
+        android:layout_marginBottom="110dp"
+        android:loopViews="true" />
 </LinearLayout>

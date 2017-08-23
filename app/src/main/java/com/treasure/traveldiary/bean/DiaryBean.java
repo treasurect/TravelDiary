@@ -1,6 +1,5 @@
 package com.treasure.traveldiary.bean;
 
-import java.io.Serializable;
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;
@@ -23,7 +22,7 @@ public class DiaryBean extends BmobObject {
     private List<String> diary_image;
     private String diary_video;
     private String diary_video_first;
-    private List<LeaveMesBean> mesBeanList;
+    private List<SUserBean> mesBeanList;
     private String state;//公开or私密
     private List<String> likeBean;
 
@@ -131,11 +130,11 @@ public class DiaryBean extends BmobObject {
         this.diary_video_first = diary_video_first;
     }
 
-    public List<LeaveMesBean> getMesBeanList() {
+    public List<SUserBean> getMesBeanList() {
         return mesBeanList;
     }
 
-    public void setMesBeanList(List<LeaveMesBean> mesBeanList) {
+    public void setMesBeanList(List<SUserBean> mesBeanList) {
         this.mesBeanList = mesBeanList;
     }
 

@@ -128,6 +128,7 @@ public class UserRegisterActivity extends BaseActivity implements View.OnClickLi
                 } else {
                     Toast.makeText(this, "请完善信息", Toast.LENGTH_SHORT).show();
                 }
+                handler.sendMessage(handler.obtainMessage(201));
                 break;
             case R.id.user_send_message:
                 phoneNumber = editPhone.getText().toString().trim();

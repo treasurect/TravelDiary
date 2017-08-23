@@ -17,12 +17,12 @@
         android:layout_weight="4">
 
         <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/mine_edit_icon"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            fresco:placeholderImage="@mipmap/ic_travel_logo"
-            fresco:roundAsCircle = "true"/>
+        android:id="@+id/mine_edit_icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        fresco:placeholderImage="@mipmap/ic_travel_logo"
+        fresco:roundAsCircle = "true"/>
     </FrameLayout>
 
     <LinearLayout

@@ -138,7 +138,6 @@
         <activity
             android:name=".activity.find_center.TravellerChoicenessActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
@@ -150,6 +149,7 @@
             android:theme="@style/Transparent">
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -298,6 +298,9 @@
             android:name="com.tencent.connect.common.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".activity.find_center.TravellerShowActivity" />
+        <activity android:name=".activity.find_center.TravellerDetailActivity" />
+        <activity android:name=".activity.user_center.UserSocialActivity"></activity>
     </application>
 
 </manifest>
