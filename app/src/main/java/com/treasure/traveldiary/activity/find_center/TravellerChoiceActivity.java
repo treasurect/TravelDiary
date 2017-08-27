@@ -7,7 +7,7 @@ import android.widget.Toast;
 import com.loopeer.cardstack.CardStackView;
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
-import com.treasure.traveldiary.adapter.ChoicenessStackAdapter;
+import com.treasure.traveldiary.adapter.ChoiceStackAdapter;
 import com.treasure.traveldiary.bean.DiaryBean;
 import com.treasure.traveldiary.utils.Tools;
 
@@ -18,16 +18,16 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class TravellerChoicenessActivity extends BaseActivity implements View.OnClickListener, CardStackView.ItemExpendListener {
+public class TravellerChoiceActivity extends BaseActivity implements View.OnClickListener, CardStackView.ItemExpendListener {
 
     private CardStackView cardStackView;
-    private ChoicenessStackAdapter choicenessStackAdapter;
+    private ChoiceStackAdapter choiceStackAdapter;
     private List<DiaryBean> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_traveller_choiceness);
+        setContentView(R.layout.activity_traveller_choice);
         initTitle();
         Tools.setTranslucentStatus(this);
         btn_back.setVisibility(View.VISIBLE);
@@ -40,13 +40,13 @@ public class TravellerChoicenessActivity extends BaseActivity implements View.On
     }
 
     private void initFindId() {
-        cardStackView = (CardStackView) findViewById(R.id.traveller_choiceness_cardStackView);
+        cardStackView = (CardStackView) findViewById(R.id.traveller_choice_cardStackView);
     }
 
     private void initCardStackView() {
         list = new ArrayList<>();
-        choicenessStackAdapter = new ChoicenessStackAdapter(this, list);
-        cardStackView.setAdapter(choicenessStackAdapter);
+        choiceStackAdapter = new ChoiceStackAdapter(this, list);
+        cardStackView.setAdapter(choiceStackAdapter);
         cardStackView.setItemExpendListener(this);
     }
 
@@ -58,7 +58,7 @@ public class TravellerChoicenessActivity extends BaseActivity implements View.On
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_back:
-                TravellerChoicenessActivity.this.finish();
+                TravellerChoiceActivity.this.finish();
                 break;
         }
     }
@@ -80,10 +80,10 @@ public class TravellerChoicenessActivity extends BaseActivity implements View.On
                         if (e == null) {
                             list.clear();
                             list.addAll(list2);
-                            choicenessStackAdapter.updateData(list);
+                            choiceStackAdapter.updateData(list);
                         } else {
 
-                            Toast.makeText(TravellerChoicenessActivity.this, "获取日记列表失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TravellerChoiceActivity.this, "获取日记列表失败", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

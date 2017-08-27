@@ -35,11 +35,31 @@
                     android:background="@drawable/bottom_yellow1_frame_gray_radius5"
                     android:orientation="vertical">
 
-                    <com.facebook.drawee.view.SimpleDraweeView
-                        android:id="@+id/scenery_detail_image"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="250dp"
-                        fresco:placeholderImage="@mipmap/pic_page_loading" />
+                        android:layout_height="250dp">
+
+                        <android.support.v4.view.ViewPager
+                            android:id="@+id/scenery_detail_viewPager"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                        <ProgressBar
+                            android:id="@+id/scenery_detail_loading"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:visibility="gone" />
+
+                        <LinearLayout
+                            android:id="@+id/scenery_detail_dots_layout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_gravity="right|bottom"
+                            android:layout_marginRight="50dp"
+                            android:layout_marginBottom="20dp"/>
+                    </FrameLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"

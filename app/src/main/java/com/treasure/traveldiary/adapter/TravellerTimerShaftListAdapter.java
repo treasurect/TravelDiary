@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,7 +53,17 @@ public class TravellerTimerShaftListAdapter extends BaseAdapter {
         
         String s = list.get(position);
         ViewHolder holder = new ViewHolder(view);
-
+        if (position % 5 == 0){
+            holder.layout.setBackgroundResource(R.drawable.gradient_orange_yellow_radius5);
+        }else if (position % 5 == 1){
+            holder.layout.setBackgroundResource(R.drawable.gradient_yellow_orange_radius5);
+        }else if (position % 5 == 2){
+            holder.layout.setBackgroundResource(R.drawable.gradient_orange_green_radius5);
+        }else if (position % 5 == 3){
+            holder.layout.setBackgroundResource(R.drawable.gradient_green_orange_radius5);
+        }else {
+            holder.layout.setBackgroundResource(R.drawable.gradient_yellow_green_radius5);
+        }
         holder.text.setText(s);
         if (position == list.size() - 1){
             holder.img.setVisibility(View.VISIBLE);
@@ -71,12 +82,14 @@ public class TravellerTimerShaftListAdapter extends BaseAdapter {
         private TextView text2;
         private ImageView img;
         private ImageView img2;
+        private FrameLayout layout;
 
         public ViewHolder(View view) {
             text = ((TextView) view.findViewById(R.id.timer_shaft_list_text));
             text2 = ((TextView) view.findViewById(R.id.timer_shaft_list_text2));
             img = ((ImageView) view.findViewById(R.id.timer_shaft_list_img));
             img2 = ((ImageView) view.findViewById(R.id.timer_shaft_list_arrows));
+            layout = ((FrameLayout) view.findViewById(R.id.timer_shaft_list_layout));
         }
     }
 }

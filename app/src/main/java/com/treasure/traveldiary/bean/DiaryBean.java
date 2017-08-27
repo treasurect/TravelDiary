@@ -24,7 +24,6 @@ public class DiaryBean extends BmobObject {
     private String diary_video_first;
     private List<SUserBean> mesBeanList;
     private String state;//公开or私密
-    private List<String> likeBean;
 
     public String getUser_name() {
         return user_name;
@@ -146,11 +145,4 @@ public class DiaryBean extends BmobObject {
         this.state = state;
     }
 
-    public List<String> getLikeBean() {
-        return likeBean;
-    }
-
-    public void setLikeBean(List<String> likeBean) {
-        this.likeBean = likeBean;
-    }
 }

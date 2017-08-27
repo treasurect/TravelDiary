@@ -7,12 +7,12 @@
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="com.treasure.traveldiary.activity.find_center.TravellerChoicenessActivity">
+    tools:context="com.treasure.traveldiary.activity.find_center.TravellerChoiceActivity">
 
     <include layout="@layout/common_title_bar_view" />
 
     <com.loopeer.cardstack.CardStackView
-        android:id="@+id/traveller_choiceness_cardStackView"
+        android:id="@+id/traveller_choice_cardStackView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorWhite"

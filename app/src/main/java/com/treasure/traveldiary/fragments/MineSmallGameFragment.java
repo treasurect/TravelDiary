@@ -46,19 +46,19 @@ public class MineSmallGameFragment extends BaseFragment implements TravellerGame
     private void initListView() {
         list = new ArrayList<>();
         TravellerGameItemBean homeH5GameItemBean = new TravellerGameItemBean();
-        homeH5GameItemBean.setBack(R.color.colorPurple);
+        homeH5GameItemBean.setBack(R.drawable.gradient_green_orange_radius5);
         homeH5GameItemBean.setName("拼图游戏");
         homeH5GameItemBean.setDesc("Come On！！！");
         list.add(homeH5GameItemBean);
 
         homeH5GameItemBean = new TravellerGameItemBean();
-        homeH5GameItemBean.setBack(R.color.colorOrange);
+        homeH5GameItemBean.setBack(R.drawable.gradient_orange_yellow_radius5);
         homeH5GameItemBean.setName("猴子接桃");
         homeH5GameItemBean.setDesc("来比比谁的分数比较高");
         list.add(homeH5GameItemBean);
 
         homeH5GameItemBean = new TravellerGameItemBean();
-        homeH5GameItemBean.setBack(R.color.colorYellow);
+        homeH5GameItemBean.setBack(R.drawable.gradient_yellow_green_radius5);
         homeH5GameItemBean.setName("红还是绿");
         homeH5GameItemBean.setDesc("来比比观察力和反应力 ");
         list.add(homeH5GameItemBean);

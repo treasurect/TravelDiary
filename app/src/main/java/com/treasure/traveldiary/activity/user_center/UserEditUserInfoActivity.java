@@ -97,9 +97,6 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
         if (!Tools.isNull(intent.getStringExtra("UserPhone"))) {
             userPhone = intent.getStringExtra("UserPhone");
             editPhone.setText(userPhone);
-            editNick.setText(userPhone);
-        } else {
-            editNick.setText("小王");
         }
         if (!Tools.isNull(intent.getStringExtra("edit_type"))) {
             edit_type = intent.getStringExtra("edit_type");
@@ -115,6 +112,14 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
                         if (e == null) {
                             mFileUrl = list.get(0).getUser_icon();
                             editIcon.setImageURI(Uri.parse(mFileUrl));
+                            editAge.setText(list.get(0).getAge());
+                            editDesc.setText(list.get(0).getUser_desc());
+                            editNick.setText(list.get(0).getNick_name());
+                            if (list.get(0).getSex().equals("男")){
+                                sex_man.setChecked(true);
+                            }else {
+                                sex_woman.setChecked(true);
+                            }
                         } else {
                             Toast.makeText(UserEditUserInfoActivity.this, "获取用户信息失败", Toast.LENGTH_SHORT).show();
                         }
@@ -320,6 +325,7 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
         infoBean.setBinding_qq("未绑定");
         infoBean.setBinding_wechat("未绑定");
         infoBean.setBinding_sina("未绑定");
+        infoBean.setVersion_name("1.5.1");
         infoBean.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {

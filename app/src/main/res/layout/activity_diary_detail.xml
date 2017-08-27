@@ -134,7 +134,7 @@
                                 android:id="@+id/diary_detail_user_video_first"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                fresco:placeholderImage="@mipmap/pic_page_loading" />
+                                fresco:placeholderImage="@mipmap/ic_travel_logo" />
 
                             <ImageView
                                 android:id="@+id/diary_detail_user_video_play"
@@ -149,6 +149,15 @@
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
                                 android:layout_gravity="center" />
+                            <ImageView
+                                android:id="@+id/diary_detail_user_video_full"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:src="@mipmap/ic_full_screen"
+                                android:layout_gravity="bottom|right"
+                                android:transitionName="video"
+                                android:layout_margin="10dp"/>
+
                         </FrameLayout>
                         <!--Image  单个图片-->
                         <com.facebook.drawee.view.SimpleDraweeView
@@ -157,7 +166,8 @@
                             android:layout_height="450dp"
                             android:layout_margin="10dp"
                             android:visibility="gone"
-                            fresco:placeholderImage="@mipmap/pic_page_loading" />
+                            android:transitionName="image1"
+                            fresco:placeholderImage="@mipmap/ic_travel_logo" />
                         <!--Image 两个图片-->
                         <LinearLayout
                             android:id="@+id/diary_detail_user_image_layout2"
@@ -172,7 +182,8 @@
                                 android:layout_height="0dp"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                fresco:placeholderImage="@mipmap/pic_page_loading" />
+                                android:transitionName="image01"
+                                fresco:placeholderImage="@mipmap/ic_travel_logo" />
 
                             <com.facebook.drawee.view.SimpleDraweeView
                                 android:id="@+id/diary_detail_user_image02"
@@ -180,7 +191,8 @@
                                 android:layout_height="0dp"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                fresco:placeholderImage="@mipmap/pic_page_loading" />
+                                android:transitionName="image02"
+                                fresco:placeholderImage="@mipmap/ic_travel_logo" />
                         </LinearLayout>
                         <!--Image 三个图片-->
                         <LinearLayout
@@ -196,7 +208,8 @@
                                 android:layout_height="0dp"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                fresco:placeholderImage="@mipmap/pic_page_loading" />
+                                android:transitionName="image001"
+                                fresco:placeholderImage="@mipmap/ic_travel_logo" />
 
                             <com.facebook.drawee.view.SimpleDraweeView
                                 android:id="@+id/diary_detail_user_image002"
@@ -204,7 +217,8 @@
                                 android:layout_height="0dp"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                fresco:placeholderImage="@mipmap/pic_page_loading" />
+                                android:transitionName="image002"
+                                fresco:placeholderImage="@mipmap/ic_travel_logo" />
 
                             <com.facebook.drawee.view.SimpleDraweeView
                                 android:id="@+id/diary_detail_user_image003"
@@ -212,7 +226,8 @@
                                 android:layout_height="0dp"
                                 android:layout_margin="10dp"
                                 android:layout_weight="1"
-                                fresco:placeholderImage="@mipmap/pic_page_loading" />
+                                android:transitionName="image003"
+                                fresco:placeholderImage="@mipmap/ic_travel_logo" />
                         </LinearLayout>
                     </FrameLayout>
 

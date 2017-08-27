@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.treasure.traveldiary.activity.diary_center.DiaryVideoFullActivity">
+
+    <SurfaceView
+        android:id="@+id/video_full_surfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/video_full_image"
+        fresco:placeholderImage="@mipmap/ic_travel_logo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <ImageView
+        android:id="@+id/video_full_play"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:src="@mipmap/ic_play"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/video_full_loading"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center" />
+
+    <SeekBar
+        android:id="@+id/video_full_seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom" />
+</FrameLayout>

@@ -39,7 +39,6 @@ public class TravellerDetailActivity extends BaseActivity implements View.OnClic
     private List<DiaryBean> list;
     private TravellerDiaryListAdapter adapter;
     private FrameLayout loading;
-    private boolean isClickLike;
     private LinearLayout nodata_layout;
     private boolean isPageDestroy;
     private String name;
@@ -178,61 +177,6 @@ public class TravellerDetailActivity extends BaseActivity implements View.OnClic
         intent.putExtra("user_name", diaryBean.getUser_name());
         intent.putExtra("user_time", diaryBean.getPublish_time());
         startActivity(intent);
-    }
-
-    @Override
-    public void likeClick(final DiaryBean diaryBean) {
-        BmobQuery<DiaryBean> query1 = new BmobQuery<>();
-        query1.addWhereEqualTo("user_name", diaryBean.getUser_name());
-        BmobQuery<DiaryBean> query2 = new BmobQuery<>();
-        query2.addWhereEqualTo("publish_time", diaryBean.getPublish_time());
-        List<BmobQuery<DiaryBean>> queries = new ArrayList<>();
-        queries.add(query1);
-        queries.add(query2);
-        BmobQuery<DiaryBean> bmobQuery = new BmobQuery<>();
-        bmobQuery.and(queries);
-        bmobQuery.findObjects(new FindListener<DiaryBean>() {
-            @Override
-            public void done(List<DiaryBean> list, BmobException e) {
-                if (e == null) {
-                    String objectId = list.get(0).getObjectId();
-                    toUpdateLikeBean(objectId, diaryBean.getLikeBean());
-                }
-            }
-        });
-    }
-
-    private void toUpdateLikeBean(String objectId, List<String> likeBean) {
-        for (int i = 0; i < likeBean.size(); i++) {
-            if (likeBean.get(i).equals(mPreferences.getString("user_name", ""))) {
-                isClickLike = true;
-            }
-        }
-        if (isClickLike) {
-            if (!isPageDestroy) {
-                Toast.makeText(this, "您已经点过赞了", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            DiaryBean diaryBean = new DiaryBean();
-            List<String> strings = new ArrayList<>();
-            strings.addAll(likeBean);
-            strings.add(mPreferences.getString("user_name", ""));
-            diaryBean.setLikeBean(strings);
-            diaryBean.update(objectId, new UpdateListener() {
-                @Override
-                public void done(BmobException e) {
-                    if (e == null) {
-                        if (!isPageDestroy) {
-                            Toast.makeText(TravellerDetailActivity.this, "点赞成功", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        if (!isPageDestroy) {
-                            Toast.makeText(TravellerDetailActivity.this, "点赞失败", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-            });
-        }
     }
 
     @Override

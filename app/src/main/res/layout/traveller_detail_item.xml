@@ -4,7 +4,7 @@
     android:layout_width="300dp"
     android:layout_height="400dp"
     android:layout_gravity="center"
-    android:background="@drawable/bottom_yellow_radius10">
+    android:background="@drawable/gradient_yellow_orange_radius5">
 
     <LinearLayout
         android:id="@+id/traveller_show_layout"

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#66000000"
+    tools:context="com.treasure.traveldiary.activity.diary_center.DiaryImageFullActivity">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/detail_show_big_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        fresco:placeholderImage="@mipmap/ic_travel_logo" />
+</FrameLayout>

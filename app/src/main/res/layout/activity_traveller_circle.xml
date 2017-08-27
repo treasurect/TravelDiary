@@ -17,6 +17,7 @@
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="300dp"
+            android:background="@drawable/gradient_yellow_orange_radius5"
             android:fitsSystemWindows="true">
 
             <android.support.design.widget.CollapsingToolbarLayout
@@ -35,7 +36,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="fitXY"
-                        fresco:placeholderImage="@mipmap/pic_page_loading" />
+                        fresco:placeholderImage="@mipmap/ic_travel_logo" />
 
                     <ImageView
                         android:layout_width="110dp"

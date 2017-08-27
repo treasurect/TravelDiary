@@ -65,7 +65,7 @@
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="20dp"
-        android:background="@color/colorOrange"
+        android:background="@drawable/gradient_yellow_orange_radius5"
         android:text="查询"
         android:textSize="20sp"
         android:textColor="@color/colorWhite"

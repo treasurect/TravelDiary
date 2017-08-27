@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    tools:context=".activity.find_center.TravellerForumActivity">
+
+    <include layout="@layout/common_nodata_view" />
+    <TextView
+        android:id="@+id/forum_list_all_nodata_text"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:text="没有数据？！  向下刷新试试||"
+        android:textColor="@color/colorOrange"
+        android:gravity="center"/>
+    <com.treasure.traveldiary.widget.CustomRefreshListView
+        android:id="@+id/forum_list_all_listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/colorWhite"
+        android:dividerHeight="20dp"
+        android:scrollbars="none" />
+
+    <include layout="@layout/common_loading_view" />
+</FrameLayout>

@@ -201,10 +201,6 @@ public class DiaryTextPublishActivity extends BaseActivity implements View.OnCli
         List<SUserBean> leaveMesBeen = new ArrayList<>();
         leaveMesBeen.add(SUserBean);
         diaryBean.setMesBeanList(leaveMesBeen);
-        //生成一个空的数据占位，以方便更新
-        List<String> list = new ArrayList<>();
-        list.add("0");
-        diaryBean.setLikeBean(list);
         diaryBean.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {

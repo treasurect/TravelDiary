@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:scaleType="fitXY"
-        fresco:placeholderImage="@mipmap/pic_page_loading" />
+        fresco:placeholderImage="@mipmap/ic_travel_logo" />
     <TextView
         android:id="@+id/scenery_list_text"
         android:layout_width="match_parent"

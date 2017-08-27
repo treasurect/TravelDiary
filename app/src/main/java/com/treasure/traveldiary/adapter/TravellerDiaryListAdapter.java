@@ -27,14 +27,11 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
     private Context context;
     private List<DiaryBean> list;
     private LayoutInflater inflater;
-    private SharedPreferences mPreferences;
-    private boolean isClickLike;
 
     public TravellerDiaryListAdapter(Context context, List<DiaryBean> list) {
         this.context = context;
         this.list = list;
         inflater = LayoutInflater.from(context);
-        mPreferences = context.getSharedPreferences("user",Context.MODE_PRIVATE);
     }
 
     @Override
@@ -124,19 +121,8 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
                 holder.state_text.setText("私密");
             }
         }
-        if (listBean.getLikeBean() != null){
-            holder.like_num.setText((listBean.getLikeBean().size() - 1)+"");
-            for (int i = 0; i < listBean.getLikeBean().size(); i++) {
-                if (listBean.getLikeBean().get(i).equals(mPreferences.getString("user_name",""))){
-                    isClickLike = true;
-                }
-            }
-            if (isClickLike){
-                holder.like_img.setImageResource(R.mipmap.ic_like_click);
-                isClickLike = false;
-            }else {
-                holder.like_img.setImageResource(R.mipmap.ic_like_unclick);
-            }
+        if (listBean.getMesBeanList() != null){
+            holder.leaveMes_num.setText((listBean.getMesBeanList().size() - 1)+"");
         }
         if (listBean.getDiary_type().equals("1")) {
             if (listBean.getDiary_image() != null) {
@@ -163,18 +149,11 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
                 diaryTextClick.layoutClick(listBean);
             }
         });
-        holder.like_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                diaryTextClick.likeClick(listBean);
-            }
-        });
         return ret;
     }
 
     public static class ViewHolder {
-        private ImageView like_img;
-        private TextView like_num;
+        private TextView leaveMes_num;
         private SimpleDraweeView video_image;
         private SimpleDraweeView image1, image2, image3;
         private SimpleDraweeView user_icon;
@@ -195,14 +174,12 @@ public class TravellerDiaryListAdapter extends BaseAdapter {
             video_image = (SimpleDraweeView) view.findViewById(R.id.diary_list_video);
             state_text = (TextView)view.findViewById(R.id.diary_list_state_text);
             state_img = (ImageView) view.findViewById(R.id.diary_list_state_img);
-            like_img = (ImageView) view.findViewById(R.id.diary_list_like_img);
-            like_num = (TextView) view.findViewById(R.id.diary_list_like_num);
+            leaveMes_num = (TextView) view.findViewById(R.id.diary_list_leave_num);
         }
     }
 
     public interface DiaryTextClick {
         void layoutClick(DiaryBean diaryBean);
-        void likeClick(DiaryBean diaryBean);
     }
 
     public DiaryTextClick diaryTextClick = null;

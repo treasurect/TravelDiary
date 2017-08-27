@@ -4,24 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/colorGray"
+    android:background="@color/colorGray3"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context="com.treasure.traveldiary.activity.find_center.FindCenterActivity">
-<include layout="@layout/common_title_bar_view"/>
+
+    <include layout="@layout/common_title_bar_view" />
+
     <LinearLayout
         android:id="@+id/find_traveller_circle_layout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/colorWhite"
+        android:layout_height="45dp"
         android:layout_marginTop="20dp"
-        android:transitionName="travellercircle"
-        android:orientation="horizontal">
+        android:background="@color/colorWhite"
+        android:orientation="horizontal"
+        android:transitionName="traveller_circle">
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="20dp"
@@ -37,22 +39,23 @@
             android:text="驴友圈"
             android:textStyle="bold" />
     </LinearLayout>
+
     <LinearLayout
-        android:id="@+id/find_traveller_choiceness_layout"
+        android:id="@+id/find_traveller_choice_layout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="1dp"
         android:background="@color/colorWhite"
-        android:layout_marginTop="20dp"
-        android:transitionName="travellerchioceness"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:transitionName="traveller_choice">
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="20dp"
-            android:src="@mipmap/ic_traveller_choiceness" />
+            android:src="@mipmap/ic_traveller_choice" />
 
         <TextView
             android:layout_width="0dp"
@@ -63,18 +66,19 @@
             android:text="驴友精选"
             android:textStyle="bold" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/find_traveller_detail_layout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="1dp"
         android:background="@color/colorWhite"
-        android:layout_marginTop="20dp"
-        android:transitionName="travellerdetail"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:transitionName="traveller_detail">
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="20dp"
@@ -87,6 +91,60 @@
             android:gravity="center_vertical"
             android:paddingLeft="5dp"
             android:text="驴友风采"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/find_traveller_forum_layout"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/colorWhite"
+        android:orientation="horizontal"
+        android:transitionName="forum_layout">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:src="@mipmap/ic_message" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:text="驴友论坛"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/find_traveller_scan_layout"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorWhite"
+        android:orientation="horizontal"
+        android:transitionName="travellerdetail">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:src="@mipmap/ic_scan" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:text="扫一扫"
             android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>

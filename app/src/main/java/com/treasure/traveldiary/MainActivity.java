@@ -445,7 +445,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             case R.id.mine_diary_layout:
                 if (Tools.isNull(mPreferences.getString("token", ""))) {
-                    showPopupWindow();
+                    showLoginWindow();
                 } else {
                     Intent intent1 = new Intent(MainActivity.this, DiaryCenterActivity.class);
                     if (Build.VERSION.SDK_INT >= 21) {
@@ -457,7 +457,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             case R.id.main_add_image:
                 if (Tools.isNull(mPreferences.getString("token", ""))) {
-                    showPopupWindow();
+                    showLoginWindow();
                 } else {
                     //加号    如果主btn显示，点击后隐藏，如果隐藏，点击后显示    如果Tools btn显示，点击后隐藏
                     if (!addShow && !isToolsShow) {
@@ -642,7 +642,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             case R.id.find_center_layout:
                 if (Tools.isNull(mPreferences.getString("token", ""))) {
-                    showPopupWindow();
+                    showLoginWindow();
                 } else {
                     Intent intent = new Intent(MainActivity.this, FindCenterActivity.class);
                     if (Build.VERSION.SDK_INT >= 21) {
@@ -654,7 +654,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             case R.id.image_user_icon:
                 if (Tools.isNull(mPreferences.getString("token", ""))) {
-                    showPopupWindow();
+                    showLoginWindow();
                 } else {
                     drawer_layout.openDrawer(GravityCompat.START);
                 }
@@ -692,7 +692,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }
                 break;
             case R.id.mine_popup_quit:
-                quitPopupWindow();
+                quitLoginWindow();
                 break;
             case R.id.mine_popup_loginin:
                 LoginIn();
@@ -718,7 +718,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.left_login_username:
                 if (Tools.isNull(mPreferences.getString("token", ""))) {
                     //Login
-                    showPopupWindow();
+                    showLoginWindow();
                 } else {
                     //edit
                     Intent intent = new Intent(MainActivity.this, UserEditUserInfoActivity.class);
@@ -734,14 +734,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.left_signing_layout:
                 if (Tools.isNull(mPreferences.getString("token", ""))) {
                     //Login
-                    showPopupWindow();
+                    showLoginWindow();
                 } else {
                     startActivity(new Intent(MainActivity.this, UserSigningActivity.class));
                 }
                 break;
             case R.id.left_social_contact_layout:
                 if (Tools.isNull(mPreferences.getString("token", ""))) {
-                    showPopupWindow();
+                    showLoginWindow();
                 } else {
                     Intent intent = new Intent(MainActivity.this, UserSocialActivity.class);
                     startActivity(intent);
@@ -749,7 +749,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             case R.id.left_message_layout:
                 if (Tools.isNull(mPreferences.getString("token", ""))) {
-                    showPopupWindow();
+                    showLoginWindow();
                 } else {
                     Intent intent = new Intent(MainActivity.this, UserMessageListActivity.class);
                     startActivity(intent);
@@ -757,7 +757,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             case R.id.left_feedback_layout:
                 if (Tools.isNull(mPreferences.getString("token", ""))) {
-                    showPopupWindow();
+                    showLoginWindow();
                 } else {
                     Intent intent = new Intent(MainActivity.this, UserFeedBackActivity.class);
                     startActivity(intent);
@@ -914,7 +914,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     /**
      * 显示 关闭 popupWindow        登陆操作
      */
-    public void showPopupWindow() {
+    public void showLoginWindow() {
         View convertView = LayoutInflater.from(this).inflate(R.layout.popupwindow_mine_login, null);
         mPopupWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
         mPopupWindow.setAnimationStyle(R.style.loginPopupWindow);
@@ -939,7 +939,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mPopupWindow.showAtLocation(rootView, Gravity.BOTTOM, 0, 0);
     }
 
-    private void quitPopupWindow() {
+    private void quitLoginWindow() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("您确认放弃登录吗？");
         builder.setPositiveButton("放弃", new DialogInterface.OnClickListener() {
@@ -1274,34 +1274,35 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private void bindingSina() {
         weiboAuth = new WeiboAuth(this, StringContents.Sina_APP_KEY, StringContents.Sina_REDIRECT_URL, StringContents.Sina_SCOPE);
         ssoHandler = new SsoHandler(MainActivity.this, weiboAuth);
-        ssoHandler.authorize(new WeiboAuthListener() {
+        try {
+            ssoHandler.authorize(new WeiboAuthListener() {
 
-            @Override
-            public void onComplete(Bundle bundle) {
-                //从 Bundle 中解析 Token
-                mAccessToken = Oauth2AccessToken.parseAccessToken(bundle);
-                if (mAccessToken != null && mAccessToken.isSessionValid()) {
+                @Override
+                public void onComplete(Bundle bundle) {
+                    //从 Bundle 中解析 Token
+                    mAccessToken = Oauth2AccessToken.parseAccessToken(bundle);
+                    if (mAccessToken != null && mAccessToken.isSessionValid()) {
 
-                    final String nickname = bundle.getString("com.sina.weibo.intent.extra.NICK_NAME");
-                    String access_token = bundle.getString("access_token");
-                    String uid = bundle.getString("uid");
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Thread.sleep(1000);
-                                Message message = handler.obtainMessage(603);
-                                Bundle bundle1 = new Bundle();
-                                bundle1.putString("nick_name",nickname);
-                                message.setData(bundle1);
-                                handler.sendMessage(message);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+                        final String nickname = bundle.getString("com.sina.weibo.intent.extra.NICK_NAME");
+                        String access_token = bundle.getString("access_token");
+                        String uid = bundle.getString("uid");
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(1000);
+                                    Message message = handler.obtainMessage(603);
+                                    Bundle bundle1 = new Bundle();
+                                    bundle1.putString("nick_name",nickname);
+                                    message.setData(bundle1);
+                                    handler.sendMessage(message);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        }
-                    }).start();
-                    toUpdateUserInfo(nickname,2);
-                    //GET请求获取用户的信息
+                        }).start();
+                        toUpdateUserInfo(nickname,2);
+                        //GET请求获取用户的信息
 //                    try {
 //                        URL url = new URL("https://api.weibo.com/2/users/show.json?access_token=" + access_token + "&uid=" + uid);
 //                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -1325,30 +1326,33 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                    } catch (Exception e) {
 //                        LogUtil.d("chengcj1" + e.getMessage());
 //                    }
-                } else {
-                    // 以下几种情况，您会收到 Code：
-                    // 1. 当您未在平台上注册的应用程序的包名与签名时；
-                    // 2. 当您注册的应用程序包名与签名不正确时；
-                    // 3. 当您在平台上注册的包名和签名与您当前测试的应用的包名和签名不匹配时。
-                    String code = bundle.getString("code");
-                    String message = getString(getResources().getIdentifier("authorize_fail", "string", getPackageName()));
-                    if (!Tools.isNull(code)) {
-                        message = message + "\n Obtained the code: " + code;
+                    } else {
+                        // 以下几种情况，您会收到 Code：
+                        // 1. 当您未在平台上注册的应用程序的包名与签名时；
+                        // 2. 当您注册的应用程序包名与签名不正确时；
+                        // 3. 当您在平台上注册的包名和签名与您当前测试的应用的包名和签名不匹配时。
+                        String code = bundle.getString("code");
+                        String message = getString(getResources().getIdentifier("authorize_fail", "string", getPackageName()));
+                        if (!Tools.isNull(code)) {
+                            message = message + "\n Obtained the code: " + code;
+                        }
+                        LogUtil.e("~~~~~~~~~~~~~~~~~~~~message::" + message);
                     }
-                    LogUtil.e("~~~~~~~~~~~~~~~~~~~~message::" + message);
                 }
-            }
 
-            @Override
-            public void onWeiboException(WeiboException e) {
-                LogUtil.e("~~~~~~~~~~~~~~~~~~WeiboException" + e.getMessage());
-            }
+                @Override
+                public void onWeiboException(WeiboException e) {
+                    LogUtil.e("~~~~~~~~~~~~~~~~~~WeiboException" + e.getMessage());
+                }
 
-            @Override
-            public void onCancel() {
-                Toast.makeText(MainActivity.this, "取消了微博授权", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onCancel() {
+                    Toast.makeText(MainActivity.this, "取消了微博授权", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }catch (Exception e){
+            Toast.makeText(this, "请安装微博客户端，并保持登录状态", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void toUpdateUserInfo(final String nickName, final int type) {

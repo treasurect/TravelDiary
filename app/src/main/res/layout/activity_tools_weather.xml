@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBlue"
+    android:background="@drawable/gradient_yellow_orange_radius5"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     tools:context=".activity.main_center.ToolsWeatherActivity">
@@ -16,6 +16,7 @@
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="380dp"
+            android:background="@drawable/gradient_yellow_orange_radius5"
             android:fitsSystemWindows="true">
 
             <android.support.design.widget.CollapsingToolbarLayout

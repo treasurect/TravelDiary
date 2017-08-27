@@ -2,10 +2,14 @@ package com.treasure.traveldiary.activity.main_center;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -14,17 +18,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.adapter.DiaryLeavemesListAdapter;
+import com.treasure.traveldiary.adapter.PictureGuideAdapter;
 import com.treasure.traveldiary.bean.SUserBean;
 import com.treasure.traveldiary.bean.SceneryBean;
+import com.treasure.traveldiary.utils.LogUtil;
 import com.treasure.traveldiary.utils.Tools;
 import com.treasure.traveldiary.widget.CustomScrollListView;
 
@@ -37,7 +45,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
-public class SceneryDetailActivity extends BaseActivity implements View.OnClickListener, TextWatcher {
+public class SceneryDetailActivity extends BaseActivity implements View.OnClickListener, TextWatcher, ViewPager.OnPageChangeListener {
 
     private ScrollView scrollView;
     private FrameLayout show_leave_mes;
@@ -49,7 +57,7 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
     private TextView scenery_desc;
     private List<SUserBean> mesBeanList;
     private DiaryLeavemesListAdapter adapter;
-    private SimpleDraweeView scenery_image;
+    private ViewPager scenery_viewPager;
     private PopupWindow mPopupWindow;
     private EditText editLeaveMes;
     private TextView sendLeaveMes;
@@ -59,6 +67,41 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
     private FrameLayout loading;
     private FloatingActionButton refresh;
     private List<SUserBean> list = new ArrayList<>();
+    private List<String> image_url;
+    private PictureGuideAdapter guideAdapter;
+    private List<ImageView> views;
+    private List<Bitmap> bitmap_list = new ArrayList<>();
+    private Bitmap bitmap;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 200:
+                    for (int i = 0; i < bitmap_list.size(); i++) {
+                        ImageView imageView = new ImageView(SceneryDetailActivity.this);
+                        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                        imageView.setImageBitmap(bitmap_list.get(i));
+                        views.add(imageView);
+                        guideAdapter.notifyDataSetChanged();
+                    }
+                    for (int i = 0; i < bitmap_list.size(); i++) {
+                        ImageView imageView = new ImageView(SceneryDetailActivity.this);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(bitmap.getWidth() / 8, bitmap.getHeight() / 8);
+                        layoutParams.setMargins(5, 0, 5, 0);
+                        layoutParams.gravity = Gravity.CENTER_VERTICAL;
+                        imageView.setLayoutParams(layoutParams);
+                        imageView.setBackgroundResource(R.drawable.viewpager_dots_unclick);
+                        dots_layout.addView(imageView);
+                    }
+                    setDots(0);
+                    viewPager_loading.setVisibility(View.GONE);
+                    break;
+            }
+        }
+    };
+    private ProgressBar viewPager_loading;
+    private LinearLayout dots_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +112,12 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
         btn_back.setVisibility(View.VISIBLE);
         title.setText("详情");
         mPreferences = getSharedPreferences("user", MODE_PRIVATE);
+        bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_bots_orange);
 
         initFindId();
         initListView();
         initScrollView();
+        initViewPager();
         getIntentReceiver();
         initClick();
     }
@@ -81,7 +126,7 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
         scrollView = (ScrollView) findViewById(R.id.scenery_detail_leaveMes_layout);
         show_leave_mes = (FrameLayout) findViewById(R.id.scenery_detail_show_leaveMes);
         mes_listView = (CustomScrollListView) findViewById(R.id.scenery_detail_leaveMes_list);
-        scenery_image = (SimpleDraweeView) findViewById(R.id.scenery_detail_image);
+        scenery_viewPager = (ViewPager) findViewById(R.id.scenery_detail_viewPager);
         scenery_level = (TextView) findViewById(R.id.scenery_detail_level);
         scenery_open_time = (TextView) findViewById(R.id.scenery_detail_open_time);
         scenery_addr = (TextView) findViewById(R.id.scenery_detail_addr);
@@ -89,6 +134,14 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
         scenery_desc = (TextView) findViewById(R.id.scenery_detail_desc);
         loading = (FrameLayout) findViewById(R.id.loading_layout);
         refresh = (FloatingActionButton) findViewById(R.id.scenery_detail_leaveMes_refresh);
+        viewPager_loading = (ProgressBar) findViewById(R.id.scenery_detail_loading);
+        dots_layout = (LinearLayout) findViewById(R.id.scenery_detail_dots_layout);
+    }
+
+    private void initViewPager() {
+        views = new ArrayList<>();
+        guideAdapter = new PictureGuideAdapter(this, views);
+        scenery_viewPager.setAdapter(guideAdapter);
     }
 
     private void getIntentReceiver() {
@@ -100,7 +153,18 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
                 title.setText(scenery_name);
             }
             if (sceneryBean.getScenery_image() != null) {
-                scenery_image.setImageURI(Uri.parse(sceneryBean.getScenery_image().get(0)));
+                image_url = sceneryBean.getScenery_image();
+                viewPager_loading.setVisibility(View.VISIBLE);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < image_url.size(); i++) {
+                            Bitmap bitmap = Tools.getBitmap(image_url.get(i));
+                            bitmap_list.add(bitmap);
+                        }
+                        handler.sendMessage(handler.obtainMessage(200));
+                    }
+                }).start();
             }
             if (!Tools.isNull(sceneryBean.getScenery_level())) {
                 scenery_level.setText(sceneryBean.getScenery_level());
@@ -144,6 +208,7 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
         show_leave_mes.setOnClickListener(this);
         refresh.setOnClickListener(this);
         loading.setOnClickListener(this);
+        scenery_viewPager.addOnPageChangeListener(this);
     }
 
     @Override
@@ -169,6 +234,45 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
                 Toast.makeText(this, "刷新成功", Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        if (position >= 0 && position < bitmap_list.size()) {
+            initDots();
+            setDots(position);
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    private void initDots() {
+        for (int i = 0; i < bitmap_list.size(); i++) {
+            ImageView imageView = (ImageView) dots_layout.getChildAt(i);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(bitmap.getWidth() / 8, bitmap.getHeight() / 8);
+            layoutParams.setMargins(5, 0, 5, 0);
+            layoutParams.gravity = Gravity.CENTER_VERTICAL;
+            imageView.setLayoutParams(layoutParams);
+            imageView.setBackgroundResource(R.drawable.viewpager_dots_unclick);
+
+        }
+    }
+
+    private void setDots(int position) {
+        ImageView imageView = (ImageView) dots_layout.getChildAt(position);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(bitmap.getWidth() / 5, bitmap.getHeight() / 5);
+        layoutParams.setMargins(5, 0, 5, 0);
+        layoutParams.gravity = Gravity.CENTER_VERTICAL;
+        imageView.setLayoutParams(layoutParams);
+        imageView.setBackgroundResource(R.drawable.viewpager_dots_click);
     }
 
     /**

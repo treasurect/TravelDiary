@@ -1,10 +1,15 @@
 package com.treasure.traveldiary.activity.diary_center;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.text.Editable;
@@ -32,9 +37,11 @@ import com.treasure.traveldiary.TravelApplication;
 import com.treasure.traveldiary.adapter.DiaryLeavemesListAdapter;
 import com.treasure.traveldiary.bean.DiaryBean;
 import com.treasure.traveldiary.bean.SUserBean;
+import com.treasure.traveldiary.utils.LogUtil;
 import com.treasure.traveldiary.utils.Tools;
 import com.treasure.traveldiary.widget.CustomScrollListView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -74,6 +81,9 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
     private ScrollView scrollView;
     private FloatingActionButton btnRefresh;
     private DiaryBean diaryBean;
+    private ImageView video_full;
+    private String image_url1, image_url2, image_url3;
+    private boolean isPageDestroy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +123,7 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
         video_play = (ImageView) findViewById(R.id.diary_detail_user_video_play);
         video_first = (SimpleDraweeView) findViewById(R.id.diary_detail_user_video_first);
         video_loading = (ProgressBar) findViewById(R.id.diary_detail_user_video_loading);
+        video_full = (ImageView) findViewById(R.id.diary_detail_user_video_full);
         //Image  onePic
         image1 = (SimpleDraweeView) findViewById(R.id.diary_detail_user_image1);
         //Image twoPic
@@ -138,9 +149,10 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
 
     private void initListView() {
         mesBeanList = new ArrayList<>();
-        adapter = new DiaryLeavemesListAdapter(this,mesBeanList);
+        adapter = new DiaryLeavemesListAdapter(this, mesBeanList);
         leaveMes_listView.setAdapter(adapter);
     }
+
     private void initScrollView() {
         scrollView.smoothScrollTo(0, 20);
         leaveMes_listView.setFocusable(false);
@@ -158,41 +170,48 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
         BmobQuery<DiaryBean> bmobQuery = new BmobQuery<>();
         bmobQuery.and(queries);
         bmobQuery.findObjects(new FindListener<DiaryBean>() {
+
             @Override
             public void done(List<DiaryBean> list, BmobException e) {
                 if (e == null) {
-                     diaryBean = list.get(0);
+                    diaryBean = list.get(0);
                     objectId = list.get(0).getObjectId();
                     if (diaryBean != null) {
-                        if (!Tools.isNull(diaryBean.getUser_icon())){
+                        if (!Tools.isNull(diaryBean.getUser_icon())) {
                             user_icon.setImageURI(Uri.parse(diaryBean.getUser_icon()));
                         }
-                        if (!Tools.isNull(diaryBean.getUser_nick())){
+                        if (!Tools.isNull(diaryBean.getUser_nick())) {
                             user_name.setText(diaryBean.getUser_nick());
                         }
-                        if (!Tools.isNull(diaryBean.getPublish_time())){
+                        if (!Tools.isNull(diaryBean.getPublish_time())) {
                             user_time.setText(diaryBean.getPublish_time());
                         }
-                        if (!Tools.isNull(diaryBean.getUser_title())){
+                        if (!Tools.isNull(diaryBean.getUser_title())) {
                             user_title.setText(diaryBean.getUser_title());
                         }
-                        if (!Tools.isNull(diaryBean.getUser_desc())){
+                        if (!Tools.isNull(diaryBean.getUser_desc())) {
                             user_desc.setText(diaryBean.getUser_desc());
                         }
-                        if (!Tools.isNull(String.valueOf(diaryBean.getDiary_type()))){
+                        if (!Tools.isNull(String.valueOf(diaryBean.getDiary_type()))) {
                             if (diaryBean.getDiary_type().equals("1")) {
                                 if (diaryBean.getDiary_image().size() == 1) {
                                     image1.setVisibility(View.VISIBLE);
-                                    image1.setImageURI(Uri.parse(diaryBean.getDiary_image().get(0).toString()));
+                                    image_url1 = diaryBean.getDiary_image().get(0).toString();
+                                    image1.setImageURI(Uri.parse(image_url1));
                                 } else if (diaryBean.getDiary_image().size() == 2) {
                                     image_layout2.setVisibility(View.VISIBLE);
-                                    image01.setImageURI(Uri.parse(diaryBean.getDiary_image().get(0).toString()));
-                                    image02.setImageURI(Uri.parse(diaryBean.getDiary_image().get(1).toString()));
+                                    image_url1 = diaryBean.getDiary_image().get(0).toString();
+                                    image_url2 = diaryBean.getDiary_image().get(1).toString();
+                                    image01.setImageURI(Uri.parse(image_url1));
+                                    image02.setImageURI(Uri.parse(image_url2));
                                 } else if (diaryBean.getDiary_image().size() == 3) {
                                     image_layout3.setVisibility(View.VISIBLE);
-                                    image001.setImageURI(Uri.parse(diaryBean.getDiary_image().get(0).toString()));
-                                    image002.setImageURI(Uri.parse(diaryBean.getDiary_image().get(1).toString()));
-                                    image003.setImageURI(Uri.parse(diaryBean.getDiary_image().get(2).toString()));
+                                    image_url1 = diaryBean.getDiary_image().get(0).toString();
+                                    image_url2 = diaryBean.getDiary_image().get(1).toString();
+                                    image_url3 = diaryBean.getDiary_image().get(2).toString();
+                                    image001.setImageURI(Uri.parse(image_url1));
+                                    image002.setImageURI(Uri.parse(image_url2));
+                                    image003.setImageURI(Uri.parse(image_url3));
                                 }
                             } else if (diaryBean.getDiary_type().equals("2")) {
                                 video_layout.setVisibility(View.VISIBLE);
@@ -223,13 +242,14 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
             }
         });
     }
-    private void getLeaveMesList(String objectId){
+
+    private void getLeaveMesList(String objectId) {
         BmobQuery<DiaryBean> diaryBeanBmobQuery = new BmobQuery<>();
-        diaryBeanBmobQuery.addWhereEqualTo("objectId",objectId)
+        diaryBeanBmobQuery.addWhereEqualTo("objectId", objectId)
                 .findObjects(new FindListener<DiaryBean>() {
                     @Override
                     public void done(List<DiaryBean> list, BmobException e) {
-                        if (e == null){
+                        if (e == null) {
                             List<SUserBean> leaveMesList2 = list.get(0).getMesBeanList();
                             //显示留言   刷新
                             mesBeanList.clear();
@@ -237,7 +257,7 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
                             Collections.reverse(leaveMesList2);
                             mesBeanList.addAll(leaveMesList2);
                             adapter.notifyDataSetChanged();
-                        }else {
+                        } else {
                             Toast.makeText(DiaryDetailActivity.this, "很遗憾，获取评论列表失败", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -247,6 +267,7 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
     private void initMediaPlayer(String path) {
         mediaPlayer = new MediaPlayer();
         try {
+            video_full.setClickable(false);
             mediaPlayer.setDataSource(this, Uri.parse(path));
             holder = surfaceView.getHolder();
             holder.addCallback(this);
@@ -261,7 +282,9 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
             //            mmr.release();//释放资源
 
         } catch (IOException e) {
-            e.printStackTrace();
+            if (!isPageDestroy) {
+                Toast.makeText(this, "原因：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -271,6 +294,13 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
         leaveMes_send.setOnClickListener(this);
         loading.setOnClickListener(this);
         btnRefresh.setOnClickListener(this);
+        image1.setOnClickListener(this);
+        image01.setOnClickListener(this);
+        image02.setOnClickListener(this);
+        image001.setOnClickListener(this);
+        image002.setOnClickListener(this);
+        image003.setOnClickListener(this);
+        video_full.setOnClickListener(this);
     }
 
     @Override
@@ -296,9 +326,76 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
                 }
                 break;
             case R.id.diary_detail_leaveMes_refresh:
-                Tools.setAnimation(btnRefresh,0,0,1,1,0,-760,1,1,2000);
+                Tools.setAnimation(btnRefresh, 0, 0, 1, 1, 0, -760, 1, 1, 2000);
                 getLeaveMesList(objectId);
                 Toast.makeText(this, "刷新成功", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.diary_detail_user_image1:
+                Intent intent00 = new Intent(DiaryDetailActivity.this, DiaryImageFullActivity.class);
+//                Bitmap bitmap = ((BitmapDrawable) ((SimpleDraweeView) image1).getDrawable()).getBitmap();
+//                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+//                byte[] bytes = bos.toByteArray();
+//                intent00.putExtra("image", bytes);
+                intent00.putExtra("image_url", image_url1);
+                if (Build.VERSION.SDK_INT >= 21) {
+                    startActivity(intent00, ActivityOptions.makeSceneTransitionAnimation(this, image1, "image1").toBundle());
+                } else {
+                    startActivity(intent00);
+                }
+                break;
+            case R.id.diary_detail_user_image01:
+                Intent intent01 = new Intent(DiaryDetailActivity.this, DiaryImageFullActivity.class);
+                intent01.putExtra("image_url", image_url1);
+                if (Build.VERSION.SDK_INT >= 21) {
+                    startActivity(intent01, ActivityOptions.makeSceneTransitionAnimation(this, image01, "image01").toBundle());
+                } else {
+                    startActivity(intent01);
+                }
+                break;
+            case R.id.diary_detail_user_image02:
+                Intent intent02 = new Intent(DiaryDetailActivity.this, DiaryImageFullActivity.class);
+                intent02.putExtra("image_url", image_url2);
+                if (Build.VERSION.SDK_INT >= 21) {
+                    startActivity(intent02, ActivityOptions.makeSceneTransitionAnimation(this, image02, "image02").toBundle());
+                } else {
+                    startActivity(intent02);
+                }
+                break;
+            case R.id.diary_detail_user_image001:
+                Intent intent03 = new Intent(DiaryDetailActivity.this, DiaryImageFullActivity.class);
+                intent03.putExtra("image_url", image_url1);
+                if (Build.VERSION.SDK_INT >= 21) {
+                    startActivity(intent03, ActivityOptions.makeSceneTransitionAnimation(this, image001, "image001").toBundle());
+                } else {
+                    startActivity(intent03);
+                }
+                break;
+            case R.id.diary_detail_user_image002:
+                Intent intent04 = new Intent(DiaryDetailActivity.this, DiaryImageFullActivity.class);
+                intent04.putExtra("image_url", image_url2);
+                if (Build.VERSION.SDK_INT >= 21) {
+                    startActivity(intent04, ActivityOptions.makeSceneTransitionAnimation(this, image002, "image002").toBundle());
+                } else {
+                    startActivity(intent04);
+                }
+                break;
+            case R.id.diary_detail_user_image003:
+                Intent intent05 = new Intent(DiaryDetailActivity.this, DiaryImageFullActivity.class);
+                intent05.putExtra("image_url", image_url3);
+                if (Build.VERSION.SDK_INT >= 21) {
+                    startActivity(intent05, ActivityOptions.makeSceneTransitionAnimation(this, image003, "image003").toBundle());
+                } else {
+                    startActivity(intent05);
+                }
+                break;
+            case R.id.diary_detail_user_video_full:
+                Intent intent06 = new Intent(DiaryDetailActivity.this, DiaryVideoFullActivity.class);
+                intent06.putExtra("video_duration", String.valueOf(mediaPlayer.getDuration()));
+                intent06.putExtra("video_position", String.valueOf(mediaPlayer.getCurrentPosition()));
+                intent06.putExtra("video_url", diaryBean.getDiary_video());
+                intent06.putExtra("image_url", diaryBean.getDiary_video_first());
+                startActivityForResult(intent06, 200);
                 break;
         }
     }
@@ -322,11 +419,14 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
     public void onPrepared(MediaPlayer mediaPlayer) {
         video_play.setVisibility(View.VISIBLE);
         video_loading.setVisibility(View.GONE);
+        video_full.setClickable(true);
     }
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
         video_play.setVisibility(View.VISIBLE);
+        video_first.setVisibility(View.VISIBLE);
+        mediaPlayer.seekTo(0);
     }
 
     /**
@@ -382,12 +482,12 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void done(List<DiaryBean> list, BmobException e) {
                 if (e == null) {
-                     objectId = list.get(0).getObjectId();
+                    objectId = list.get(0).getObjectId();
                     List<SUserBean> leaveMesList3 = list.get(0).getMesBeanList();
                     String diary_type = list.get(0).getDiary_type();
                     String user_lat = list.get(0).getUser_lat();
                     String user_long = list.get(0).getUser_long();
-                    saveLeaveMes(objectId, leaveMesList3,diary_type,user_lat,user_long);
+                    saveLeaveMes(objectId, leaveMesList3, diary_type, user_lat, user_long);
                 } else {
                     Toast.makeText(DiaryDetailActivity.this, "很遗憾，评论发布失败", Toast.LENGTH_SHORT).show();
                 }
@@ -396,7 +496,7 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
 
     }
 
-    private void saveLeaveMes(final String objectId, List<SUserBean> leaveMesList4, String diary_type, String user_lat, String user_long)  {
+    private void saveLeaveMes(final String objectId, List<SUserBean> leaveMesList4, String diary_type, String user_lat, String user_long) {
         SUserBean bean = new SUserBean();
         bean.setLeave_content(editLeaveMes.getText().toString().trim());
         bean.setLeave_icon(mPreferences.getString("user_icon", ""));
@@ -425,5 +525,38 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
                 }
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        isPageDestroy = true;
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 200 && resultCode == RESULT_OK) {
+            if (data != null) {
+                int video_position = Integer.parseInt(data.getStringExtra("video_position"));
+                if (mediaPlayer != null) {
+                    if (mediaPlayer.isPlaying()) {//此时未播放完视频
+                        mediaPlayer.seekTo(video_position);
+                        video_play.setVisibility(View.GONE);
+                        video_first.setVisibility(View.GONE);
+                    } else {//已播放完或者未播放
+                        video_play.setVisibility(View.GONE);
+                        video_first.setVisibility(View.GONE);
+                        mediaPlayer.start();
+                        mediaPlayer.seekTo(video_position);
+                    }
+                }
+            }
+        }
     }
 }

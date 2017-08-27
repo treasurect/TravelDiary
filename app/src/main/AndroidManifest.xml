@@ -24,6 +24,9 @@
     <!-- 申请使用摄像头的权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-feature android:name="android.hardware.camera" /> <!-- 使用照相机权限 -->
+    <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 自动聚焦权限 -->
     <!-- 极光推送 -->
     <uses-permission android:name="com.treasure.traveldiary.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
@@ -136,8 +139,28 @@
             android:name=".activity.find_center.FindCenterActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.find_center.TravellerChoicenessActivity"
+            android:name=".activity.find_center.TravellerChoiceActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.find_center.TravellerShowActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.find_center.TravellerDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user_center.UserSocialActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.diary_center.DiaryImageFullActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.diary_center.DiaryVideoFullActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activity.find_center.TravellerForumActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 微信和微博的三方绑定和分享 -->
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
@@ -298,9 +321,12 @@
             android:name="com.tencent.connect.common.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".activity.find_center.TravellerShowActivity" />
-        <activity android:name=".activity.find_center.TravellerDetailActivity" />
-        <activity android:name=".activity.user_center.UserSocialActivity"></activity>
+
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   Google Zxing    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <activity
+            android:name=".activity.find_center.TravellerQRScanActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
     </application>
 
 </manifest>

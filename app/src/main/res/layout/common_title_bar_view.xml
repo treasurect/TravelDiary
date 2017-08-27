@@ -4,7 +4,7 @@
     android:id="@+id/titleBar"
     android:layout_width="match_parent"
     android:layout_height="45dp"
-    android:background="@color/colorOrange"
+    android:background="@drawable/gradient_yellow_orange_radius5"
     android:focusable="true"
     android:focusableInTouchMode="true">
 

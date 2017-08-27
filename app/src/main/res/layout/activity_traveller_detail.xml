@@ -19,6 +19,7 @@
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="290dp"
+            android:background="@drawable/gradient_yellow_orange_radius5"
             android:fitsSystemWindows="true">
 
             <android.support.design.widget.CollapsingToolbarLayout
