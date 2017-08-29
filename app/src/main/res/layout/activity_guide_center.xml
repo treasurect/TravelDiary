@@ -7,7 +7,7 @@
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     android:background="@color/colorGray"
-    tools:context="com.treasure.traveldiary.activity.main_center.SceneryActivity">
+    tools:context="com.treasure.traveldiary.activity.guide_center.GuideCenterActivity">
 
     <include layout="@layout/common_title_bar_view" />
 

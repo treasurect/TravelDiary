@@ -101,7 +101,7 @@
         android:layout_marginTop="1dp"
         android:background="@color/colorWhite"
         android:orientation="horizontal"
-        android:transitionName="forum_layout">
+        android:transitionName="traveller_forum">
 
         <ImageView
             android:layout_width="20dp"
@@ -128,7 +128,7 @@
         android:layout_marginTop="20dp"
         android:background="@color/colorWhite"
         android:orientation="horizontal"
-        android:transitionName="travellerdetail">
+        android:transitionName="traveller_scan">
 
         <ImageView
             android:layout_width="20dp"

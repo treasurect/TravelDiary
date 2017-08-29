@@ -129,3 +129,7 @@
 
 #  QQ WeChat SinaWeibo
 -keep class com.sina.weibo.sdk.** { *; }
+
+#Zxing
+-dontwarn com.google.zxing.**
+-keep  class com.google.zxing.**{*;}

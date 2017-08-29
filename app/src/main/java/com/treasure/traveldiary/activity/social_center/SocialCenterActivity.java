@@ -1,8 +1,10 @@
-package com.treasure.traveldiary.activity.user_center;
+package com.treasure.traveldiary.activity.social_center;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,7 +19,6 @@ import com.treasure.traveldiary.activity.find_center.TravellerDetailActivity;
 import com.treasure.traveldiary.adapter.DiaryLeavemesListAdapter;
 import com.treasure.traveldiary.bean.SUserBean;
 import com.treasure.traveldiary.bean.UserInfoBean;
-import com.treasure.traveldiary.utils.LogUtil;
 import com.treasure.traveldiary.utils.Tools;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class UserSocialActivity extends BaseActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener, AdapterView.OnItemClickListener {
+public class SocialCenterActivity extends BaseActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener, AdapterView.OnItemClickListener {
     private TabLayout tabLayout;
     private ListView listView;
     private List<SUserBean> list;
@@ -35,11 +36,22 @@ public class UserSocialActivity extends BaseActivity implements View.OnClickList
     private boolean isPageDestroy;
     private FrameLayout loading;
     private LinearLayout nodata_layout;
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 200:
+                    loading.setVisibility(View.GONE);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_social);
+        setContentView(R.layout.activity_social_center);
         initTitle();
         Tools.setTranslucentStatus(this);
         title.setText("社交");
@@ -51,6 +63,24 @@ public class UserSocialActivity extends BaseActivity implements View.OnClickList
         initTabLayout();
         initListView();
         initClick();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(5000);
+                    if (!isPageDestroy){
+                        handler.sendMessage(handler.obtainMessage(200));
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private void initFindId() {
@@ -100,7 +130,7 @@ public class UserSocialActivity extends BaseActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_back:
-                UserSocialActivity.this.finish();
+                SocialCenterActivity.this.finish();
                 break;
         }
     }
@@ -130,7 +160,7 @@ public class UserSocialActivity extends BaseActivity implements View.OnClickList
                         }else {
                             if (!isPageDestroy){
                                 loading.setVisibility(View.GONE);
-                                Toast.makeText(UserSocialActivity.this, "获取关注列表失败", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SocialCenterActivity.this, "获取关注列表失败", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -162,7 +192,7 @@ public class UserSocialActivity extends BaseActivity implements View.OnClickList
                         }else {
                             if (!isPageDestroy){
                                 loading.setVisibility(View.GONE);
-                                Toast.makeText(UserSocialActivity.this, "获取关注列表失败", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SocialCenterActivity.this, "获取关注列表失败", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -172,7 +202,7 @@ public class UserSocialActivity extends BaseActivity implements View.OnClickList
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         String leave_name = list.get(i).getLeave_name();
-        Intent intent = new Intent(UserSocialActivity.this, TravellerDetailActivity.class);
+        Intent intent = new Intent(SocialCenterActivity.this, TravellerDetailActivity.class);
         intent.putExtra("user_name",leave_name);
         startActivity(intent);
     }

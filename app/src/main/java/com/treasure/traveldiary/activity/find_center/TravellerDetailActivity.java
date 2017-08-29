@@ -42,14 +42,12 @@ public class TravellerDetailActivity extends BaseActivity implements View.OnClic
     private LinearLayout nodata_layout;
     private boolean isPageDestroy;
     private String name;
-    private SharedPreferences mPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_traveller_detail);
         Tools.setTranslucentStatus(this);
-        mPreferences = getSharedPreferences("user", MODE_PRIVATE);
 
         initFindId();
         getIntentReceiver();

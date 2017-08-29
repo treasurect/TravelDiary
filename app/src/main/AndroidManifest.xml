@@ -127,13 +127,13 @@
             android:name=".activity.diary_center.GamePuzzleActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.main_center.SceneryActivity"
+            android:name=".activity.guide_center.GuideCenterActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.diary_center.GameH5Activity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.main_center.SceneryDetailActivity"
+            android:name=".activity.guide_center.SceneryDetailActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.find_center.FindCenterActivity"
@@ -148,7 +148,7 @@
             android:name=".activity.find_center.TravellerDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.user_center.UserSocialActivity"
+            android:name=".activity.social_center.SocialCenterActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.diary_center.DiaryImageFullActivity"
@@ -327,6 +327,7 @@
         <activity
             android:name=".activity.find_center.TravellerQRScanActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity android:name=".activity.main_center.TravellerSearchActivity"></activity>
     </application>
 
 </manifest>

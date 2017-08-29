@@ -21,11 +21,11 @@
         android:id="@+id/image_user_icon"
         android:layout_width="45dp"
         android:layout_height="match_parent"
-        android:padding="5dp"
         android:layout_marginLeft="5dp"
+        android:padding="5dp"
+        android:visibility="gone"
         fresco:placeholderImage="@mipmap/ic_travel_logo"
-        fresco:roundAsCircle = "true"
-        android:visibility="gone"/>
+        fresco:roundAsCircle="true" />
 
     <TextView
         android:id="@+id/btn_cancel"
@@ -116,14 +116,39 @@
         android:textColor="@color/colorWhite"
         android:textSize="15sp"
         android:textStyle="bold"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
     <ImageView
-        android:id="@+id/btn_share"
+        android:id="@+id/btn_more"
         android:layout_width="45dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
-        android:src="@mipmap/ic_share"
+        android:paddingBottom="12dp"
+        android:paddingTop="12dp"
+        android:src="@mipmap/ic_add"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/edit_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:hint="搜索"
+        android:background="@drawable/bottom_white_radius25"
         android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/btn_search_cancel"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:src="@mipmap/ic_close"
+        android:visibility="gone" />
 </RelativeLayout>

@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:openDrawer="start">
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -50,24 +51,73 @@
 
                         <ImageView
                             android:id="@+id/mine_diary_image"
-                            android:layout_width="23dp"
-                            android:layout_height="23dp"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_margin="3.5dp"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginBottom="2dp"
                             android:src="@mipmap/ic_diary" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:textSize="12sp"
-                            android:text="日记" />
+                            android:text="日记"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/guide_center_layout"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:transitionName="guide">
+
+                        <ImageView
+                            android:id="@+id/guide_center_image"
+                            android:layout_width="23dp"
+                            android:layout_height="23dp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginBottom="2dp"
+                            android:src="@mipmap/ic_guide" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:text="攻略"
+                            android:textSize="12sp" />
                     </LinearLayout>
 
                     <FrameLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1" />
+                    <LinearLayout
+                        android:id="@+id/social_center_layout"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:transitionName="social">
 
+                        <ImageView
+                            android:id="@+id/social_center_image"
+                            android:layout_width="23dp"
+                            android:layout_height="23dp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginBottom="2dp"
+                            android:src="@mipmap/ic_social_contact" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:text="关注"
+                            android:textSize="12sp" />
+                    </LinearLayout>
                     <LinearLayout
                         android:id="@+id/find_center_layout"
                         android:layout_width="0dp"
@@ -75,7 +125,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:transitionName="findcenter">
+                        android:transitionName="find">
 
                         <ImageView
                             android:id="@+id/traveller_center_image"
@@ -84,12 +134,13 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginBottom="2dp"
                             android:src="@mipmap/ic_find" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:textSize="12sp"
-                            android:text="发现" />
+                            android:text="发现"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -208,27 +259,6 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/add_scenery_t"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|bottom"
-                    android:layout_marginBottom="25dp"
-                    android:text="风景区"
-                    android:textColor="@color/colorWhite"
-                    android:textStyle="bold"
-                    android:transitionName="scenery" />
-
-                <TextView
-                    android:id="@+id/add_live_t"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|bottom"
-                    android:layout_marginBottom="25dp"
-                    android:text="直播"
-                    android:textColor="@color/colorWhite"
-                    android:textStyle="bold" />
-
-                <TextView
                     android:id="@+id/add_tools_t"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -279,27 +309,6 @@
                     android:src="@mipmap/ic_signing"
                     android:transitionName="evaluated"
                     app:backgroundTint="@color/colorCambridgeBlue"
-                    app:rippleColor="@color/colorAccent" />
-
-                <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/add_scenery"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center_horizontal|bottom"
-                    android:layout_marginBottom="25dp"
-                    android:src="@mipmap/ic_scenic"
-                    android:transitionName="scenery"
-                    app:backgroundTint="@color/colorCambridgeBlue"
-                    app:rippleColor="@color/colorAccent" />
-
-                <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/add_live"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center_horizontal|bottom"
-                    android:layout_marginBottom="25dp"
-                    android:src="@mipmap/ic_live"
-                    app:backgroundTint="@color/colorYellow"
                     app:rippleColor="@color/colorAccent" />
 
                 <android.support.design.widget.FloatingActionButton
@@ -567,38 +576,7 @@
                         android:layout_marginRight="10dp"
                         android:src="@mipmap/ic_right" />
                 </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/left_social_contact_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="10dp"
-                        android:src="@mipmap/ic_social_contact" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/colorWhite"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="5dp"
-                        android:text="社交"
-                        android:textStyle="bold" />
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="right|center_vertical"
-                        android:layout_marginRight="10dp"
-                        android:src="@mipmap/ic_right" />
-                </LinearLayout>
                 <LinearLayout
                     android:id="@+id/left_message_layout"
                     android:layout_width="match_parent"
@@ -715,6 +693,7 @@
                     android:paddingLeft="5dp"
                     android:text="第三方绑定"
                     android:textStyle="bold" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -737,6 +716,7 @@
                         android:paddingLeft="5dp"
                         android:text="QQ"
                         android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/left_binding_qq"
                         android:layout_width="0dp"
@@ -748,6 +728,7 @@
                         android:textColor="@color/colorOrange"
                         android:textStyle="bold" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -770,6 +751,7 @@
                         android:paddingLeft="5dp"
                         android:text="微信"
                         android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/left_binding_wechat"
                         android:layout_width="0dp"
@@ -779,8 +761,9 @@
                         android:gravity="center_vertical|right"
                         android:paddingRight="15dp"
                         android:textColor="@color/colorOrange"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -803,6 +786,7 @@
                         android:paddingLeft="5dp"
                         android:text="微博"
                         android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/left_binding_sina"
                         android:layout_width="0dp"

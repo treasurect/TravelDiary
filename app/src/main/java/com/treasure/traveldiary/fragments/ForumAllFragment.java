@@ -163,10 +163,7 @@ public class ForumAllFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void layoutClick(ForumBean forumBean) {
-        Intent intent = new Intent(getContext(), DiaryDetailActivity.class);
-        intent.putExtra("user_name", forumBean.getUser_name());
-        intent.putExtra("user_time", forumBean.getPublish_time());
-        startActivity(intent);
+        Toast.makeText(getContext(), "此功能未开放", Toast.LENGTH_SHORT).show();
     }
 
     @Override

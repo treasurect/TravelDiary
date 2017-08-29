@@ -1,4 +1,4 @@
-package com.treasure.traveldiary.activity.main_center;
+package com.treasure.traveldiary.activity.guide_center;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,7 +32,6 @@ import com.treasure.traveldiary.adapter.DiaryLeavemesListAdapter;
 import com.treasure.traveldiary.adapter.PictureGuideAdapter;
 import com.treasure.traveldiary.bean.SUserBean;
 import com.treasure.traveldiary.bean.SceneryBean;
-import com.treasure.traveldiary.utils.LogUtil;
 import com.treasure.traveldiary.utils.Tools;
 import com.treasure.traveldiary.widget.CustomScrollListView;
 

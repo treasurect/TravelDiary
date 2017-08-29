@@ -159,7 +159,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="400dp">
+                android:layout_height="600dp">
 
                 <include layout="@layout/common_nodata_view" />
 

@@ -2,6 +2,7 @@ package com.treasure.traveldiary;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -22,7 +23,9 @@ public class BaseActivity extends FragmentActivity {
     public TextView text_integral;
     public SimpleDraweeView user_icon;
     public Spinner list_city;
-    public ImageView btn_share;
+    public ImageView btn_more;
+    public EditText edit_search;
+    public ImageView btn_search_cancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,9 @@ public class BaseActivity extends FragmentActivity {
         text_integral = (TextView) findViewById(R.id.text_integral);
         user_icon = (SimpleDraweeView) findViewById(R.id.image_user_icon);
         list_city = (Spinner) findViewById(R.id.list_city);
-        btn_share = (ImageView) findViewById(R.id.btn_share);
+        btn_more = (ImageView) findViewById(R.id.btn_more);
+        edit_search = (EditText)findViewById(R.id.edit_search);
+        btn_search_cancel = (ImageView)findViewById(R.id.btn_search_cancel);
     }
 
 }

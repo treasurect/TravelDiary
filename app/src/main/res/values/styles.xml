@@ -19,6 +19,10 @@
         <item name="android:windowEnterAnimation">@anim/in_right</item>
         <item name="android:windowExitAnimation">@anim/out_right</item>
     </style>
+    <style name="morePopupWindow" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/in_top</item>
+        <item name="android:windowExitAnimation">@anim/out_top</item>
+    </style>
     <style name="Transparent">
         <item name="android:windowBackground">@color/colorFull</item>
         <item name="android:windowIsTranslucent">true</item>

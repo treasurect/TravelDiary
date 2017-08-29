@@ -95,17 +95,19 @@ import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
 import com.treasure.traveldiary.activity.find_center.FindCenterActivity;
+import com.treasure.traveldiary.activity.find_center.TravellerQRScanActivity;
+import com.treasure.traveldiary.activity.guide_center.GuideCenterActivity;
 import com.treasure.traveldiary.activity.main_center.DiaryImageCameraActivity;
 import com.treasure.traveldiary.activity.main_center.DiaryImagePublishActivity;
 import com.treasure.traveldiary.activity.main_center.EvaluatedPublishActivity;
 import com.treasure.traveldiary.activity.main_center.DiaryVideoCameraActivity;
 import com.treasure.traveldiary.activity.main_center.DiaryVideoPublishActivity;
-import com.treasure.traveldiary.activity.main_center.SceneryActivity;
 import com.treasure.traveldiary.activity.main_center.ToolsTicketActivity;
 import com.treasure.traveldiary.activity.main_center.ToolsWeatherActivity;
 import com.treasure.traveldiary.activity.diary_center.DiaryCenterActivity;
 import com.treasure.traveldiary.activity.diary_center.DiaryDetailActivity;
 import com.treasure.traveldiary.activity.main_center.DiaryTextPublishActivity;
+import com.treasure.traveldiary.activity.main_center.TravellerSearchActivity;
 import com.treasure.traveldiary.activity.user_center.UserEditUserInfoActivity;
 import com.treasure.traveldiary.activity.user_center.UserFeedBackActivity;
 import com.treasure.traveldiary.activity.user_center.UserForgetPassActivity;
@@ -113,7 +115,7 @@ import com.treasure.traveldiary.activity.user_center.UserMessageListActivity;
 import com.treasure.traveldiary.activity.user_center.UserRegisterActivity;
 import com.treasure.traveldiary.activity.user_center.UserSettingsActivity;
 import com.treasure.traveldiary.activity.user_center.UserSigningActivity;
-import com.treasure.traveldiary.activity.user_center.UserSocialActivity;
+import com.treasure.traveldiary.activity.social_center.SocialCenterActivity;
 import com.treasure.traveldiary.bean.DiaryBean;
 import com.treasure.traveldiary.bean.MapMarkerInfoBean;
 import com.treasure.traveldiary.bean.UserInfoBean;
@@ -142,6 +144,8 @@ import cn.bmob.v3.listener.UpdateListener;
 public class MainActivity extends BaseActivity implements View.OnClickListener, BDLocationListener, BaiduMap.OnMapLoadedCallback, BaiduMap.OnMarkerClickListener, BaiduMap.OnMapClickListener, RadioGroup.OnCheckedChangeListener, TextWatcher, OnGetRoutePlanResultListener {
 
     private LinearLayout mineDiaryLayout;
+    private LinearLayout guideCenterLayout;
+    private LinearLayout socialCenterLayout;
     private LinearLayout findCenterLayout;
     private MapView mapView;
     private BaiduMap map;
@@ -222,10 +226,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private ImageView show_location;
     private TravelApplication application;
     private TextView text_t, image_t, video_t, evaluated_t;
-    private FloatingActionButton btnScenic;
-    private TextView scenic_t;
-    private FloatingActionButton btnLive;
-    private TextView live_t;
     private FloatingActionButton btnTools;
     private TextView tools_t;
     private FloatingActionButton btnToolsWeather;
@@ -242,7 +242,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private CommonDataReceiver commonDataReceiver;
     private SimpleDraweeView left_user_icon;
     private TextView left_user_name;
-    private LinearLayout night_layout, signing_layout, social_layout,message_layout, feedback_layout, settings_layout;
+    private LinearLayout night_layout, signing_layout, message_layout, feedback_layout, settings_layout;
     private ImageView night_icon;
     private DrawerLayout drawer_layout;
     private FloatingActionButton search;
@@ -262,6 +262,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private WeiboAuth weiboAuth;
     private SsoHandler ssoHandler;
     private Oauth2AccessToken mAccessToken;
+    private PopupWindow moreWindow;
 
 
     @Override
@@ -272,7 +273,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         initTitle();
         mapLocLayout.setVisibility(View.VISIBLE);
         user_icon.setVisibility(View.VISIBLE);
-        btn_share.setVisibility(View.VISIBLE);
+        btn_more.setVisibility(View.VISIBLE);
         widthPixels = getResources().getDisplayMetrics().widthPixels;
         heightPixels = getResources().getDisplayMetrics().heightPixels;
         application = (TravelApplication) getApplication();
@@ -289,6 +290,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private void initFindId() {
         mineDiaryLayout = (LinearLayout) findViewById(R.id.mine_diary_layout);
+        guideCenterLayout = (LinearLayout) findViewById(R.id.guide_center_layout);
+        socialCenterLayout = (LinearLayout) findViewById(R.id.social_center_layout);
         findCenterLayout = (LinearLayout) findViewById(R.id.find_center_layout);
         mapView = (MapView) findViewById(R.id.home_mapView);
         loading = (FrameLayout) findViewById(R.id.loading_layout);
@@ -307,10 +310,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         image_t = (TextView) findViewById(R.id.add_diary_image_t);
         video_t = (TextView) findViewById(R.id.add_diary_video_t);
         evaluated_t = (TextView) findViewById(R.id.add_evaluated_t);
-        btnScenic = (FloatingActionButton) findViewById(R.id.add_scenery);
-        scenic_t = (TextView) findViewById(R.id.add_scenery_t);
-        btnLive = (FloatingActionButton) findViewById(R.id.add_live);
-        live_t = (TextView) findViewById(R.id.add_live_t);
         btnTools = (FloatingActionButton) findViewById(R.id.add_tools);
         tools_t = (TextView) findViewById(R.id.add_tools_t);
         btnToolsWeather = (FloatingActionButton) findViewById(R.id.add_tools_weather);
@@ -328,7 +327,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         night_icon = (ImageView) findViewById(R.id.left_night_icon);
         night_layout = (LinearLayout) findViewById(R.id.left_night_layout);
         signing_layout = (LinearLayout) findViewById(R.id.left_signing_layout);
-        social_layout = (LinearLayout) findViewById(R.id.left_social_contact_layout);
         message_layout = (LinearLayout) findViewById(R.id.left_message_layout);
         feedback_layout = (LinearLayout) findViewById(R.id.left_feedback_layout);
         settings_layout = (LinearLayout) findViewById(R.id.left_settings_layout);
@@ -391,8 +389,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private void initClick() {
         mineDiaryLayout.setOnClickListener(this);
-        btnAdd.setOnClickListener(this);
         findCenterLayout.setOnClickListener(this);
+        guideCenterLayout.setOnClickListener(this);
+        socialCenterLayout.setOnClickListener(this);
+        btnAdd.setOnClickListener(this);
         loading.setOnClickListener(this);
         btnDiaryText.setOnClickListener(this);
         btnDiaryImage.setOnClickListener(this);
@@ -407,11 +407,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         image_t.setOnClickListener(this);
         video_t.setOnClickListener(this);
         evaluated_t.setOnClickListener(this);
-        btnScenic.setOnClickListener(this);
-        btnLive.setOnClickListener(this);
         btnTools.setOnClickListener(this);
-        scenic_t.setOnClickListener(this);
-        live_t.setOnClickListener(this);
         tools_t.setOnClickListener(this);
         btnToolsWeather.setOnClickListener(this);
         btnToolsWeather.setOnClickListener(this);
@@ -422,13 +418,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         search_btn.setOnClickListener(this);
         search_edit.addTextChangedListener(this);
         search_rg.setOnCheckedChangeListener(this);
-        btn_share.setOnClickListener(this);
+        btn_more.setOnClickListener(this);
 
         left_user_icon.setOnClickListener(this);
         left_user_name.setOnClickListener(this);
         night_layout.setOnClickListener(this);
         signing_layout.setOnClickListener(this);
-        social_layout.setOnClickListener(this);
         message_layout.setOnClickListener(this);
         feedback_layout.setOnClickListener(this);
         settings_layout.setOnClickListener(this);
@@ -440,19 +435,61 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_share:
-                showShareWindow();
-                break;
             case R.id.mine_diary_layout:
                 if (Tools.isNull(mPreferences.getString("token", ""))) {
                     showLoginWindow();
                 } else {
-                    Intent intent1 = new Intent(MainActivity.this, DiaryCenterActivity.class);
+                    Intent intent = new Intent(MainActivity.this, DiaryCenterActivity.class);
                     if (Build.VERSION.SDK_INT >= 21) {
-                        startActivity(intent1, ActivityOptions.makeSceneTransitionAnimation(this, mineDiaryLayout, "diary").toBundle());
+                        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this, mineDiaryLayout, "diary").toBundle());
                     } else {
-                        startActivity(intent1);
+                        startActivity(intent);
                     }
+                }
+                break;
+            case R.id.guide_center_layout:
+                if (Tools.isNull(mPreferences.getString("token", ""))) {
+                    showLoginWindow();
+                } else {
+                    Intent intent = new Intent(MainActivity.this, GuideCenterActivity.class);
+                    if (Build.VERSION.SDK_INT >= 21) {
+                        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this, guideCenterLayout, "guide").toBundle());
+                    } else {
+                        startActivity(intent);
+                    }
+                }
+                break;
+            case R.id.social_center_layout:
+                if (Tools.isNull(mPreferences.getString("token", ""))) {
+                    showLoginWindow();
+                } else {
+                    Intent intent = new Intent(MainActivity.this, SocialCenterActivity.class);
+                    if (Build.VERSION.SDK_INT >= 21) {
+                        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this, socialCenterLayout, "social").toBundle());
+                    } else {
+                        startActivity(intent);
+                    }
+                }
+                break;
+            case R.id.find_center_layout:
+                if (Tools.isNull(mPreferences.getString("token", ""))) {
+                    showLoginWindow();
+                } else {
+                    Intent intent = new Intent(MainActivity.this, FindCenterActivity.class);
+                    if (Build.VERSION.SDK_INT >= 21) {
+                        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this, findCenterLayout, "find").toBundle());
+                    } else {
+                        startActivity(intent);
+                    }
+                }
+                break;
+            case R.id.btn_more:
+                if (Tools.isNull(mPreferences.getString("token", ""))) {
+                    showLoginWindow();
+                } else {
+                    if (moreWindow != null && moreWindow.isShowing())
+                        moreWindow.dismiss();
+                    showMoreWindow();
                 }
                 break;
             case R.id.main_add_image:
@@ -517,22 +554,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 } else {
                     startActivity(intent5);
                 }
-                hindFloatActionButton();
-                break;
-            case R.id.add_scenery:
-            case R.id.add_scenery_t:
-                Intent intent8 = new Intent(MainActivity.this, SceneryActivity.class);
-                intent8.putExtra("user_province", user_province);
-                if (Build.VERSION.SDK_INT >= 21) {
-                    startActivity(intent8, ActivityOptions.makeSceneTransitionAnimation(this, btnScenic, "scenery").toBundle());
-                } else {
-                    startActivity(intent8);
-                }
-                hindFloatActionButton();
-                break;
-            case R.id.add_live:
-            case R.id.add_live_t:
-                Toast.makeText(this, "该功能尚未开放！", Toast.LENGTH_SHORT).show();
                 hindFloatActionButton();
                 break;
             case R.id.add_tools:
@@ -640,18 +661,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.user_map_location:
                 showUserLocation();
                 break;
-            case R.id.find_center_layout:
-                if (Tools.isNull(mPreferences.getString("token", ""))) {
-                    showLoginWindow();
-                } else {
-                    Intent intent = new Intent(MainActivity.this, FindCenterActivity.class);
-                    if (Build.VERSION.SDK_INT >= 21) {
-                        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this, findCenterLayout, "findcenter").toBundle());
-                    } else {
-                        startActivity(intent);
-                    }
-                }
-                break;
+
             case R.id.image_user_icon:
                 if (Tools.isNull(mPreferences.getString("token", ""))) {
                     showLoginWindow();
@@ -739,14 +749,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     startActivity(new Intent(MainActivity.this, UserSigningActivity.class));
                 }
                 break;
-            case R.id.left_social_contact_layout:
-                if (Tools.isNull(mPreferences.getString("token", ""))) {
-                    showLoginWindow();
-                } else {
-                    Intent intent = new Intent(MainActivity.this, UserSocialActivity.class);
-                    startActivity(intent);
-                }
-                break;
             case R.id.left_message_layout:
                 if (Tools.isNull(mPreferences.getString("token", ""))) {
                     showLoginWindow();
@@ -777,6 +779,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             case R.id.left_binding_sina:
                 bindingSina();
+                break;
+            case R.id.more_friend_add:
+                if (moreWindow != null && moreWindow.isShowing())
+                    moreWindow.dismiss();
+                startActivity(new Intent(MainActivity.this, TravellerSearchActivity.class));
+                break;
+            case R.id.more_scan:
+                if (moreWindow != null && moreWindow.isShowing())
+                    moreWindow.dismiss();
+                startActivity(new Intent(MainActivity.this, TravellerQRScanActivity.class));
+                break;
+            case R.id.more_share:
+                if (moreWindow != null && moreWindow.isShowing())
+                    moreWindow.dismiss();
+                showShareWindow();
                 break;
             case R.id.main_share_block:
                 shareWindow.dismiss();
@@ -853,19 +870,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         Tools.setAnimation(btnDiaryImage, -widthPixels / 9, -heightPixels / 3, 0, 1, 0, 360, 1, 1, 500);
         Tools.setAnimation(btnDiaryVideo, widthPixels / 9, -heightPixels / 3, 0, 1, 0, -360, 1, 1, 500);
         Tools.setAnimation(btnDiaryEvaluated, widthPixels / 3, -heightPixels / 3, 0, 1, 0, -360, 1, 1, 500);
-
-        Tools.setAnimation(btnScenic, -widthPixels / 3, -heightPixels / 6, 0, 1, 0, 360, 1, 1, 500);
-        Tools.setAnimation(btnLive, -widthPixels / 9, -heightPixels / 6, 0, 1, 0, 360, 1, 1, 500);
-        Tools.setAnimation(btnTools, widthPixels / 9, -heightPixels / 6, 0, 1, 0, -360, 1, 1, 500);
+        Tools.setAnimation(btnTools, -widthPixels / 3, -heightPixels / 6, 0, 1, 0, 360, 1, 1, 500);
 
         Tools.setAnimation(text_t, -widthPixels / 3, -heightPixels / 3 + 80, 0, 1, 0, 360, 1, 1, 500);
         Tools.setAnimation(image_t, -widthPixels / 9, -heightPixels / 3 + 80, 0, 1, 0, 360, 1, 1, 500);
         Tools.setAnimation(video_t, widthPixels / 9, -heightPixels / 3 + 80, 0, 1, 0, -360, 1, 1, 500);
         Tools.setAnimation(evaluated_t, widthPixels / 3, -heightPixels / 3 + 80, 0, 1, 0, -360, 1, 1, 500);
-
-        Tools.setAnimation(scenic_t, -widthPixels / 3, -heightPixels / 6 + 80, 0, 1, 0, 360, 1, 1, 500);
-        Tools.setAnimation(live_t, -widthPixels / 9, -heightPixels / 6 + 80, 0, 1, 0, 360, 1, 1, 500);
-        Tools.setAnimation(tools_t, widthPixels / 9, -heightPixels / 6 + 80, 0, 1, 0, -360, 1, 1, 500);
+        Tools.setAnimation(tools_t, -widthPixels / 3, -heightPixels / 6 + 80, 0, 1, 0, 360, 1, 1, 500);
 
         Tools.setAnimation(btnAdd, 0, 0, 1, 1, 0, -45, 1, 1, 500);
         btnToolsWeather.setVisibility(View.GONE);
@@ -885,19 +896,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         Tools.setAnimation(btnDiaryImage, 0, 0, 1, 0, -360, 0, 1, 1, 500);
         Tools.setAnimation(btnDiaryVideo, 0, 0, 1, 0, 360, 0, 1, 1, 500);
         Tools.setAnimation(btnDiaryEvaluated, 0, 0, 1, 0, 360, 0, 1, 1, 500);
-
-        Tools.setAnimation(btnScenic, 0, 0, 1, 0, -360, 0, 1, 1, 500);
-        Tools.setAnimation(btnLive, 0, 0, 1, 0, -360, 0, 1, 1, 500);
-        Tools.setAnimation(btnTools, 0, 0, 1, 0, 360, 0, 1, 1, 500);
+        Tools.setAnimation(btnTools, 0, 0, 1, 0, -360, 0, 1, 1, 500);
 
         Tools.setAnimation(text_t, 0, 0, 1, 0, -360, 0, 1, 1, 500);
         Tools.setAnimation(image_t, 0, 0, 1, 0, -360, 0, 1, 1, 500);
         Tools.setAnimation(video_t, 0, 0, 1, 0, 360, 0, 1, 1, 500);
         Tools.setAnimation(evaluated_t, 0, 0, 1, 0, 360, 0, 1, 1, 500);
-
-        Tools.setAnimation(scenic_t, 0, 0, 1, 0, -360, 0, 1, 1, 500);
-        Tools.setAnimation(live_t, 0, 0, 1, 0, -360, 0, 1, 1, 500);
-        Tools.setAnimation(tools_t, 0, 0, 1, 0, 360, 0, 1, 1, 500);
+        Tools.setAnimation(tools_t, 0, 0, 1, 0, -360, 0, 1, 1, 500);
 
         Tools.setAnimation(btnAdd, 0, 0, 1, 1, -45, 0, 1, 1, 500);
         btnToolsWeather.setVisibility(View.GONE);
@@ -1069,10 +1074,35 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     /**
+     * 显示 更多的View
+     */
+    private void showMoreWindow() {
+        View convertView = LayoutInflater.from(this).inflate(R.layout.popupwindow_more_view, null);
+        moreWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        moreWindow.setAnimationStyle(R.style.morePopupWindow);
+        moreWindow.setOutsideTouchable(true);
+        moreWindow.setBackgroundDrawable(new ColorDrawable(0x66000000));
+
+        LinearLayout friend_add = (LinearLayout) convertView.findViewById(R.id.more_friend_add);
+        LinearLayout scan = (LinearLayout) convertView.findViewById(R.id.more_scan);
+        LinearLayout share = (LinearLayout) convertView.findViewById(R.id.more_share);
+        friend_add.setOnClickListener(this);
+        scan.setOnClickListener(this);
+        share.setOnClickListener(this);
+
+        View rootView = LayoutInflater.from(this).inflate(R.layout.activity_main, null);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            moreWindow.showAsDropDown(btn_more);
+        } else {
+            moreWindow.showAtLocation(rootView, Gravity.END, 0, 0);
+        }
+    }
+
+    /**
      * 显示 分享的View
      */
     private void showShareWindow() {
-        View convertView = LayoutInflater.from(this).inflate(R.layout.main_share_view, null);
+        View convertView = LayoutInflater.from(this).inflate(R.layout.popupwindow_share_view, null);
         shareWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
         shareWindow.setAnimationStyle(R.style.sharePopupWindow);
         shareWindow.setOutsideTouchable(true);
@@ -1161,7 +1191,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                                     Thread.sleep(1000);
                                                     Message message = handler.obtainMessage(601);
                                                     Bundle bundle1 = new Bundle();
-                                                    bundle1.putString("nick_name",nickName);
+                                                    bundle1.putString("nick_name", nickName);
                                                     message.setData(bundle1);
                                                     handler.sendMessage(message);
                                                 } catch (InterruptedException e) {
@@ -1169,7 +1199,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                                 }
                                             }
                                         }).start();
-                                        toUpdateUserInfo(nickName,0);
+                                        toUpdateUserInfo(nickName, 0);
                                     } catch (Exception e) {
 
                                     }
@@ -1293,7 +1323,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                     Thread.sleep(1000);
                                     Message message = handler.obtainMessage(603);
                                     Bundle bundle1 = new Bundle();
-                                    bundle1.putString("nick_name",nickname);
+                                    bundle1.putString("nick_name", nickname);
                                     message.setData(bundle1);
                                     handler.sendMessage(message);
                                 } catch (InterruptedException e) {
@@ -1301,7 +1331,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                 }
                             }
                         }).start();
-                        toUpdateUserInfo(nickname,2);
+                        toUpdateUserInfo(nickname, 2);
                         //GET请求获取用户的信息
 //                    try {
 //                        URL url = new URL("https://api.weibo.com/2/users/show.json?access_token=" + access_token + "&uid=" + uid);
@@ -1350,7 +1380,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     Toast.makeText(MainActivity.this, "取消了微博授权", Toast.LENGTH_SHORT).show();
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             Toast.makeText(this, "请安装微博客户端，并保持登录状态", Toast.LENGTH_SHORT).show();
         }
     }
@@ -1390,7 +1420,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void onReceiveLocation(BDLocation bdLocation) {
-// 定位接口可能返回错误码,要根据结果错误码,来判断是否是正确的地址;
+        // 定位接口可能返回错误码,要根据结果错误码,来判断是否是正确的地址;
         int locType = bdLocation.getLocType();
         switch (locType) {
             case BDLocation.TypeCacheLocation:

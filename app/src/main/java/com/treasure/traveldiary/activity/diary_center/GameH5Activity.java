@@ -54,10 +54,12 @@ public class GameH5Activity extends BaseActivity implements View.OnClickListener
             if (intent.getStringExtra("game_type").equals("红还是绿")) {
                 assertPath = "file:///android_asset/honghaishilv/index.html";
                 title.setText("红还是绿");
-            }
-            if (intent.getStringExtra("game_type").equals("猴子接桃")) {
+            }else if (intent.getStringExtra("game_type").equals("猴子接桃")) {
                 assertPath = "file:///android_asset/monkey/index.html";
                 title.setText("猴子接桃");
+            }else if (intent.getStringExtra("game_type").equals("扫描详情")) {
+                assertPath = intent.getStringExtra("web_url");
+                title.setText("扫描详情");
             }
         }
     }
@@ -107,7 +109,6 @@ public class GameH5Activity extends BaseActivity implements View.OnClickListener
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~url:"+url);
                 if(url.contains("closegame")){
                         String aaa = url.split("result")[1].replace("=","");
                         try {

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="150dp"
+    android:layout_height="120dp"
+    android:background="@drawable/gradient_orange_yellow_radius5"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/more_friend_add"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:src="@mipmap/ic_friend_add" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:text="添加关注"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorWhite" />
+
+    <LinearLayout
+        android:id="@+id/more_scan"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            android:src="@mipmap/ic_scan2" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:text="扫 一 扫"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorWhite" />
+
+    <LinearLayout
+        android:id="@+id/more_share"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            android:src="@mipmap/ic_share" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:text="分    享"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp" />
+    </LinearLayout>
+</LinearLayout>

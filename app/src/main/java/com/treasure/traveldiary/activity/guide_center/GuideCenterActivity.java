@@ -1,4 +1,4 @@
-package com.treasure.traveldiary.activity.main_center;
+package com.treasure.traveldiary.activity.guide_center;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,7 +24,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class SceneryActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, SceneryListAdapter.SceneryTextClick {
+public class GuideCenterActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, SceneryListAdapter.SceneryTextClick {
 
     private LinearLayout nodata_layout;
     private List<String> list;
@@ -39,7 +39,7 @@ public class SceneryActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scenery);
+        setContentView(R.layout.activity_guide_center);
         initTitle();
         Tools.setTranslucentStatus(this);
         title.setText("景点");
@@ -87,7 +87,7 @@ public class SceneryActivity extends BaseActivity implements View.OnClickListene
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_back:
-                SceneryActivity.this.finish();
+                GuideCenterActivity.this.finish();
                 break;
             case R.id.scenery_refresh:
                 Tools.setAnimation(refresh, 0, 0, 1, 1, 0, -720, 1, 1, 2000);
@@ -118,7 +118,7 @@ public class SceneryActivity extends BaseActivity implements View.OnClickListene
                             loading.setVisibility(View.GONE);
                         }else {
                             if (!isPageDestroy){
-                                Toast.makeText(SceneryActivity.this, "获取景区列表失败", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(GuideCenterActivity.this, "获取景区列表失败", Toast.LENGTH_SHORT).show();
                                 loading.setVisibility(View.GONE);
                             }
                         }
@@ -151,7 +151,7 @@ public class SceneryActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void layoutClick(SceneryBean sceneryBean) {
-        Intent intent = new Intent(SceneryActivity.this, SceneryDetailActivity.class);
+        Intent intent = new Intent(GuideCenterActivity.this, SceneryDetailActivity.class);
         intent.putExtra("sceneryBean",sceneryBean);
         startActivity(intent);
     }
