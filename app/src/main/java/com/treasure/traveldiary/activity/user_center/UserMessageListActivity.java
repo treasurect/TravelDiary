@@ -75,7 +75,7 @@ public class UserMessageListActivity extends BaseActivity implements View.OnClic
     private void getMessageList() {
         loading.setVisibility(View.VISIBLE);
         BmobQuery<PushBean> query = new BmobQuery<>();
-        query.addWhereEqualTo("user_name", mPreferences.getString("user_name", ""))
+        query.addWhereEqualTo("user_name", mPreferences.getString("user_name", mPreferences.getString("user_name","")))
                 .findObjects(new FindListener<PushBean>() {
                     @Override
                     public void done(List<PushBean> list1, BmobException e) {

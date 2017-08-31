@@ -15,6 +15,8 @@
         android:id="@+id/user_message_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:divider="@color/colorWhite"
+        android:dividerHeight="0dp"
         android:layout_marginTop="50dp" />
     <include layout="@layout/common_nodata_view"/>
     <include layout="@layout/common_loading_view"/>

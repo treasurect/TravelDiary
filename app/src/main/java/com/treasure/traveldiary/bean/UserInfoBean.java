@@ -27,6 +27,7 @@ public class UserInfoBean extends BmobObject {
     private String binding_sina;
     private List<SUserBean> fans;
     private List<SUserBean> attention;
+    private List<SUserBean> leaveMesList;
 
     public String getUser_name() {
         return user_name;
@@ -170,5 +171,13 @@ public class UserInfoBean extends BmobObject {
 
     public void setAttention(List<SUserBean> attention) {
         this.attention = attention;
+    }
+
+    public List<SUserBean> getLeaveMesList() {
+        return leaveMesList;
+    }
+
+    public void setLeaveMesList(List<SUserBean> leaveMesList) {
+        this.leaveMesList = leaveMesList;
     }
 }

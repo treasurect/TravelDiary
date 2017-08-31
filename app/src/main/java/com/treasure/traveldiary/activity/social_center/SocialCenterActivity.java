@@ -6,47 +6,31 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.treasure.traveldiary.BaseActivity;
 import com.treasure.traveldiary.R;
 import com.treasure.traveldiary.activity.find_center.TravellerDetailActivity;
 import com.treasure.traveldiary.adapter.DiaryLeavemesListAdapter;
+import com.treasure.traveldiary.adapter.HomeFragmentPagerAdapter;
 import com.treasure.traveldiary.bean.SUserBean;
-import com.treasure.traveldiary.bean.UserInfoBean;
+import com.treasure.traveldiary.fragments.BaseFragment;
+import com.treasure.traveldiary.fragments.SocialAttentionFragment;
+import com.treasure.traveldiary.fragments.SocialFansFragment;
+import com.treasure.traveldiary.fragments.SocialLeavemesFragment;
 import com.treasure.traveldiary.utils.Tools;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
-
-public class SocialCenterActivity extends BaseActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener, AdapterView.OnItemClickListener {
+public class SocialCenterActivity extends BaseActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener {
     private TabLayout tabLayout;
-    private ListView listView;
-    private List<SUserBean> list;
-    private DiaryLeavemesListAdapter adapter;
-    private SharedPreferences preferences;
-    private boolean isPageDestroy;
-    private FrameLayout loading;
-    private LinearLayout nodata_layout;
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 200:
-                    loading.setVisibility(View.GONE);
-                    break;
-            }
-        }
-    };
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,59 +40,39 @@ public class SocialCenterActivity extends BaseActivity implements View.OnClickLi
         Tools.setTranslucentStatus(this);
         title.setText("社交");
         btn_back.setVisibility(View.VISIBLE);
-        preferences = getSharedPreferences("user",MODE_PRIVATE);
 
         initFindId();
         tabLayout.addOnTabSelectedListener(this);
         initTabLayout();
-        initListView();
+        initViewPager();
         initClick();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(5000);
-                    if (!isPageDestroy){
-                        handler.sendMessage(handler.obtainMessage(200));
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+        //联动
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        viewPager.setCurrentItem(0, false);
     }
 
     private void initFindId() {
-        tabLayout = (TabLayout) findViewById(R.id.user_social_tabLayout);
-        listView = (ListView) findViewById(R.id.user_social_listView);
-        loading = (FrameLayout) findViewById(R.id.loading_layout);
-        nodata_layout = (LinearLayout) findViewById(R.id.no_data_layout);
+        tabLayout = (TabLayout) findViewById(R.id.social_center_tabLayout);
+        viewPager = (ViewPager) findViewById(R.id.social_center_viewPager);
     }
 
     private void initTabLayout() {
         tabLayout.addTab(tabLayout.newTab().setText("关注"));
         tabLayout.addTab(tabLayout.newTab().setText("粉丝"));
+        tabLayout.addTab(tabLayout.newTab().setText("留言"));
     }
-
-    private void initListView() {
-        list = new ArrayList<>();
-        adapter = new DiaryLeavemesListAdapter(this,list);
-        listView.setAdapter(adapter);
+    private void initViewPager() {
+        List<BaseFragment> list = new ArrayList<>();
+        list.add(new SocialAttentionFragment());
+        list.add(new SocialFansFragment());
+        list.add(new SocialLeavemesFragment());
+        HomeFragmentPagerAdapter pagerAdapter = new HomeFragmentPagerAdapter(getSupportFragmentManager(), list);
+        viewPager.setAdapter(pagerAdapter);
     }
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        int position = tab.getPosition();
-        if (position == 0){
-            getAttentionList();
-        }else {
-            getFansList();
-        }
+        viewPager.setCurrentItem(tab.getPosition(),false);
     }
 
     @Override
@@ -123,7 +87,6 @@ public class SocialCenterActivity extends BaseActivity implements View.OnClickLi
 
     private void initClick() {
         btn_back.setOnClickListener(this);
-        listView.setOnItemClickListener(this);
     }
 
     @Override
@@ -133,83 +96,5 @@ public class SocialCenterActivity extends BaseActivity implements View.OnClickLi
                 SocialCenterActivity.this.finish();
                 break;
         }
-    }
-    private void getAttentionList(){
-        loading.setVisibility(View.VISIBLE);
-        BmobQuery<UserInfoBean> query = new BmobQuery<>();
-        query.addWhereEqualTo("user_name",preferences.getString("user_name",""))
-                .findObjects(new FindListener<UserInfoBean>() {
-                    @Override
-                    public void done(List<UserInfoBean> list2, BmobException e) {
-                        if (e == null){
-                            if (!isPageDestroy){
-                                loading.setVisibility(View.GONE);
-                                if (list2.size() > 0){
-                                    List<SUserBean> attention = list2.get(0).getAttention();
-                                    list.clear();
-                                    attention.remove(0);
-                                    list.addAll(attention);
-                                    adapter.notifyDataSetChanged();
-                                    if (attention.size() == 0){
-                                        nodata_layout.setVisibility(View.VISIBLE);
-                                    }else {
-                                        nodata_layout.setVisibility(View.GONE);
-                                    }
-                                }
-                            }
-                        }else {
-                            if (!isPageDestroy){
-                                loading.setVisibility(View.GONE);
-                                Toast.makeText(SocialCenterActivity.this, "获取关注列表失败", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-                });
-    }
-    private void getFansList(){
-        loading.setVisibility(View.VISIBLE);
-        BmobQuery<UserInfoBean> query = new BmobQuery<>();
-        query.addWhereEqualTo("user_name",preferences.getString("user_name",""))
-                .findObjects(new FindListener<UserInfoBean>() {
-                    @Override
-                    public void done(List<UserInfoBean> list2, BmobException e) {
-                        if (e == null){
-                            if (!isPageDestroy){
-                                loading.setVisibility(View.GONE);
-                                if (list2.size() > 0){
-                                    List<SUserBean> fans = list2.get(0).getFans();
-                                    fans.remove(0);
-                                    list.clear();
-                                    list.addAll(fans);
-                                    adapter.notifyDataSetChanged();
-                                    if (fans.size() == 0){
-                                        nodata_layout.setVisibility(View.VISIBLE);
-                                    }else {
-                                        nodata_layout.setVisibility(View.GONE);
-                                    }
-                                }
-                            }
-                        }else {
-                            if (!isPageDestroy){
-                                loading.setVisibility(View.GONE);
-                                Toast.makeText(SocialCenterActivity.this, "获取关注列表失败", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-                });
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        String leave_name = list.get(i).getLeave_name();
-        Intent intent = new Intent(SocialCenterActivity.this, TravellerDetailActivity.class);
-        intent.putExtra("user_name",leave_name);
-        startActivity(intent);
-    }
-
-    @Override
-    protected void onDestroy() {
-        isPageDestroy = true;
-        super.onDestroy();
     }
 }

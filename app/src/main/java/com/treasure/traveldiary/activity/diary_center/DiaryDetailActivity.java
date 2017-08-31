@@ -53,7 +53,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
-public class DiaryDetailActivity extends BaseActivity implements View.OnClickListener, SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, TextWatcher {
+public class DiaryDetailActivity extends BaseActivity implements View.OnClickListener, SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, TextWatcher, DiaryLeavemesListAdapter.LayoutClick {
 
     private SimpleDraweeView user_icon;
     private TextView user_name, user_time, user_title, user_desc;
@@ -151,6 +151,7 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
         mesBeanList = new ArrayList<>();
         adapter = new DiaryLeavemesListAdapter(this, mesBeanList);
         leaveMes_listView.setAdapter(adapter);
+        adapter.setLayoutClick(this);
     }
 
     private void initScrollView() {
@@ -558,5 +559,10 @@ public class DiaryDetailActivity extends BaseActivity implements View.OnClickLis
                 }
             }
         }
+    }
+
+    @Override
+    public void leave_mesClick(String name) {
+
     }
 }

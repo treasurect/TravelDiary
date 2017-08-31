@@ -8,169 +8,194 @@
     android:background="@color/colorWhite"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
-    tools:context=".activity.main_center.ToolsWeatherActivity">
+    tools:context=".activity.find_center.TravellerDetailActivity">
 
     <include layout="@layout/common_loading_view" />
-
-    <android.support.design.widget.CoordinatorLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.design.widget.AppBarLayout
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="290dp"
-            android:background="@drawable/gradient_yellow_orange_radius5"
-            android:fitsSystemWindows="true">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-            <android.support.design.widget.CollapsingToolbarLayout
+            <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:contentScrim="@color/colorOrange"
-                app:expandedTitleMarginStart="45dp"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                android:layout_height="290dp"
+                android:background="@drawable/gradient_yellow_orange_radius5"
+                android:fitsSystemWindows="true">
 
-                <android.support.v7.widget.Toolbar
+                <android.support.design.widget.CollapsingToolbarLayout
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    app:layout_collapseMode="pin">
+                    android:layout_height="match_parent"
+                    app:contentScrim="@color/colorOrange"
+                    app:expandedTitleMarginStart="45dp"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                    <android.support.v7.widget.Toolbar
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        app:layout_collapseMode="pin">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/traveller_detail_return"
+                                android:layout_width="15dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center"
+                                android:src="@mipmap/ic_return" />
+
+                            <TextView
+                                android:id="@+id/traveller_detail_title"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginRight="40dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="详情"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </android.support.v7.widget.Toolbar>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:layout_marginBottom="45dp"
+                        android:layout_marginTop="30dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/traveller_detail_return"
-                            android:layout_width="15dp"
-                            android:layout_height="30dp"
-                            android:layout_gravity="center"
-                            android:src="@mipmap/ic_return" />
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
 
-                        <TextView
-                            android:id="@+id/traveller_detail_title"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="40dp"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="详情"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </android.support.v7.widget.Toolbar>
+                            <ImageView
+                                android:layout_width="90dp"
+                                android:layout_height="90dp"
+                                android:layout_gravity="center"
+                                android:scaleType="fitXY"
+                                android:src="@mipmap/ic_camera_scan2" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="45dp"
-                    android:layout_marginTop="30dp"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                            <com.facebook.drawee.view.SimpleDraweeView
+                                android:id="@+id/traveller_detail_icon"
+                                android:layout_width="70dp"
+                                android:layout_height="70dp"
+                                android:layout_gravity="center"
+                                fresco:placeholderImage="@mipmap/ic_travel_logo"
+                                fresco:roundAsCircle="true" />
+                        </FrameLayout>
 
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:layout_width="90dp"
-                            android:layout_height="90dp"
-                            android:layout_gravity="center"
-                            android:scaleType="fitXY"
-                            android:src="@mipmap/ic_camera_scan2" />
-
-                        <com.facebook.drawee.view.SimpleDraweeView
-                            android:id="@+id/traveller_detail_icon"
-                            android:layout_width="70dp"
-                            android:layout_height="70dp"
-                            android:layout_gravity="center"
-                            fresco:placeholderImage="@mipmap/ic_travel_logo"
-                            fresco:roundAsCircle="true" />
-                    </FrameLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/traveller_detail_nick"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="40dp"
-                            android:text="null"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="20sp" />
+                            android:orientation="horizontal">
 
-                        <ImageView
-                            android:id="@+id/traveller_detail_sex"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="20dp"
-                            android:src="@mipmap/ic_sex_man" />
-                    </LinearLayout>
+                            <TextView
+                                android:id="@+id/traveller_detail_nick"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="40dp"
+                                android:text="null"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="20sp" />
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="25dp"
-                        android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/traveller_detail_sex"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="20dp"
+                                android:src="@mipmap/ic_sex_man" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="25dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/traveller_detail_attention"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginRight="10dp"
+                                android:gravity="center"
+                                android:textColor="@color/colorWhite" />
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="5dp"
+                                android:layout_marginTop="5dp"
+                                android:background="@color/colorWhite" />
+
+                            <TextView
+                                android:id="@+id/traveller_detail_fans"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="10dp"
+                                android:gravity="center"
+                                android:textColor="@color/colorWhite" />
+                        </LinearLayout>
 
                         <TextView
-                            android:id="@+id/traveller_detail_attention"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="10dp"
-                            android:gravity="center"
-                            android:textColor="@color/colorWhite" />
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginBottom="5dp"
-                            android:layout_marginTop="5dp"
-                            android:background="@color/colorWhite" />
-
-                        <TextView
-                            android:id="@+id/traveller_detail_fans"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:id="@+id/traveller_detail_desc"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
                             android:layout_marginLeft="10dp"
                             android:gravity="center"
                             android:textColor="@color/colorWhite" />
                     </LinearLayout>
+                </android.support.design.widget.CollapsingToolbarLayout>
+            </android.support.design.widget.AppBarLayout>
 
-                    <TextView
-                        android:id="@+id/traveller_detail_desc"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center"
-                        android:textColor="@color/colorWhite" />
-                </LinearLayout>
-            </android.support.design.widget.CollapsingToolbarLayout>
-        </android.support.design.widget.AppBarLayout>
-
-        <android.support.v4.widget.NestedScrollView
-            android:id="@+id/traveller_detail_scrollView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <FrameLayout
+            <android.support.v4.widget.NestedScrollView
+                android:id="@+id/traveller_detail_scrollView"
                 android:layout_width="match_parent"
-                android:layout_height="600dp">
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                <include layout="@layout/common_nodata_view" />
-
-                <com.treasure.traveldiary.widget.CustomScrollListView
-                    android:id="@+id/traveller_detail_listView"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="720dp"
-                    android:divider="@color/colorWhite"
-                    android:dividerHeight="20dp"
-                    android:fadingEdge="none" />
-            </FrameLayout>
-        </android.support.v4.widget.NestedScrollView>
-    </android.support.design.widget.CoordinatorLayout>
+                    android:layout_height="match_parent">
+
+                    <include layout="@layout/common_nodata_view" />
+
+                    <com.treasure.traveldiary.widget.CustomScrollListView
+                        android:id="@+id/traveller_detail_listView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:divider="@color/colorWhite"
+                        android:dividerHeight="20dp"
+                        android:fadingEdge="none" />
+                </FrameLayout>
+            </android.support.v4.widget.NestedScrollView>
+        </android.support.design.widget.CoordinatorLayout>
+        <FrameLayout
+            android:id="@+id/traveller_detail_show_leaveMes"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            android:background="@color/colorYellow1">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="7dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="7dp"
+                android:background="@drawable/bottom_white_radius25"
+                android:gravity="center"
+                android:text="留点什么？"
+                android:textColor="@color/colorGray"
+                android:textStyle="bold" />
+        </FrameLayout>
+    </LinearLayout>
 </FrameLayout>

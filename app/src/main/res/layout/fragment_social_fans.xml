@@ -1,0 +1,17 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.treasure.traveldiary.fragments.SocialFansFragment">
+        <com.treasure.traveldiary.widget.CustomRefreshListView
+            android:id="@+id/social_fans_listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/colorWhite"
+            android:dividerHeight="5dp" />
+
+        <include layout="@layout/common_nodata_view" />
+
+        <include layout="@layout/common_loading_view" />
+
+</FrameLayout>

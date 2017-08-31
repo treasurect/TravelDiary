@@ -312,6 +312,8 @@ public class UserEditUserInfoActivity extends BaseActivity implements View.OnCli
         infoBean.setFans(sUserBeen);
         //关注字段添加一个占位
         infoBean.setAttention(sUserBeen);
+        //留言字段添加一个占位
+        infoBean.setLeaveMesList(sUserBeen);
         infoBean.setBinding_qq("未绑定");
         infoBean.setBinding_wechat("未绑定");
         infoBean.setBinding_sina("未绑定");

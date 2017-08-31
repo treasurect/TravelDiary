@@ -44,7 +44,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
-public class SceneryDetailActivity extends BaseActivity implements View.OnClickListener, TextWatcher, ViewPager.OnPageChangeListener {
+public class SceneryDetailActivity extends BaseActivity implements View.OnClickListener, TextWatcher, ViewPager.OnPageChangeListener, DiaryLeavemesListAdapter.LayoutClick {
 
     private ScrollView scrollView;
     private FrameLayout show_leave_mes;
@@ -195,6 +195,7 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
         mesBeanList = new ArrayList<>();
         adapter = new DiaryLeavemesListAdapter(this, mesBeanList);
         mes_listView.setAdapter(adapter);
+        adapter.setLayoutClick(this);
     }
 
     private void initScrollView() {
@@ -393,5 +394,10 @@ public class SceneryDetailActivity extends BaseActivity implements View.OnClickL
     protected void onDestroy() {
         isPageDestroy = true;
         super.onDestroy();
+    }
+
+    @Override
+    public void leave_mesClick(String name) {
+
     }
 }

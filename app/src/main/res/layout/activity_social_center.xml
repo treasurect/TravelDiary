@@ -12,7 +12,7 @@
     <include layout="@layout/common_title_bar_view" />
 
     <android.support.design.widget.TabLayout
-        android:id="@+id/user_social_tabLayout"
+        android:id="@+id/social_center_tabLayout"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:layout_gravity="center"
@@ -23,20 +23,9 @@
         app:tabSelectedTextColor="@color/colorOrange"
         app:tabTextColor="@color/colorBlock" />
 
-    <FrameLayout
+    <android.support.v4.view.ViewPager
+        android:id="@+id/social_center_viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <ListView
-            android:id="@+id/user_social_listView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@color/colorWhite"
-            android:dividerHeight="5dp" />
-
-        <include layout="@layout/common_nodata_view" />
-
-        <include layout="@layout/common_loading_view" />
-    </FrameLayout>
+        android:layout_weight="1"/>
 </LinearLayout>

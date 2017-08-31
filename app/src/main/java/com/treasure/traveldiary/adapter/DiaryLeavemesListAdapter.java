@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -53,7 +54,7 @@ public class DiaryLeavemesListAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup viewGroup) {
         View ret = null;
         ViewHolder holder = null;
-        SUserBean listBean = list.get(position);
+        final SUserBean listBean = list.get(position);
         if (view != null) {
             ret = view;
             holder = (ViewHolder) ret.getTag();
@@ -74,10 +75,17 @@ public class DiaryLeavemesListAdapter extends BaseAdapter {
         if (!Tools.isNull(listBean.getLeave_content())){
             holder.user_desc.setText(listBean.getLeave_content());
         }
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                layoutClick.leave_mesClick(listBean.getLeave_name());
+            }
+        });
         return ret;
     }
 
     public static class ViewHolder {
+        private LinearLayout layout;
         private SimpleDraweeView user_icon;
         private TextView user_name, user_time, user_desc;
 
@@ -86,6 +94,15 @@ public class DiaryLeavemesListAdapter extends BaseAdapter {
             user_name = ((TextView) view.findViewById(R.id.diary_leaveMes_user_name));
             user_time = ((TextView) view.findViewById(R.id.diary_leaveMes_user_time));
             user_desc = ((TextView) view.findViewById(R.id.diary_leaveMes_user_content));
+            layout = (LinearLayout) view.findViewById(R.id.diary_leaveMes_item_layout);
         }
+    }
+    public interface LayoutClick{
+        void leave_mesClick(String name);
+    }
+    private LayoutClick layoutClick;
+
+    public void setLayoutClick(LayoutClick layoutClick) {
+        this.layoutClick = layoutClick;
     }
 }
